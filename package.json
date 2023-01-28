@@ -1,19 +1,35 @@
 {
   "name": "sparklib",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sparkly mini charts for your sparkling app",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "esm/index.js",
+  "files": [
+    "dist",
+    "esm",
+    "src"
+  ],
   "scripts": {
+    "clean": "rimraf dist esm",
+    "prebuild": "npm run clean",
+    "preversion": "npm run build",
+    "build:esm": "tsc --target es2018 --outDir esm",
+    "build:cjs": "tsc --target es2015 --module commonjs --outDir dist",
+    "build": "npm run build:esm && npm run build:cjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TobyBackstrom/sparklib.git"
   },
-  "author": "",
+  "author": "Toby Backstrom",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/TobyBackstrom/sparklib/issues"
   },
-  "homepage": "https://github.com/TobyBackstrom/sparklib#readme"
+  "homepage": "https://github.com/TobyBackstrom/sparklib#readme",
+  "devDependencies": {
+    "rimraf": "^4.1.2",
+    "typescript": "^4.9.4"
+  }
 }
