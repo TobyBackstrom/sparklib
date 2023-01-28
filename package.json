@@ -1,0 +1,19 @@
+{
+  "name": "sparklib",
+  "version": "1.0.0",
+  "description": "Sparkly mini charts for your sparkling app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TobyBackstrom/sparklib.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TobyBackstrom/sparklib/issues"
+  },
+  "homepage": "https://github.com/TobyBackstrom/sparklib#readme"
+}
