@@ -1,10 +1,14 @@
 import * as dom from './dom';
 
-export function sparkline(): HTMLCanvasElement {
-  const context = dom.context2d(250, 50);
+export function sparkline(
+  width: number,
+  height: number,
+  dpi?: number
+): HTMLCanvasElement {
+  const context = dom.context2d(width, height, dpi);
 
   context.beginPath();
-  context.rect(0, 0, 250, 50);
+  context.rect(0, 0, width, height);
   context.fillStyle = 'blue';
   context.fill();
 
