@@ -1,6 +1,6 @@
 {
   "name": "sparklib",
-  "version": "1.0.2",
+  "version": "1.0.3-alpha",
   "description": "Sparkly mini charts for your sparkling app",
   "main": "dist/index.js",
   "files": [
