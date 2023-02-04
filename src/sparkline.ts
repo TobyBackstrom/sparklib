@@ -26,10 +26,10 @@ export function sparkline(
   const color = properties.color ?? 'black';
   const lineWidth = properties.lineWidth ?? 1;
   const margin: Margin = properties.margin ?? {
-    left: 0.01,
-    right: 0.01,
-    top: 0.06,
-    bottom: 0.06,
+    left: 0.0,
+    right: 0.0,
+    top: 0.0,
+    bottom: 0.0,
   };
 
   const horizontalMargin = margin.left + margin.right;
@@ -39,7 +39,7 @@ export function sparkline(
     .domain([0, values.length - 1])
     .range([
       properties.width * horizontalMargin,
-      properties.width - properties.width * verticalMargin,
+      properties.width - properties.width * horizontalMargin,
     ]);
 
   const yExtent = d3Array.extent(values) as [number, number];
@@ -57,11 +57,11 @@ export function sparkline(
     properties.dpi
   );
 
-  const line = (d: number[][]) => {
+  const line = (d: number[]) => {
     context.beginPath();
 
     var lineDrawer = d3Shape
-      .line<number[]>()
+      .line<number>()
       .x((_, i) => x(i))
       .y(y)
       .context(context);
@@ -75,7 +75,7 @@ export function sparkline(
     context.closePath();
   };
 
-  line(values.map((v, i) => [v, i]));
+  line(values);
 
   return context.canvas;
 }
