@@ -1,17 +1,20 @@
 {
   "name": "sparklib",
-  "version": "1.0.10-alpha",
+  "version": "1.0.11-alpha",
   "description": "Sparkly mini charts for your sparkling app",
   "main": "dist/index.js",
-  "module": "dist/index.js",
+  "module": "esm/index.js",
   "files": [
-    "dist"
+    "dist",
+    "esm"
   ],
   "scripts": {
-    "clean": "rimraf dist",
+    "clean": "rimraf dist esm",
     "prebuild": "npm run clean",
     "preversion": "npm run build",
-    "build": "tsc --target es2018 --outDir dist",
+    "build:cjs": "tsc --module commonjs --outDir dist",
+    "build:esm": "tsc --target es2018 --outDir esm",
+    "build": "npm run build:esm && npm run build:cjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

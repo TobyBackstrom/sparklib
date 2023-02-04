@@ -1,5 +1,5 @@
 import * as dom from './dom';
-import { scaleLinear } from 'd3-scale';
+import * as d3Scale from 'd3-scale';
 import * as d3Array from 'd3-array';
 import * as d3Shape from 'd3-shape';
 
@@ -10,46 +10,48 @@ export interface Margin {
   bottom: number;
 }
 
-export interface SparklineProperties {
+export interface LineProperties {
+  strokeStyle?: string | CanvasGradient | CanvasPattern; // default: "black"
+  lineWidth?: number; // default: 1
+  lineDash?: number[]; // default: [], https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash
+}
+
+export interface ZeroLineProperties extends LineProperties {
+  zeroLineValue?: number; // default: 0
+}
+
+export interface ChartProperties extends LineProperties {
   width: number;
   height: number;
   dpi?: number;
-  color?: string;
-  lineWidth?: number;
   margin?: Margin;
+  zeroLine?: ZeroLineProperties;
 }
 
 export function sparkline(
   values: number[],
-  properties: SparklineProperties
+  properties: ChartProperties
 ): HTMLCanvasElement {
-  const color = properties.color ?? 'black';
-  const lineWidth = properties.lineWidth ?? 1;
-  const margin: Margin = properties.margin ?? {
-    left: 0.0,
-    right: 0.0,
-    top: 0.0,
-    bottom: 0.0,
-  };
+  const margin = properties.margin ?? defaultMargin;
 
   const horizontalMargin = margin.left + margin.right;
   const verticalMargin = margin.top + margin.bottom;
 
-  const x = scaleLinear()
+  const xScale = d3Scale
+    .scaleLinear()
     .domain([0, values.length - 1])
     .range([
       properties.width * horizontalMargin,
       properties.width - properties.width * horizontalMargin,
     ]);
 
-  const yExtent = d3Array.extent(values) as [number, number];
-
-  const y = scaleLinear()
-    .domain(yExtent)
+  const yScale = d3Scale
+    .scaleLinear()
+    .domain(d3Array.extent(values) as [number, number])
     .range([
       properties.height - properties.height * verticalMargin,
       properties.height * verticalMargin,
-    ]) as any;
+    ]);
 
   const context = dom.context2d(
     properties.width,
@@ -57,25 +59,112 @@ export function sparkline(
     properties.dpi
   );
 
-  const line = (d: number[]) => {
+  if (properties.zeroLine) {
+    const y =
+      properties.zeroLine.zeroLineValue ??
+      defaultZeroLineProperties.zeroLineValue!;
+
+    drawLine(
+      [
+        [0, y],
+        [values.length - 1, y],
+      ],
+      xScale,
+      yScale,
+      properties.zeroLine,
+      context
+    );
+  }
+
+  drawPath(values, xScale, yScale, properties, context);
+
+  return context.canvas;
+}
+
+function drawLine(
+  coordinates: number[][],
+  xScale: any,
+  yScale: any,
+  lineProperties: LineProperties,
+  context: CanvasRenderingContext2D
+) {
+  const line = (data: number[][]) => {
     context.beginPath();
 
-    var lineDrawer = d3Shape
+    d3Shape
+      .line<number[]>()
+      .x((coordinate, _) => xScale(coordinate[0]))
+      .y((coordinate, _) => yScale(coordinate[1]))
+      .context(context)(data);
+
+    setContextProperties(lineProperties, context);
+
+    context.stroke();
+    context.closePath();
+  };
+
+  line(coordinates);
+}
+
+function drawPath(
+  values: number[],
+  xScale: any,
+  yScale: any,
+  lineProperties: LineProperties,
+  context: CanvasRenderingContext2D
+) {
+  const line = (data: number[]) => {
+    context.beginPath();
+
+    const line = d3Shape
       .line<number>()
-      .x((_, i) => x(i))
-      .y(y)
-      .context(context);
+      .x((_, i) => xScale(i))
+      .y(yScale)
+      .context(context)(data);
 
-    lineDrawer(d);
-
-    context.strokeStyle = color;
-    context.lineWidth = lineWidth;
+    setContextProperties(lineProperties, context);
 
     context.stroke();
     context.closePath();
   };
 
   line(values);
-
-  return context.canvas;
 }
+
+function setContextProperties(
+  properties: LineProperties,
+  context: CanvasRenderingContext2D
+) {
+  const strokeStyle =
+    properties.strokeStyle ?? defaultLineProperties.strokeStyle;
+  const lineWidth = properties.lineWidth ?? defaultLineProperties.lineWidth;
+  const lineDash = properties.lineDash ?? defaultLineProperties.lineDash;
+
+  context.strokeStyle = strokeStyle!;
+  context.setLineDash(lineDash!);
+  context.lineWidth = lineWidth!;
+}
+
+function is2DArray(array: any[]): boolean {
+  return array.every((element) => Array.isArray(element));
+}
+
+const defaultMargin: Margin = {
+  bottom: 0,
+  left: 0,
+  right: 0,
+  top: 0,
+};
+
+const defaultLineProperties: LineProperties = {
+  strokeStyle: 'black',
+  lineDash: [],
+  lineWidth: 1,
+};
+
+const defaultZeroLineProperties: ZeroLineProperties = {
+  strokeStyle: 'black',
+  lineDash: [],
+  lineWidth: 1,
+  zeroLineValue: 0,
+};
