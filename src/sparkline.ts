@@ -82,7 +82,7 @@ export function sparkline(
 }
 
 function drawLine(
-  coordinates: number[][],
+  coordinates: number[][], // (x0, y0) -> (x1, y1)
   xScale: any,
   yScale: any,
   lineProperties: LineProperties,
@@ -91,13 +91,10 @@ function drawLine(
   const line = (data: number[][]) => {
     context.beginPath();
 
-    d3Shape
-      .line<number[]>()
-      .x((coordinate, _) => xScale(coordinate[0]))
-      .y((coordinate, _) => yScale(coordinate[1]))
-      .context(context)(data);
+    context.moveTo(xScale(coordinates[0][0]), yScale(coordinates[0][1]));
+    context.lineTo(xScale(coordinates[1][0]), yScale(coordinates[1][1]));
 
-    setContextProperties(lineProperties, context);
+    setContextLineProperties(lineProperties, context);
 
     context.stroke();
     context.closePath();
@@ -122,7 +119,7 @@ function drawPath(
       .y(yScale)
       .context(context)(data);
 
-    setContextProperties(lineProperties, context);
+    setContextLineProperties(lineProperties, context);
 
     context.stroke();
     context.closePath();
@@ -131,7 +128,7 @@ function drawPath(
   line(values);
 }
 
-function setContextProperties(
+function setContextLineProperties(
   properties: LineProperties,
   context: CanvasRenderingContext2D
 ) {
