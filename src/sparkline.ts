@@ -2,12 +2,17 @@ import * as dom from './dom';
 import * as d3Scale from 'd3-scale';
 import * as d3Array from 'd3-array';
 import * as d3Shape from 'd3-shape';
+import * as d3Color from 'd3-color';
 
-export interface Margin {
+export interface ChartMargins {
   left: number;
   top: number;
   right: number;
   bottom: number;
+}
+
+export interface AreaProperties {
+  fillStyle?: string | CanvasGradient | CanvasPattern; // default: "black"
 }
 
 export interface LineProperties {
@@ -20,11 +25,13 @@ export interface ZeroLineProperties extends LineProperties {
   zeroLineValue?: number; // default: 0
 }
 
-export interface ChartProperties extends LineProperties {
+export interface ChartProperties {
   width: number;
   height: number;
   dpi?: number;
-  margin?: Margin;
+  area: AreaProperties;
+  line: LineProperties;
+  margins?: ChartMargins;
   zeroLine?: ZeroLineProperties;
 }
 
@@ -32,10 +39,10 @@ export function sparkline(
   values: number[],
   properties: ChartProperties
 ): HTMLCanvasElement {
-  const margin = properties.margin ?? defaultMargin;
+  const margins = properties.margins ?? defaultMargins;
 
-  const horizontalMargin = margin.left + margin.right;
-  const verticalMargin = margin.top + margin.bottom;
+  const horizontalMargin = margins.left + margins.right;
+  const verticalMargin = margins.top + margins.bottom;
 
   const xScale = d3Scale
     .scaleLinear()
@@ -76,7 +83,7 @@ export function sparkline(
     );
   }
 
-  drawPath(values, xScale, yScale, properties, context);
+  drawPath(values, xScale, yScale, properties.line, context);
 
   return context.canvas;
 }
@@ -142,11 +149,31 @@ function setContextLineProperties(
   context.lineWidth = lineWidth!;
 }
 
+function getAreaFillstyle(
+  area: AreaProperties,
+  fallback: LineProperties
+): string | CanvasGradient | CanvasPattern {
+  if (area?.fillStyle) {
+    return area.fillStyle!;
+  }
+
+  if (
+    typeof fallback?.strokeStyle === 'string' ||
+    fallback?.strokeStyle == null
+  ) {
+    const fillStyle = fallback?.strokeStyle || 'black';
+    const color = d3Color.color(fillStyle)?.copy({ opacity: 0.3 });
+    return color!.formatHex8();
+  }
+
+  return area.fillStyle!;
+}
+
 function is2DArray(array: any[]): boolean {
   return array.every((element) => Array.isArray(element));
 }
 
-const defaultMargin: Margin = {
+const defaultMargins: ChartMargins = {
   bottom: 0,
   left: 0,
   right: 0,
