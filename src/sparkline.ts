@@ -66,16 +66,29 @@ export function sparkline(
     properties.dpi
   );
 
-  if (properties.zeroLine) {
+  drawZeroLine(properties.zeroLine, values.length - 1, xScale, yScale, context);
+  drawPath(values, xScale, yScale, properties.line, context);
+
+  return context.canvas;
+}
+
+function drawZeroLine(
+  properties: ZeroLineProperties | undefined,
+  xMaxValue: number,
+  xScale: d3Scale.ScaleLinear<number, number, never>,
+  yScale: d3Scale.ScaleLinear<number, number, never>,
+  context: CanvasRenderingContext2D
+) {
+  if (properties) {
     const zeroLineProperties = {
       ...defaultZeroLineProperties,
-      ...properties.zeroLine,
+      ...properties,
     };
 
     drawLine(
       [
         [0, zeroLineProperties.zeroLineValue!],
-        [values.length - 1, zeroLineProperties.zeroLineValue!],
+        [xMaxValue, zeroLineProperties.zeroLineValue!],
       ],
       xScale,
       yScale,
@@ -83,10 +96,6 @@ export function sparkline(
       context
     );
   }
-
-  drawPath(values, xScale, yScale, properties.line, context);
-
-  return context.canvas;
 }
 
 function drawLine(
