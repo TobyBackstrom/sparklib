@@ -67,18 +67,19 @@ export function sparkline(
   );
 
   if (properties.zeroLine) {
-    const y =
-      properties.zeroLine.zeroLineValue ??
-      defaultZeroLineProperties.zeroLineValue!;
+    const zeroLineProperties = {
+      ...defaultZeroLineProperties,
+      ...properties.zeroLine,
+    };
 
     drawLine(
       [
-        [0, y],
-        [values.length - 1, y],
+        [0, zeroLineProperties.zeroLineValue!],
+        [values.length - 1, zeroLineProperties.zeroLineValue!],
       ],
       xScale,
       yScale,
-      properties.zeroLine,
+      zeroLineProperties,
       context
     );
   }
@@ -188,7 +189,7 @@ const defaultLineProperties: LineProperties = {
 
 const defaultZeroLineProperties: ZeroLineProperties = {
   strokeStyle: 'black',
-  lineDash: [],
+  lineDash: [1, 1],
   lineWidth: 1,
   zeroLineValue: 0,
 };
