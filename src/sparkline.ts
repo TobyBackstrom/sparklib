@@ -12,52 +12,80 @@ export interface ChartMargins {
 }
 
 export interface AreaProperties {
-  fillStyle?: string | CanvasGradient | CanvasPattern; // default: "black"
+  fillStyle?: string | CanvasGradient; // default: "black with opacity 0.3"
 }
 
 export interface LineProperties {
-  strokeStyle?: string | CanvasGradient | CanvasPattern; // default: "black"
+  strokeStyle?: string | CanvasGradient; // default: "black"
   lineWidth?: number; // default: 1
   lineDash?: number[]; // default: [], https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash
 }
 
-export interface ZeroLineProperties extends LineProperties {
-  zeroLineValue?: number; // default: 0
+export interface DatumLineProperties extends LineProperties {
+  y: number; // default: 0
 }
 
 export interface ChartProperties {
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   dpi?: number;
-  area: AreaProperties;
-  line: LineProperties;
   margins?: ChartMargins;
-  zeroLine?: ZeroLineProperties;
+  area?: AreaProperties;
+  line?: LineProperties;
+  datumLines: DatumLineProperties[];
+  background?: string | CanvasGradient;
 }
 
-export const chart = (properties: ChartProperties) => {
-  let _width = properties?.width ?? 250;
-  let _height = properties?.height ?? 50;
-  let _dpi = properties.dpi;
+const defaultChartProperties: ChartProperties = {
+  width: 250,
+  height: 50,
+  margins: {
+    bottom: 2,
+    left: 2,
+    right: 2,
+    top: 2,
+  },
+  area: undefined,
+  line: {
+    lineWidth: 1,
+    strokeStyle: 'black',
+  },
+  datumLines: [],
+};
+
+export const chart = (properties?: ChartProperties) => {
+  let _width = properties?.width ?? defaultChartProperties.width!;
+  let _height = properties?.height ?? defaultChartProperties.height!;
+  let _dpi = properties?.dpi;
   let _xDomain: [number, number];
   let _yDomain: [number, number];
+  let _marginProps = {
+    ...defaultChartProperties.margins!,
+    ...properties?.margins,
+  };
+  let _lineProps = { ...defaultChartProperties.line!, ...properties?.line };
+  let _datumLines = properties?.datumLines
+    ? [...properties?.datumLines]
+    : [...defaultChartProperties.datumLines];
+  let _background: string | CanvasGradient | undefined = properties?.background;
 
-  const margins = properties.margins ?? defaultMargins;
-  const horizontalMargin = margins.left + margins.right;
-  const verticalMargin = margins.top + margins.bottom;
-
-  const width = (w: number) => {
-    _width = w;
+  const width = (_: number) => {
+    _width = _;
     return exports;
   };
 
-  const height = (h: number) => {
-    _height = h;
+  const height = (_: number) => {
+    _height = _;
     return exports;
   };
 
   const dpi = (_: number) => {
     _dpi = _;
+    return exports;
+  };
+
+  const margins = (_: ChartMargins) => {
+    _marginProps = { ..._marginProps, ..._ };
     return exports;
   };
 
@@ -71,60 +99,76 @@ export const chart = (properties: ChartProperties) => {
     return exports;
   };
 
+  // add horizontal reference lines in the y domain
+  const datum = (y: number, lineProps?: LineProperties) => {
+    _datumLines.push({ y, ...lineProps });
+    return exports;
+  };
+
+  const background = (_: string | CanvasGradient) => {
+    _background = _;
+    return exports;
+  };
+
   const render = (values: number[]): HTMLCanvasElement => {
     const xScale = d3Scale
       .scaleLinear()
       .domain(_xDomain ?? [0, values.length - 1])
-      .range([_width * horizontalMargin, _width - _width * horizontalMargin]);
+      .range([_marginProps.left, _width - _marginProps.right]);
 
     const yScale = d3Scale
       .scaleLinear()
       .domain(_yDomain ?? (d3Array.extent(values) as [number, number]))
-      .range([_height - _height * verticalMargin, _height * verticalMargin]);
+      .range([_height - _marginProps.top, _marginProps.bottom]);
 
     const context = dom.context2d(_width, _height, _dpi);
 
-    drawZeroLine(
-      properties.zeroLine,
-      values.length - 1,
-      xScale,
-      yScale,
-      context
+    if (_background) {
+      context.fillStyle = _background;
+      context.fillRect(0, 0, _width, _height);
+    }
+
+    _datumLines.forEach((datum) =>
+      drawZeroLine(datum, values.length - 1, xScale, yScale, context)
     );
-    drawPath(values, xScale, yScale, properties.line, context);
+
+    drawPath(values, xScale, yScale, _lineProps, context);
 
     return context.canvas;
   };
 
-  const exports = { width, height, dpi, xDomain, yDomain, render };
+  const exports = {
+    width,
+    height,
+    dpi,
+    margins,
+    xDomain,
+    yDomain,
+    datum,
+    background,
+    render,
+  };
 
   return exports;
 };
 
 function drawZeroLine(
-  properties: ZeroLineProperties | undefined,
+  properties: DatumLineProperties,
   xMaxValue: number,
   xScale: d3Scale.ScaleLinear<number, number, never>,
   yScale: d3Scale.ScaleLinear<number, number, never>,
   context: CanvasRenderingContext2D
 ) {
-  if (properties) {
-    const zeroLineProperties = {
-      ...defaultZeroLineProperties,
-      ...properties,
-    };
-
-    drawLine(
-      [
-        [0, zeroLineProperties.zeroLineValue!],
-        [xMaxValue, zeroLineProperties.zeroLineValue!],
-      ],
-      xScale,
-      yScale,
-      zeroLineProperties,
-      context
-    );
-  }
+  drawLine(
+    [
+      [0, properties.y ?? 0],
+      [xMaxValue, properties.y ?? 0],
+    ],
+    xScale,
+    yScale,
+    properties,
+    context
+  );
 }
 
 function drawLine(
@@ -212,22 +256,8 @@ function is2DArray(array: any[]): boolean {
   return array.every((element) => Array.isArray(element));
 }
 
-const defaultMargins: ChartMargins = {
-  bottom: 0,
-  left: 0,
-  right: 0,
-  top: 0,
-};
-
 const defaultLineProperties: LineProperties = {
   strokeStyle: 'black',
   lineDash: [],
   lineWidth: 1,
-};
-
-const defaultZeroLineProperties: ZeroLineProperties = {
-  strokeStyle: 'black',
-  lineDash: [1, 1],
-  lineWidth: 1,
-  zeroLineValue: 0,
 };
