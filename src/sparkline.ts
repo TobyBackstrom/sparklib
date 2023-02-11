@@ -35,42 +35,59 @@ export interface ChartProperties {
   zeroLine?: ZeroLineProperties;
 }
 
-export function sparkline(
-  values: number[],
-  properties: ChartProperties
-): HTMLCanvasElement {
-  const margins = properties.margins ?? defaultMargins;
+export const chart = (properties: ChartProperties) => {
+  let _width = properties?.width ?? 250;
+  let _height = properties?.height ?? 50;
+  let _dpi = properties.dpi;
 
+  const margins = properties.margins ?? defaultMargins;
   const horizontalMargin = margins.left + margins.right;
   const verticalMargin = margins.top + margins.bottom;
 
-  const xScale = d3Scale
-    .scaleLinear()
-    .domain([0, values.length - 1])
-    .range([
-      properties.width * horizontalMargin,
-      properties.width - properties.width * horizontalMargin,
-    ]);
+  const width = (w: number) => {
+    _width = w;
+    return exports;
+  };
 
-  const yScale = d3Scale
-    .scaleLinear()
-    .domain(d3Array.extent(values) as [number, number])
-    .range([
-      properties.height - properties.height * verticalMargin,
-      properties.height * verticalMargin,
-    ]);
+  const height = (h: number) => {
+    _height = h;
+    return exports;
+  };
 
-  const context = dom.context2d(
-    properties.width,
-    properties.height,
-    properties.dpi
-  );
+  const dpi = (_: number) => {
+    _dpi = _;
+    return exports;
+  };
 
-  drawZeroLine(properties.zeroLine, values.length - 1, xScale, yScale, context);
-  drawPath(values, xScale, yScale, properties.line, context);
+  const render = (values: number[]): HTMLCanvasElement => {
+    const xScale = d3Scale
+      .scaleLinear()
+      .domain([0, values.length - 1])
+      .range([_width * horizontalMargin, _width - _width * horizontalMargin]);
 
-  return context.canvas;
-}
+    const yScale = d3Scale
+      .scaleLinear()
+      .domain(d3Array.extent(values) as [number, number])
+      .range([_height - _height * verticalMargin, _height * verticalMargin]);
+
+    const context = dom.context2d(_width, _height, _dpi);
+
+    drawZeroLine(
+      properties.zeroLine,
+      values.length - 1,
+      xScale,
+      yScale,
+      context
+    );
+    drawPath(values, xScale, yScale, properties.line, context);
+
+    return context.canvas;
+  };
+
+  const exports = { render };
+
+  return exports;
+};
 
 function drawZeroLine(
   properties: ZeroLineProperties | undefined,

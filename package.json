@@ -1,6 +1,6 @@
 {
   "name": "sparklib",
-  "version": "1.0.12-alpha",
+  "version": "1.0.14-alpha",
   "description": "Sparkly mini charts for your sparkling app",
   "main": "dist/index.js",
   "module": "esm/index.js",
