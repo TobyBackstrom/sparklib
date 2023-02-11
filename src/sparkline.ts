@@ -39,6 +39,8 @@ export const chart = (properties: ChartProperties) => {
   let _width = properties?.width ?? 250;
   let _height = properties?.height ?? 50;
   let _dpi = properties.dpi;
+  let _xDomain: [number, number];
+  let _yDomain: [number, number];
 
   const margins = properties.margins ?? defaultMargins;
   const horizontalMargin = margins.left + margins.right;
@@ -59,15 +61,25 @@ export const chart = (properties: ChartProperties) => {
     return exports;
   };
 
+  const xDomain = (_: [number, number]) => {
+    _xDomain = _;
+    return exports;
+  };
+
+  const yDomain = (_: [number, number]) => {
+    _yDomain = _;
+    return exports;
+  };
+
   const render = (values: number[]): HTMLCanvasElement => {
     const xScale = d3Scale
       .scaleLinear()
-      .domain([0, values.length - 1])
+      .domain(_xDomain ?? [0, values.length - 1])
       .range([_width * horizontalMargin, _width - _width * horizontalMargin]);
 
     const yScale = d3Scale
       .scaleLinear()
-      .domain(d3Array.extent(values) as [number, number])
+      .domain(_yDomain ?? (d3Array.extent(values) as [number, number]))
       .range([_height - _height * verticalMargin, _height * verticalMargin]);
 
     const context = dom.context2d(_width, _height, _dpi);
@@ -84,7 +96,7 @@ export const chart = (properties: ChartProperties) => {
     return context.canvas;
   };
 
-  const exports = { render };
+  const exports = { width, height, dpi, xDomain, yDomain, render };
 
   return exports;
 };
