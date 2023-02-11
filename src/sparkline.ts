@@ -63,7 +63,9 @@ export const chart = (properties?: ChartProperties) => {
     ...defaultChartProperties.margins!,
     ...properties?.margins,
   };
-  let _lineProps = { ...defaultChartProperties.line!, ...properties?.line };
+  let _lineProps: LineProperties | undefined = properties?.line
+    ? { ...properties?.line }
+    : undefined;
   let _datumLines = properties?.datumLines
     ? [...properties?.datumLines]
     : [...defaultChartProperties.datumLines];
@@ -110,6 +112,11 @@ export const chart = (properties?: ChartProperties) => {
     return exports;
   };
 
+  const line = (_?: LineProperties) => {
+    _lineProps = _ ? _ : defaultLineProperties;
+    return exports;
+  };
+
   const render = (values: number[]): HTMLCanvasElement => {
     const xScale = d3Scale
       .scaleLinear()
@@ -129,10 +136,21 @@ export const chart = (properties?: ChartProperties) => {
     }
 
     _datumLines.forEach((datum) =>
-      drawZeroLine(datum, values.length - 1, xScale, yScale, context)
+      drawLine(
+        [
+          [0, datum.y ?? 0],
+          [values.length - 1, datum.y ?? 0],
+        ],
+        xScale,
+        yScale,
+        datum,
+        context
+      )
     );
 
-    drawPath(values, xScale, yScale, _lineProps, context);
+    if (_lineProps) {
+      drawPath(values, xScale, yScale, _lineProps, context);
+    }
 
     return context.canvas;
   };
@@ -146,30 +164,12 @@ export const chart = (properties?: ChartProperties) => {
     yDomain,
     datum,
     background,
+    line,
     render,
   };
 
   return exports;
 };
-
-function drawZeroLine(
-  properties: DatumLineProperties,
-  xMaxValue: number,
-  xScale: d3Scale.ScaleLinear<number, number, never>,
-  yScale: d3Scale.ScaleLinear<number, number, never>,
-  context: CanvasRenderingContext2D
-) {
-  drawLine(
-    [
-      [0, properties.y ?? 0],
-      [xMaxValue, properties.y ?? 0],
-    ],
-    xScale,
-    yScale,
-    properties,
-    context
-  );
-}
 
 function drawLine(
   coordinates: number[][], // (x0, y0) -> (x1, y1)
