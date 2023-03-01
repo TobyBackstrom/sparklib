@@ -29,60 +29,37 @@ export interface ChartProperties {
   width?: number;
   height?: number;
   dpi?: number;
-  margins?: ChartMargins;
-  area?: AreaProperties;
-  line?: LineProperties;
-  datumLines: DatumLineProperties[];
-  background?: string | CanvasGradient;
 }
 
-const defaultChartProperties: ChartProperties = {
-  width: 250,
-  height: 50,
-  margins: {
+export const chart = (props?: ChartProperties) => {
+  let _chartProps = { width: 250, height: 50, ...props };
+  let _background: string | CanvasGradient | undefined = undefined;
+
+  let _marginProps = {
     bottom: 2,
     left: 2,
     right: 2,
     top: 2,
-  },
-  area: undefined,
-  line: {
-    lineWidth: 1,
-    strokeStyle: 'black',
-  },
-  datumLines: [],
-};
+  };
 
-export const chart = (properties?: ChartProperties) => {
-  let _width = properties?.width ?? defaultChartProperties.width!;
-  let _height = properties?.height ?? defaultChartProperties.height!;
-  let _dpi = properties?.dpi;
+  let _lineProps: LineProperties | undefined = undefined;
+  let _datumLines: DatumLineProperties[] = [];
+
   let _xDomain: [number, number];
   let _yDomain: [number, number];
-  let _marginProps = {
-    ...defaultChartProperties.margins!,
-    ...properties?.margins,
-  };
-  let _lineProps: LineProperties | undefined = properties?.line
-    ? { ...properties?.line }
-    : undefined;
-  let _datumLines = properties?.datumLines
-    ? [...properties?.datumLines]
-    : [...defaultChartProperties.datumLines];
-  let _background: string | CanvasGradient | undefined = properties?.background;
 
   const width = (_: number) => {
-    _width = _;
+    _chartProps.width = _;
     return exports;
   };
 
   const height = (_: number) => {
-    _height = _;
+    _chartProps.height = _;
     return exports;
   };
 
   const dpi = (_: number) => {
-    _dpi = _;
+    _chartProps.dpi = _;
     return exports;
   };
 
@@ -91,11 +68,13 @@ export const chart = (properties?: ChartProperties) => {
     return exports;
   };
 
+  // minX - maxX
   const xDomain = (_: [number, number]) => {
     _xDomain = _;
     return exports;
   };
 
+  // minY - maxY
   const yDomain = (_: [number, number]) => {
     _yDomain = _;
     return exports;
@@ -103,7 +82,13 @@ export const chart = (properties?: ChartProperties) => {
 
   // add horizontal reference lines in the y domain
   const datum = (y: number, lineProps?: LineProperties) => {
-    _datumLines.push({ y, ...lineProps });
+    const defaultLineProps = {
+      strokeStyle: 'black',
+      lineDash: [],
+      lineWidth: 1,
+    };
+
+    _datumLines.push({ y, ...defaultLineProps, ...lineProps });
     return exports;
   };
 
@@ -113,26 +98,40 @@ export const chart = (properties?: ChartProperties) => {
   };
 
   const line = (_?: LineProperties) => {
-    _lineProps = _ ? _ : defaultLineProperties;
+    const defaultLineProps = {
+      strokeStyle: 'black',
+      lineDash: [],
+      lineWidth: 1,
+    };
+
+    _lineProps = _ ? { ...defaultLineProps, ..._ } : defaultLineProps;
+
     return exports;
   };
 
-  const render = (values: number[]): HTMLCanvasElement => {
+  const render = (
+    values: number[],
+    tmp: [number, number][]
+  ): HTMLCanvasElement => {
     const xScale = d3Scale
       .scaleLinear()
       .domain(_xDomain ?? [0, values.length - 1])
-      .range([_marginProps.left, _width - _marginProps.right]);
+      .range([_marginProps.left, _chartProps.width - _marginProps.right]);
 
     const yScale = d3Scale
       .scaleLinear()
       .domain(_yDomain ?? (d3Array.extent(values) as [number, number]))
-      .range([_height - _marginProps.top, _marginProps.bottom]);
+      .range([_chartProps.height - _marginProps.top, _marginProps.bottom]);
 
-    const context = dom.context2d(_width, _height, _dpi);
+    const context = dom.context2d(
+      _chartProps.width,
+      _chartProps.height,
+      _chartProps.dpi
+    );
 
     if (_background) {
       context.fillStyle = _background;
-      context.fillRect(0, 0, _width, _height);
+      context.fillRect(0, 0, _chartProps.width, _chartProps.height);
     }
 
     _datumLines.forEach((datum) =>
@@ -219,17 +218,12 @@ function drawPath(
 }
 
 function setContextLineProperties(
-  properties: LineProperties,
+  props: LineProperties,
   context: CanvasRenderingContext2D
 ) {
-  const strokeStyle =
-    properties.strokeStyle ?? defaultLineProperties.strokeStyle;
-  const lineWidth = properties.lineWidth ?? defaultLineProperties.lineWidth;
-  const lineDash = properties.lineDash ?? defaultLineProperties.lineDash;
-
-  context.strokeStyle = strokeStyle!;
-  context.setLineDash(lineDash!);
-  context.lineWidth = lineWidth!;
+  context.strokeStyle = props.strokeStyle!;
+  context.setLineDash(props.lineDash!);
+  context.lineWidth = props.lineWidth!;
 }
 
 function getAreaFillstyle(
@@ -255,9 +249,3 @@ function getAreaFillstyle(
 function is2DArray(array: any[]): boolean {
   return array.every((element) => Array.isArray(element));
 }
-
-const defaultLineProperties: LineProperties = {
-  strokeStyle: 'black',
-  lineDash: [],
-  lineWidth: 1,
-};
