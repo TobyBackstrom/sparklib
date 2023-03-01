@@ -21,8 +21,9 @@ export interface LineProperties {
   lineDash?: number[]; // default: [], https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash
 }
 
-export interface DatumLineProperties extends LineProperties {
+export interface DatumLine {
   y: number; // default: 0
+  lineProperties: LineProperties;
 }
 
 export interface ChartProperties {
@@ -43,7 +44,7 @@ export const chart = (props?: ChartProperties) => {
   };
 
   let _lineProps: LineProperties | undefined = undefined;
-  let _datumLines: DatumLineProperties[] = [];
+  let _datumLines: DatumLine[] = [];
 
   let _xDomain: [number, number];
   let _yDomain: [number, number];
@@ -82,13 +83,19 @@ export const chart = (props?: ChartProperties) => {
 
   // add horizontal reference lines in the y domain
   const datum = (y: number, lineProps?: LineProperties) => {
-    const defaultLineProps = {
+    const defaultDatumLineProps = {
       strokeStyle: 'black',
       lineDash: [],
       lineWidth: 1,
     };
 
-    _datumLines.push({ y, ...defaultLineProps, ...lineProps });
+    const datumLineProps = {
+      ...defaultDatumLineProps,
+      ...lineProps,
+    };
+
+    _datumLines.push({ y, lineProperties: datumLineProps });
+
     return exports;
   };
 
@@ -134,15 +141,15 @@ export const chart = (props?: ChartProperties) => {
       context.fillRect(0, 0, _chartProps.width, _chartProps.height);
     }
 
-    _datumLines.forEach((datum) =>
+    _datumLines.forEach((datumLine) =>
       drawLine(
         [
-          [0, datum.y ?? 0],
-          [values.length - 1, datum.y ?? 0],
+          [0, datumLine.y ?? 0],
+          [values.length - 1, datumLine.y ?? 0],
         ],
         xScale,
         yScale,
-        datum,
+        datumLine.lineProperties,
         context
       )
     );
