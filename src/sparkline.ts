@@ -22,7 +22,7 @@ export interface LineProperties {
 }
 
 export interface DatumLine {
-  y: number; // default: 0
+  position: number; // x or y, default: 0
   lineProperties: LineProperties;
 }
 
@@ -44,7 +44,8 @@ export const chart = (props?: ChartProperties) => {
   };
 
   let _lineProps: LineProperties | undefined = undefined;
-  let _datumLines: DatumLine[] = [];
+  let _xDatumLines: DatumLine[] = [];
+  let _yDatumLines: DatumLine[] = [];
 
   let _xDomain: [number, number];
   let _yDomain: [number, number];
@@ -82,19 +83,15 @@ export const chart = (props?: ChartProperties) => {
   };
 
   // add horizontal reference lines in the y domain
-  const datum = (y: number, lineProps?: LineProperties) => {
-    const defaultDatumLineProps = {
-      strokeStyle: 'black',
-      lineDash: [],
-      lineWidth: 1,
-    };
+  const yDatum = (y: number, lineProps?: LineProperties) => {
+    datum(_yDatumLines, y, lineProps);
 
-    const datumLineProps = {
-      ...defaultDatumLineProps,
-      ...lineProps,
-    };
+    return exports;
+  };
 
-    _datumLines.push({ y, lineProperties: datumLineProps });
+  // add horizontal reference lines in the y domain
+  const xDatum = (x: number, lineProps?: LineProperties) => {
+    datum(_xDatumLines, x, lineProps);
 
     return exports;
   };
@@ -125,9 +122,10 @@ export const chart = (props?: ChartProperties) => {
       .domain(_xDomain ?? [0, values.length - 1])
       .range([_marginProps.left, _chartProps.width - _marginProps.right]);
 
+    _yDomain = _yDomain ?? (d3Array.extent(values) as [number, number]);
     const yScale = d3Scale
       .scaleLinear()
-      .domain(_yDomain ?? (d3Array.extent(values) as [number, number]))
+      .domain(_yDomain)
       .range([_chartProps.height - _marginProps.top, _marginProps.bottom]);
 
     const context = dom.context2d(
@@ -141,11 +139,24 @@ export const chart = (props?: ChartProperties) => {
       context.fillRect(0, 0, _chartProps.width, _chartProps.height);
     }
 
-    _datumLines.forEach((datumLine) =>
+    _xDatumLines.forEach((datumLine) =>
       drawLine(
         [
-          [0, datumLine.y ?? 0],
-          [values.length - 1, datumLine.y ?? 0],
+          [datumLine.position ?? 0, _yDomain[0]],
+          [datumLine.position ?? 0, _yDomain[1]],
+        ],
+        yScale,
+        xScale,
+        datumLine.lineProperties,
+        context
+      )
+    );
+
+    _yDatumLines.forEach((datumLine) =>
+      drawLine(
+        [
+          [0, datumLine.position ?? 0],
+          [values.length - 1, datumLine.position ?? 0],
         ],
         xScale,
         yScale,
@@ -168,7 +179,8 @@ export const chart = (props?: ChartProperties) => {
     margins,
     xDomain,
     yDomain,
-    datum,
+    xDatum,
+    yDatum,
     background,
     line,
     render,
@@ -176,6 +188,25 @@ export const chart = (props?: ChartProperties) => {
 
   return exports;
 };
+
+function datum(
+  datumLines: DatumLine[],
+  position: number,
+  datumLineProps?: LineProperties
+) {
+  const defaultDatumLineProps = {
+    strokeStyle: 'black',
+    lineDash: [],
+    lineWidth: 1,
+  };
+
+  const lineProperties = {
+    ...defaultDatumLineProps,
+    ...datumLineProps,
+  } as LineProperties;
+
+  datumLines.push({ position, lineProperties });
+}
 
 function drawLine(
   coordinates: number[][], // (x0, y0) -> (x1, y1)
