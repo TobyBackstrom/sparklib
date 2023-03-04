@@ -54,58 +54,58 @@ export class ChartBase {
     this.#chartProps = { ...this.#chartProps, ...props };
   }
 
-  width = (width: number) => {
+  width(width: number) {
     this.#chartProps.width = width;
     return this;
-  };
+  }
 
-  height = (height: number) => {
+  height(height: number) {
     this.#chartProps.height = height;
     return this;
-  };
+  }
 
-  dpi = (dpi: number) => {
+  dpi(dpi: number) {
     this.#chartProps.dpi = dpi;
     return this;
-  };
+  }
 
-  margins = (margins: ChartMargins) => {
+  margins(margins: ChartMargins) {
     this.#margins = { ...this.#margins, ...margins };
     return this;
-  };
+  }
 
   // minX - maxX
-  xDomain = (xDomain: [number, number]) => {
+  xDomain(xDomain: [number, number]) {
     this.#xDomain = xDomain;
     return this;
-  };
+  }
 
   // minY - maxY
-  yDomain = (yDomain: [number, number]) => {
+  yDomain(yDomain: [number, number]) {
     this.#yDomain = yDomain;
     return this;
-  };
+  }
 
   // add horizontal reference lines in the y domain
-  yDatum = (y: number, lineProps?: LineProperties) => {
+  yDatum(y: number, lineProps?: LineProperties) {
     this.#datum(this.#yDatumLines, y, lineProps);
 
     return this;
-  };
+  }
 
   // add horizontal reference lines in the y domain
-  xDatum = (x: number, lineProps?: LineProperties) => {
+  xDatum(x: number, lineProps?: LineProperties) {
     this.#datum(this.#xDatumLines, x, lineProps);
 
     return this;
-  };
+  }
 
-  background = (background: string | CanvasGradient) => {
+  background(background: string | CanvasGradient) {
     this.#background = background;
     return this;
-  };
+  }
 
-  line = (lineProps?: LineProperties) => {
+  line(lineProps?: LineProperties) {
     const defaultLineProps = {
       strokeStyle: 'black',
       lineDash: [],
@@ -117,9 +117,9 @@ export class ChartBase {
       : defaultLineProps;
 
     return this;
-  };
+  }
 
-  render = (values: number[], tmp: [number, number][]): HTMLCanvasElement => {
+  render(values: number[], tmp: [number, number][]): HTMLCanvasElement {
     const xScale = d3Scale
       .scaleLinear()
       .domain(this.#xDomain ?? [0, values.length - 1])
@@ -180,7 +180,7 @@ export class ChartBase {
     }
 
     return context.canvas;
-  };
+  }
 
   #datum = (
     datumLines: DatumLine[],
