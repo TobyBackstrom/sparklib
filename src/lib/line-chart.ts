@@ -1,21 +1,9 @@
-import * as dom from './dom';
 import * as d3Array from 'd3-array';
 import * as d3Color from 'd3-color';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
-export interface ChartMargins {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-}
-
-export interface ChartProperties {
-  width?: number;
-  height?: number;
-  dpi?: number;
-}
+import { ChartBase, ChartProperties } from './chart-base';
 
 export interface AreaProperties {
   fillStyle?: string | CanvasGradient; // default: "black with opacity 0.3"
@@ -30,62 +18,6 @@ export interface LineProperties {
 export interface DatumLine {
   position: number; // x or y, default: 0
   lineProperties: LineProperties;
-}
-
-export class ChartBase {
-  protected chartProps: ChartProperties = { width: 250, height: 50 };
-  protected backgroundProps: string | CanvasGradient | undefined = undefined;
-
-  marginsProps: ChartMargins = {
-    bottom: 2,
-    left: 2,
-    right: 2,
-    top: 2,
-  };
-
-  constructor(props?: ChartProperties) {
-    this.chartProps = { ...this.chartProps, ...props };
-  }
-
-  width(width: number) {
-    this.chartProps.width = width;
-    return this;
-  }
-
-  height(height: number) {
-    this.chartProps.height = height;
-    return this;
-  }
-
-  dpi(dpi: number) {
-    this.chartProps.dpi = dpi;
-    return this;
-  }
-
-  margins(margins: ChartMargins) {
-    this.marginsProps = { ...this.marginsProps, ...margins };
-    return this;
-  }
-
-  background(backgroundProps: string | CanvasGradient) {
-    this.backgroundProps = backgroundProps;
-    return this;
-  }
-
-  protected renderChartBase(): CanvasRenderingContext2D {
-    const context = dom.context2d(
-      this.chartProps.width!,
-      this.chartProps.height!,
-      this.chartProps.dpi
-    );
-
-    if (this.backgroundProps) {
-      context.fillStyle = this.backgroundProps;
-      context.fillRect(0, 0, this.chartProps.width!, this.chartProps.height!);
-    }
-
-    return context;
-  }
 }
 
 export interface SparklineParameters {
@@ -214,6 +146,7 @@ export class LineChart extends ChartBase {
     datumLines.push({ position, lineProperties });
   };
 }
+
 // TODO: move
 
 export function drawLine(
