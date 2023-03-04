@@ -11,6 +11,12 @@ export interface ChartMargins {
   bottom: number;
 }
 
+export interface ChartProperties {
+  width?: number;
+  height?: number;
+  dpi?: number;
+}
+
 export interface AreaProperties {
   fillStyle?: string | CanvasGradient; // default: "black with opacity 0.3"
 }
@@ -26,23 +32,68 @@ export interface DatumLine {
   lineProperties: LineProperties;
 }
 
-export interface ChartProperties {
-  width?: number;
-  height?: number;
-  dpi?: number;
-}
-
 export class ChartBase {
-  #chartProps: ChartProperties = { width: 250, height: 50 };
-  #background: string | CanvasGradient | undefined = undefined;
+  protected chartProps: ChartProperties = { width: 250, height: 50 };
+  protected backgroundProps: string | CanvasGradient | undefined = undefined;
 
-  #margins: ChartMargins = {
+  marginsProps: ChartMargins = {
     bottom: 2,
     left: 2,
     right: 2,
     top: 2,
   };
 
+  constructor(props?: ChartProperties) {
+    this.chartProps = { ...this.chartProps, ...props };
+  }
+
+  width(width: number) {
+    this.chartProps.width = width;
+    return this;
+  }
+
+  height(height: number) {
+    this.chartProps.height = height;
+    return this;
+  }
+
+  dpi(dpi: number) {
+    this.chartProps.dpi = dpi;
+    return this;
+  }
+
+  margins(margins: ChartMargins) {
+    this.marginsProps = { ...this.marginsProps, ...margins };
+    return this;
+  }
+
+  background(backgroundProps: string | CanvasGradient) {
+    this.backgroundProps = backgroundProps;
+    return this;
+  }
+
+  protected renderChartBase(): CanvasRenderingContext2D {
+    const context = dom.context2d(
+      this.chartProps.width!,
+      this.chartProps.height!,
+      this.chartProps.dpi
+    );
+
+    if (this.backgroundProps) {
+      context.fillStyle = this.backgroundProps;
+      context.fillRect(0, 0, this.chartProps.width!, this.chartProps.height!);
+    }
+
+    return context;
+  }
+}
+
+export interface SparklineParameters {
+  lineProps?: LineProperties;
+  chartProps?: ChartProperties;
+}
+
+export class LineChart extends ChartBase {
   #lineProps: LineProperties | undefined = undefined;
   #xDatumLines: DatumLine[] = [];
   #yDatumLines: DatumLine[] = [];
@@ -50,82 +101,29 @@ export class ChartBase {
   #xDomain: [number, number] | undefined;
   #yDomain: [number, number] | undefined;
 
-  constructor(props?: ChartProperties) {
-    this.#chartProps = { ...this.#chartProps, ...props };
-  }
+  constructor(params?: SparklineParameters) {
+    super(params?.chartProps);
 
-  width(width: number) {
-    this.#chartProps.width = width;
-    return this;
-  }
-
-  height(height: number) {
-    this.#chartProps.height = height;
-    return this;
-  }
-
-  dpi(dpi: number) {
-    this.#chartProps.dpi = dpi;
-    return this;
-  }
-
-  margins(margins: ChartMargins) {
-    this.#margins = { ...this.#margins, ...margins };
-    return this;
-  }
-
-  // minX - maxX
-  xDomain(xDomain: [number, number]) {
-    this.#xDomain = xDomain;
-    return this;
-  }
-
-  // minY - maxY
-  yDomain(yDomain: [number, number]) {
-    this.#yDomain = yDomain;
-    return this;
-  }
-
-  // add horizontal reference lines in the y domain
-  yDatum(y: number, lineProps?: LineProperties) {
-    this.#datum(this.#yDatumLines, y, lineProps);
-
-    return this;
-  }
-
-  // add horizontal reference lines in the y domain
-  xDatum(x: number, lineProps?: LineProperties) {
-    this.#datum(this.#xDatumLines, x, lineProps);
-
-    return this;
-  }
-
-  background(background: string | CanvasGradient) {
-    this.#background = background;
-    return this;
-  }
-
-  line(lineProps?: LineProperties) {
-    const defaultLineProps = {
+    const defaultLineProps: LineProperties = {
       strokeStyle: 'black',
       lineDash: [],
       lineWidth: 1,
     };
 
-    this.#lineProps = lineProps
-      ? { ...defaultLineProps, ...lineProps }
+    this.#lineProps = params?.lineProps
+      ? { ...defaultLineProps, ...params.lineProps }
       : defaultLineProps;
-
-    return this;
   }
 
   render(values: number[], tmp: [number, number][]): HTMLCanvasElement {
+    const context = super.renderChartBase();
+
     const xScale = d3Scale
       .scaleLinear()
       .domain(this.#xDomain ?? [0, values.length - 1])
       .range([
-        this.#margins.left,
-        this.#chartProps.width! - this.#margins.right,
+        this.marginsProps.left,
+        this.chartProps.width! - this.marginsProps.right,
       ]);
 
     this.#yDomain =
@@ -134,20 +132,9 @@ export class ChartBase {
       .scaleLinear()
       .domain(this.#yDomain)
       .range([
-        this.#chartProps.height! - this.#margins.top,
-        this.#margins.bottom,
+        this.chartProps.height! - this.marginsProps.top,
+        this.marginsProps.bottom,
       ]);
-
-    const context = dom.context2d(
-      this.#chartProps.width!,
-      this.#chartProps.height!,
-      this.#chartProps.dpi
-    );
-
-    if (this.#background) {
-      context.fillStyle = this.#background;
-      context.fillRect(0, 0, this.#chartProps.width!, this.#chartProps.height!);
-    }
 
     this.#xDatumLines.forEach((datumLine) =>
       drawLine(
@@ -182,6 +169,32 @@ export class ChartBase {
     return context.canvas;
   }
 
+  // minX - maxX
+  xDomain(xDomain: [number, number]) {
+    this.#xDomain = xDomain;
+    return this;
+  }
+
+  // minY - maxY
+  yDomain(yDomain: [number, number]) {
+    this.#yDomain = yDomain;
+    return this;
+  }
+
+  // add horizontal reference lines in the y domain
+  yDatum(y: number, lineProps?: LineProperties) {
+    this.#datum(this.#yDatumLines, y, lineProps);
+
+    return this;
+  }
+
+  // add vertical reference lines in the x domain
+  xDatum(x: number, lineProps?: LineProperties) {
+    this.#datum(this.#xDatumLines, x, lineProps);
+
+    return this;
+  }
+
   #datum = (
     datumLines: DatumLine[],
     position: number,
@@ -189,7 +202,7 @@ export class ChartBase {
   ) => {
     const defaultDatumLineProps = {
       strokeStyle: 'black',
-      lineDash: [],
+      lineDash: [1, 1],
       lineWidth: 1,
     };
 
@@ -200,12 +213,6 @@ export class ChartBase {
 
     datumLines.push({ position, lineProperties });
   };
-}
-
-export class LineChart extends ChartBase {
-  constructor(props?: ChartProperties) {
-    super(props);
-  }
 }
 // TODO: move
 

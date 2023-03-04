@@ -1,5 +1,6 @@
-import { ChartBase, ChartProperties } from './chart-base';
+import { LineChart, SparklineParameters } from './chart-base';
 
-export const chart = (props?: ChartProperties) => {
-  return new ChartBase(props);
+// factory function (for simplicity to keep the fluid API going)
+export const sparkline = (params: SparklineParameters) => {
+  return new LineChart(params);
 };
