@@ -53,23 +53,10 @@ export class LineChart extends ChartBase {
   render(values: number[], tmp: [number, number][]): HTMLCanvasElement {
     const context = super.renderChartBase();
 
-    const xScale = d3Scale
-      .scaleLinear()
-      .domain(this.#xDomain ?? [0, values.length - 1])
-      .range([
-        this.marginsProps.left,
-        this.chartProps.width! - this.marginsProps.right,
-      ]);
+    this.#yDomain = this.#yDomain ?? (d3Array.extent(values) as Range);
 
-    this.#yDomain =
-      this.#yDomain ?? (d3Array.extent(values) as [number, number]);
-    const yScale = d3Scale
-      .scaleLinear()
-      .domain(this.#yDomain)
-      .range([
-        this.chartProps.height! - this.marginsProps.top,
-        this.marginsProps.bottom,
-      ]);
+    const xScale = this.#xScale(values);
+    const yScale = this.#yScale(this.#yDomain);
 
     this.#xDatumLines.forEach((datumLine) => {
       const scaledCoordinates = [
@@ -122,6 +109,26 @@ export class LineChart extends ChartBase {
     this.#datum(this.#xDatumLines, x, lineProps);
 
     return this;
+  }
+
+  #xScale(values: number[]): d3Scale.ScaleLinear<number, number, never> {
+    return d3Scale
+      .scaleLinear()
+      .domain(this.#xDomain ?? [0, values.length - 1])
+      .range([
+        this.marginsProps.left,
+        this.chartProps.width! - this.marginsProps.right,
+      ]);
+  }
+
+  #yScale(yDomain: Range): d3Scale.ScaleLinear<number, number, never> {
+    return d3Scale
+      .scaleLinear()
+      .domain(yDomain)
+      .range([
+        this.chartProps.height! - this.marginsProps.top,
+        this.marginsProps.bottom,
+      ]);
   }
 
   #datum(
