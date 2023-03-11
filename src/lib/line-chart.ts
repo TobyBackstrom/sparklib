@@ -71,30 +71,28 @@ export class LineChart extends ChartBase {
         this.marginsProps.bottom,
       ]);
 
-    this.#xDatumLines.forEach((datumLine) =>
-      this.#drawLine(
+    this.#xDatumLines.forEach((datumLine) => {
+      const scaledCoordinates = [
         [yScale(datumLine.position ?? 0), xScale(this.#yDomain![0])],
         [yScale(datumLine.position ?? 0), xScale(this.#yDomain![1])],
-        datumLine.lineProperties,
-        context
-      )
-    );
+      ] as Coordinate[];
+      this.#drawPath(scaledCoordinates, datumLine.lineProperties, context);
+    });
 
-    this.#yDatumLines.forEach((datumLine) =>
-      this.#drawLine(
+    this.#yDatumLines.forEach((datumLine) => {
+      const scaledCoordinates = [
         [xScale(0), yScale(datumLine.position ?? 0)],
         [xScale(values.length - 1), yScale(datumLine.position ?? 0)],
-        datumLine.lineProperties,
-        context
-      )
-    );
+      ] as Coordinate[];
 
-    const scaledValues = values.map(
-      (v, i) => [xScale(i), yScale(v)] as Coordinate
-    );
+      this.#drawPath(scaledCoordinates, datumLine.lineProperties, context);
+    });
 
     if (this.#lineProps) {
-      this.#drawPath(scaledValues, this.#lineProps, context);
+      const scaledCoordinates = values.map(
+        (v, i) => [xScale(i), yScale(v)] as Coordinate
+      );
+      this.#drawPath(scaledCoordinates, this.#lineProps, context);
     }
 
     return context.canvas;
@@ -143,25 +141,6 @@ export class LineChart extends ChartBase {
     } as LineProperties;
 
     datumLines.push({ position, lineProperties });
-  }
-
-  #drawLine(
-    from: Coordinate,
-    to: Coordinate,
-    lineProperties: LineProperties,
-    context: CanvasRenderingContext2D
-  ) {
-    context.beginPath();
-
-    context.moveTo(from[0], from[1]);
-    context.lineTo(to[0], to[1]);
-
-    context.strokeStyle = lineProperties.strokeStyle!;
-    context.setLineDash(lineProperties.lineDash!);
-    context.lineWidth = lineProperties.lineWidth!;
-
-    context.stroke();
-    context.closePath();
   }
 
   #drawPath(
