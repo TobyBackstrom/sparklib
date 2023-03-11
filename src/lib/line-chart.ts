@@ -5,6 +5,9 @@ import * as d3Shape from 'd3-shape';
 
 import { ChartBase, ChartProperties } from './chart-base';
 
+export type Coordinate = [number, number];
+export type Range = [number, number];
+
 export interface AreaProperties {
   fillStyle?: string | CanvasGradient; // default: "black with opacity 0.3"
 }
@@ -30,8 +33,8 @@ export class LineChart extends ChartBase {
   #xDatumLines: DatumLine[] = [];
   #yDatumLines: DatumLine[] = [];
 
-  #xDomain: [number, number] | undefined;
-  #yDomain: [number, number] | undefined;
+  #xDomain: Range | undefined;
+  #yDomain: Range | undefined;
 
   constructor(params?: SparklineParameters) {
     super(params?.chartProps);
@@ -69,46 +72,42 @@ export class LineChart extends ChartBase {
       ]);
 
     this.#xDatumLines.forEach((datumLine) =>
-      drawLine(
-        [
-          [datumLine.position ?? 0, this.#yDomain![0]],
-          [datumLine.position ?? 0, this.#yDomain![1]],
-        ],
-        yScale,
-        xScale,
+      this.#drawLine(
+        [yScale(datumLine.position ?? 0), xScale(this.#yDomain![0])],
+        [yScale(datumLine.position ?? 0), xScale(this.#yDomain![1])],
         datumLine.lineProperties,
         context
       )
     );
 
     this.#yDatumLines.forEach((datumLine) =>
-      drawLine(
-        [
-          [0, datumLine.position ?? 0],
-          [values.length - 1, datumLine.position ?? 0],
-        ],
-        xScale,
-        yScale,
+      this.#drawLine(
+        [xScale(0), yScale(datumLine.position ?? 0)],
+        [xScale(values.length - 1), yScale(datumLine.position ?? 0)],
         datumLine.lineProperties,
         context
       )
     );
 
+    const scaledValues = values.map(
+      (v, i) => [xScale(i), yScale(v)] as Coordinate
+    );
+
     if (this.#lineProps) {
-      drawPath(values, xScale, yScale, this.#lineProps, context);
+      this.#drawPath(scaledValues, this.#lineProps, context);
     }
 
     return context.canvas;
   }
 
   // minX - maxX
-  xDomain(xDomain: [number, number]) {
+  xDomain(xDomain: Range) {
     this.#xDomain = xDomain;
     return this;
   }
 
   // minY - maxY
-  yDomain(yDomain: [number, number]) {
+  yDomain(yDomain: Range) {
     this.#yDomain = yDomain;
     return this;
   }
@@ -127,11 +126,11 @@ export class LineChart extends ChartBase {
     return this;
   }
 
-  #datum = (
+  #datum(
     datumLines: DatumLine[],
     position: number,
     datumLineProps?: LineProperties
-  ) => {
+  ) {
     const defaultDatumLineProps = {
       strokeStyle: 'black',
       lineDash: [1, 1],
@@ -144,65 +143,47 @@ export class LineChart extends ChartBase {
     } as LineProperties;
 
     datumLines.push({ position, lineProperties });
-  };
-}
+  }
 
-// TODO: move
-
-export function drawLine(
-  coordinates: number[][], // (x0, y0) -> (x1, y1)
-  xScale: any,
-  yScale: any,
-  lineProperties: LineProperties,
-  context: CanvasRenderingContext2D
-) {
-  const line = (data: number[][]) => {
+  #drawLine(
+    from: Coordinate,
+    to: Coordinate,
+    lineProperties: LineProperties,
+    context: CanvasRenderingContext2D
+  ) {
     context.beginPath();
 
-    context.moveTo(xScale(coordinates[0][0]), yScale(coordinates[0][1]));
-    context.lineTo(xScale(coordinates[1][0]), yScale(coordinates[1][1]));
+    context.moveTo(from[0], from[1]);
+    context.lineTo(to[0], to[1]);
 
-    setContextLineProperties(lineProperties, context);
+    context.strokeStyle = lineProperties.strokeStyle!;
+    context.setLineDash(lineProperties.lineDash!);
+    context.lineWidth = lineProperties.lineWidth!;
 
     context.stroke();
     context.closePath();
-  };
+  }
 
-  line(coordinates);
-}
-
-export function drawPath(
-  values: number[],
-  xScale: any,
-  yScale: any,
-  lineProperties: LineProperties,
-  context: CanvasRenderingContext2D
-) {
-  const line = (data: number[]) => {
+  #drawPath(
+    coordinates: Coordinate[],
+    lineProperties: LineProperties,
+    context: CanvasRenderingContext2D
+  ) {
     context.beginPath();
 
-    const line = d3Shape
-      .line<number>()
-      .x((_, i) => xScale(i))
-      .y(yScale)
-      .context(context)(data);
+    d3Shape
+      .line<Coordinate>()
+      .x((coordinate) => coordinate[0])
+      .y((coordinate) => coordinate[1])
+      .context(context)(coordinates);
 
-    setContextLineProperties(lineProperties, context);
+    context.strokeStyle = lineProperties.strokeStyle!;
+    context.setLineDash(lineProperties.lineDash!);
+    context.lineWidth = lineProperties.lineWidth!;
 
     context.stroke();
     context.closePath();
-  };
-
-  line(values);
-}
-
-function setContextLineProperties(
-  props: LineProperties,
-  context: CanvasRenderingContext2D
-) {
-  context.strokeStyle = props.strokeStyle!;
-  context.setLineDash(props.lineDash!);
-  context.lineWidth = props.lineWidth!;
+  }
 }
 
 function getAreaFillstyle(
