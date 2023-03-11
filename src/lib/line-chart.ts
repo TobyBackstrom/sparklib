@@ -53,6 +53,12 @@ export class LineChart extends ChartBase {
   render(values: number[], tmp: [number, number][]): HTMLCanvasElement {
     const context = super.renderChartBase();
 
+    if (values.length < 2) {
+      // This is a line chart, remember? It requires at least a pair of coordinates.
+      // Instead of throwing an error just return the empty canvas.
+      return context.canvas;
+    }
+
     this.#yDomain = this.#yDomain ?? (d3Array.extent(values) as Range);
 
     const xScale = this.#xScale(values);
