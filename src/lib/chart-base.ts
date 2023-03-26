@@ -51,8 +51,10 @@ export class ChartBase {
     return this;
   }
 
-  margins(margins: ChartMargins) {
-    this.marginsProps = { ...this.marginsProps, ...margins };
+  margins(margins?: ChartMargins) {
+    this.marginsProps = margins
+      ? { ...this.marginsProps, ...margins }
+      : NO_MARGINS;
     return this;
   }
 
