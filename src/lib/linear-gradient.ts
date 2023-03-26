@@ -8,6 +8,8 @@ interface ColorStop {
   color: string;
 }
 
+export type LinearGradientValueType = 'domain' | 'canvas';
+
 /**
  * Class representing a linear gradient.
  */
@@ -25,7 +27,8 @@ export class LinearGradient {
     private x0: number,
     private y0: number,
     private x1: number,
-    private y1: number
+    private y1: number,
+    private valueType: LinearGradientValueType = 'canvas'
   ) {}
 
   /**
