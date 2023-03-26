@@ -1,4 +1,5 @@
 import * as dom from '../dom';
+import { LinearGradient } from './linear-gradient';
 
 export interface ChartMargins {
   left: number;
@@ -22,7 +23,7 @@ export const NO_MARGINS: ChartMargins = {
 
 export class ChartBase {
   protected chartProps: ChartProperties = { width: 250, height: 50 };
-  protected backgroundProps: string | CanvasGradient | undefined = undefined;
+  protected backgroundProps: string | LinearGradient | undefined = undefined;
 
   marginsProps: ChartMargins = {
     bottom: 2,
@@ -55,7 +56,7 @@ export class ChartBase {
     return this;
   }
 
-  background(backgroundProps: string | CanvasGradient) {
+  background(backgroundProps: string | LinearGradient) {
     this.backgroundProps = backgroundProps;
     return this;
   }
@@ -68,7 +69,12 @@ export class ChartBase {
     );
 
     if (this.backgroundProps) {
-      context.fillStyle = this.backgroundProps;
+      const fillStyle =
+        this.backgroundProps instanceof LinearGradient
+          ? this.backgroundProps.getCanvasGradient(context)
+          : this.backgroundProps;
+
+      context.fillStyle = fillStyle;
       context.fillRect(0, 0, this.chartProps.width!, this.chartProps.height!);
     }
 

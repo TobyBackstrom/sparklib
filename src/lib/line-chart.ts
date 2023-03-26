@@ -4,23 +4,24 @@ import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
 import { ChartBase, ChartProperties } from './chart-base';
+import { LinearGradient } from './linear-gradient';
 
 export type Coordinate = [number, number];
 export type Range = [number, number];
 
 export interface AreaProperties {
-  fillStyle?: string | CanvasGradient; // default: "black with opacity 0.3"
+  fillStyle?: string | LinearGradient; // default: "black with opacity 0.3"
 }
 
 export interface LineProperties {
-  strokeStyle?: string | CanvasGradient; // default: "black"
+  strokeStyle?: string | LinearGradient; // default: "black"
   lineWidth?: number; // default: 1
   lineDash?: number[]; // default: [], https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash
 }
 
-export interface DatumLine {
+interface DatumLine {
   position: number; // x or y, default: 0
-  lineProperties: LineProperties;
+  lineProperties: Required<LineProperties>;
 }
 
 export interface SparklineParameters {
@@ -29,7 +30,7 @@ export interface SparklineParameters {
 }
 
 export class LineChart extends ChartBase {
-  #lineProps: LineProperties | undefined = undefined;
+  #lineProps: Required<LineProperties>;
   #xDatumLines: DatumLine[] = [];
   #yDatumLines: DatumLine[] = [];
 
@@ -39,7 +40,7 @@ export class LineChart extends ChartBase {
   constructor(params?: SparklineParameters) {
     super(params?.chartProps);
 
-    const defaultLineProps: LineProperties = {
+    const defaultLineProps: Required<LineProperties> = {
       strokeStyle: 'black',
       lineDash: [],
       lineWidth: 1,
@@ -117,6 +118,21 @@ export class LineChart extends ChartBase {
     return this;
   }
 
+  strokeStyle(strokeStyle: string | LinearGradient) {
+    this.#lineProps.strokeStyle = strokeStyle;
+    return this;
+  }
+
+  lineDash(lineDash: number[]) {
+    this.#lineProps.lineDash = lineDash;
+    return this;
+  }
+
+  lineWidth(lineWidth: number) {
+    this.#lineProps.lineWidth = lineWidth;
+    return this;
+  }
+
   #xScale(values: number[]): d3Scale.ScaleLinear<number, number, never> {
     return d3Scale
       .scaleLinear()
@@ -151,16 +167,21 @@ export class LineChart extends ChartBase {
     const lineProperties = {
       ...defaultDatumLineProps,
       ...datumLineProps,
-    } as LineProperties;
+    } as Required<LineProperties>;
 
     datumLines.push({ position, lineProperties });
   }
 
   #drawPath(
     coordinates: Coordinate[],
-    lineProperties: LineProperties,
+    lineProperties: Required<LineProperties>,
     context: CanvasRenderingContext2D
   ) {
+    const strokeStyle =
+      lineProperties.strokeStyle instanceof LinearGradient
+        ? lineProperties.strokeStyle.getCanvasGradient(context)
+        : lineProperties.strokeStyle;
+
     context.beginPath();
 
     d3Shape
@@ -169,7 +190,7 @@ export class LineChart extends ChartBase {
       .y((coordinate) => coordinate[1])
       .context(context)(coordinates);
 
-    context.strokeStyle = lineProperties.strokeStyle!;
+    context.strokeStyle = strokeStyle;
     context.setLineDash(lineProperties.lineDash!);
     context.lineWidth = lineProperties.lineWidth!;
 
