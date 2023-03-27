@@ -1,3 +1,5 @@
+import * as d3Scale from 'd3-scale';
+
 /**
  * Interface representing a single color stop in a gradient.
  */
@@ -42,6 +44,35 @@ export class LinearGradient {
     return this;
   }
 
+  convertToCanvasCoordinates(
+    xScale: d3Scale.ScaleLinear<number, number, never>,
+    yScale: d3Scale.ScaleLinear<number, number, never>
+  ): LinearGradient {
+    if (this.valueType === 'canvas') {
+      return this;
+    }
+
+    // length of the gradient line in domain space
+    const dx = this.x1 - this.x0;
+    const dy = this.y1 - this.y0;
+    const length = Math.sqrt(dx * dx + dy * dy);
+
+    // convert the gradient to canvas space
+    const gradient = new LinearGradient(
+      xScale(this.x0),
+      yScale(this.y0),
+      xScale(this.x1),
+      yScale(this.y1)
+    );
+
+    // map the stops to canvas space
+    this.colorStops.forEach((s) =>
+      gradient.addColorStop(s.offset / length, s.color)
+    );
+
+    return gradient;
+  }
+
   /**
    * Get a CanvasGradient object representing the linear gradient, for use with the HTML canvas API.
    * @param context The 2D rendering context of the canvas.
@@ -73,7 +104,8 @@ export const linearGradient = (
   x0: number,
   y0: number,
   x1: number,
-  y1: number
+  y1: number,
+  valueType?: LinearGradientValueType
 ) => {
-  return new LinearGradient(x0, y0, x1, y1);
+  return new LinearGradient(x0, y0, x1, y1, valueType);
 };
