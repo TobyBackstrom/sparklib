@@ -262,6 +262,7 @@ export class LineChart extends ChartBase {
 
     d3Shape
       .area<Coordinate>()
+      .defined((coordinate) => coordinate[1] != null)
       .x((coordinate) => coordinate[0])
       .y0(y0)
       .y1((coordinate) => coordinate[1])
@@ -286,11 +287,13 @@ export class LineChart extends ChartBase {
 
     d3Shape
       .line<Coordinate>()
+      .defined((coordinate) => coordinate[1] != null)
       .x((coordinate) => coordinate[0])
       .y((coordinate) => coordinate[1])
       .context(context)(coordinates);
 
     context.strokeStyle = strokeStyle;
+    context.lineCap = 'round';
     context.setLineDash(lineProperties.lineDash!);
     context.lineWidth = lineProperties.lineWidth!;
     context.stroke();
