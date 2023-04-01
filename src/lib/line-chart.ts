@@ -68,37 +68,19 @@ export class LineChart extends ChartBase {
 
     const arrayType = getArrayType(values);
 
-    this.#xDomain =
-      this.#xDomain ??
-      ((arrayType === ArrayType.SingleNumbers
-        ? [0, values.length - 1] // index in array defines the x domain
-        : d3Array.extent(values as [number, number][], (d) => d[0])) as Range);
+    const xDomain = this.#getXDomain(values, arrayType);
+    const yDomain = this.#getYDomain(values, arrayType);
 
-    this.#yDomain =
-      this.#yDomain ??
-      ((arrayType === ArrayType.SingleNumbers
-        ? d3Array.extent(values as number[])
-        : d3Array.extent(values as [number, number][], (d) => d[1])) as Range);
+    const xScale = this.#xScale(xDomain);
+    const yScale = this.#yScale(yDomain);
 
-    const xScale = this.#xScale(this.#xDomain);
-    const yScale = this.#yScale(this.#yDomain);
+    this.#xDatumLines.forEach((datumLine) =>
+      this.#drawDatumLine('x', datumLine, yDomain, xScale, yScale, context)
+    );
 
-    this.#xDatumLines.forEach((datumLine) => {
-      const scaledCoordinates = [
-        [xScale(datumLine.position ?? 0), yScale(this.#yDomain![0])],
-        [xScale(datumLine.position ?? 0), yScale(this.#yDomain![1])],
-      ] as Coordinate[];
-      this.#drawPath(scaledCoordinates, datumLine.lineProperties, context);
-    });
-
-    this.#yDatumLines.forEach((datumLine) => {
-      const scaledCoordinates = [
-        [xScale(this.#xDomain![0]), yScale(datumLine.position ?? 0)],
-        [xScale(this.#xDomain![1]), yScale(datumLine.position ?? 0)],
-      ] as Coordinate[];
-
-      this.#drawPath(scaledCoordinates, datumLine.lineProperties, context);
-    });
+    this.#yDatumLines.forEach((datumLine) =>
+      this.#drawDatumLine('y', datumLine, xDomain, xScale, yScale, context)
+    );
 
     if (this.#lineProps) {
       const scaledCoordinates = this.#scaleCoordinates(
@@ -154,10 +136,34 @@ export class LineChart extends ChartBase {
     return this;
   }
 
-  #xScale(values: number[]): d3Scale.ScaleLinear<number, number, never> {
+  #getXDomain(
+    values: (number | [number, number])[],
+    arrayType: ArrayType
+  ): Range {
+    return (
+      this.#xDomain ??
+      ((arrayType === ArrayType.SingleNumbers
+        ? [0, values.length - 1] // index in array defines the x domain
+        : d3Array.extent(values as [number, number][], (d) => d[0])) as Range)
+    );
+  }
+
+  #getYDomain(
+    values: (number | [number, number])[],
+    arrayType: ArrayType
+  ): Range {
+    return (
+      this.#yDomain ??
+      ((arrayType === ArrayType.SingleNumbers
+        ? d3Array.extent(values as number[])
+        : d3Array.extent(values as [number, number][], (d) => d[1])) as Range)
+    );
+  }
+
+  #xScale(xDomain: Range): d3Scale.ScaleLinear<number, number, never> {
     return d3Scale
       .scaleLinear()
-      .domain(this.#xDomain!)
+      .domain(xDomain)
       .range([
         this.marginsProps.left,
         this.chartProps.width! - this.marginsProps.right,
@@ -210,6 +216,28 @@ export class LineChart extends ChartBase {
     } as Required<LineProperties>;
 
     datumLines.push({ position, lineProperties });
+  }
+
+  #drawDatumLine(
+    axis: 'x' | 'y',
+    datumLine: DatumLine,
+    domain: Range,
+    xScale: d3Scale.ScaleLinear<number, number>,
+    yScale: d3Scale.ScaleLinear<number, number>,
+    context: CanvasRenderingContext2D
+  ) {
+    const scaledCoordinates: Coordinate[] =
+      axis === 'x'
+        ? [
+            [xScale(datumLine.position ?? 0), yScale(domain[0])],
+            [xScale(datumLine.position ?? 0), yScale(domain[1])],
+          ]
+        : [
+            [xScale(domain[0]), yScale(datumLine.position ?? 0)],
+            [xScale(domain[1]), yScale(datumLine.position ?? 0)],
+          ];
+
+    this.#drawPath(scaledCoordinates, datumLine.lineProperties, context);
   }
 
   #drawPath(
