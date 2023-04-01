@@ -15,10 +15,6 @@ enum ArrayType {
   NumberPairs = 'NumberPairs',
 }
 
-export interface AreaProperties {
-  fillStyle?: string | LinearGradient; // default: "black with opacity 0.3"
-}
-
 export interface LineProperties {
   strokeStyle?: string | LinearGradient; // default: "black"
   lineWidth?: number; // default: 1
@@ -37,6 +33,8 @@ export interface SparklineParameters {
 
 export class LineChart extends ChartBase {
   #lineProps: Required<LineProperties>;
+  #fillStyle?: string | LinearGradient;
+
   #xDatumLines: DatumLine[] = [];
   #yDatumLines: DatumLine[] = [];
 
@@ -82,15 +80,17 @@ export class LineChart extends ChartBase {
       this.#drawDatumLine('y', datumLine, xDomain, xScale, yScale, context)
     );
 
-    if (this.#lineProps) {
-      const scaledCoordinates = this.#scaleCoordinates(
-        values,
-        arrayType,
-        xScale,
-        yScale
-      );
-      this.#drawPath(scaledCoordinates, this.#lineProps, context);
+    const scaledCoordinates = this.#scaleCoordinates(
+      values,
+      arrayType,
+      xScale,
+      yScale
+    );
+
+    if (this.#fillStyle) {
+      this.#drawArea(scaledCoordinates, yScale(0), this.#fillStyle!, context);
     }
+    this.#drawPath(scaledCoordinates, this.#lineProps, context);
 
     return context.canvas;
   }
@@ -123,6 +123,13 @@ export class LineChart extends ChartBase {
 
   strokeStyle(strokeStyle: string | LinearGradient) {
     this.#lineProps.strokeStyle = strokeStyle;
+    return this;
+  }
+
+  fillStyle(fillStyle?: string | LinearGradient) {
+    if (fillStyle) {
+      this.#fillStyle = fillStyle;
+    }
     return this;
   }
 
@@ -240,6 +247,31 @@ export class LineChart extends ChartBase {
     this.#drawPath(scaledCoordinates, datumLine.lineProperties, context);
   }
 
+  #drawArea(
+    coordinates: Coordinate[],
+    y0: number,
+    fillStyle: string | LinearGradient,
+    context: CanvasRenderingContext2D
+  ) {
+    const usedFillStyle =
+      fillStyle instanceof LinearGradient
+        ? fillStyle.getCanvasGradient(context)
+        : fillStyle;
+
+    context.beginPath();
+
+    d3Shape
+      .area<Coordinate>()
+      .x((coordinate) => coordinate[0])
+      .y0(y0)
+      .y1((coordinate) => coordinate[1])
+      .context(context)(coordinates);
+
+    context.fillStyle = usedFillStyle;
+    context.fill();
+    context.closePath();
+  }
+
   #drawPath(
     coordinates: Coordinate[],
     lineProperties: Required<LineProperties>,
@@ -261,30 +293,9 @@ export class LineChart extends ChartBase {
     context.strokeStyle = strokeStyle;
     context.setLineDash(lineProperties.lineDash!);
     context.lineWidth = lineProperties.lineWidth!;
-
     context.stroke();
     context.closePath();
   }
-}
-
-function getAreaFillstyle(
-  area: AreaProperties,
-  fallback: LineProperties
-): string | CanvasGradient | CanvasPattern {
-  if (area?.fillStyle) {
-    return area.fillStyle!;
-  }
-
-  if (
-    typeof fallback?.strokeStyle === 'string' ||
-    fallback?.strokeStyle == null
-  ) {
-    const fillStyle = fallback?.strokeStyle || 'black';
-    const color = d3Color.color(fillStyle)?.copy({ opacity: 0.3 });
-    return color!.formatHex8();
-  }
-
-  return area.fillStyle!;
 }
 
 function getArrayType(values: (number | [number, number])[]): ArrayType {
