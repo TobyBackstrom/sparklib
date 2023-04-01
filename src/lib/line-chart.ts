@@ -13,7 +13,6 @@ enum ArrayType {
   Unknown = 'Unknown',
   SingleNumbers = 'SingleNumbers',
   NumberPairs = 'NumberPairs',
-  NumberDatePairs = 'NumberDatePairs',
 }
 
 export interface AreaProperties {
@@ -58,7 +57,7 @@ export class LineChart extends ChartBase {
       : defaultLineProps;
   }
 
-  render(values: number[] | [number, number][]): HTMLCanvasElement {
+  render(values: (number | [number, number])[]): HTMLCanvasElement {
     const context = super.renderChartBase();
 
     if (values.length < 2) {
@@ -72,7 +71,7 @@ export class LineChart extends ChartBase {
     this.#xDomain =
       this.#xDomain ??
       ((arrayType === ArrayType.SingleNumbers
-        ? [0, values.length] // index in array defines the x domain
+        ? [0, values.length - 1] // index in array defines the x domain
         : d3Array.extent(values as [number, number][], (d) => d[0])) as Range);
 
     this.#yDomain =
@@ -86,16 +85,16 @@ export class LineChart extends ChartBase {
 
     this.#xDatumLines.forEach((datumLine) => {
       const scaledCoordinates = [
-        [yScale(datumLine.position ?? 0), xScale(this.#yDomain![0])],
-        [yScale(datumLine.position ?? 0), xScale(this.#yDomain![1])],
+        [xScale(datumLine.position ?? 0), yScale(this.#yDomain![0])],
+        [xScale(datumLine.position ?? 0), yScale(this.#yDomain![1])],
       ] as Coordinate[];
       this.#drawPath(scaledCoordinates, datumLine.lineProperties, context);
     });
 
     this.#yDatumLines.forEach((datumLine) => {
       const scaledCoordinates = [
-        [xScale(0), yScale(datumLine.position ?? 0)],
-        [xScale(values.length - 1), yScale(datumLine.position ?? 0)],
+        [xScale(this.#xDomain![0]), yScale(datumLine.position ?? 0)],
+        [xScale(this.#xDomain![1]), yScale(datumLine.position ?? 0)],
       ] as Coordinate[];
 
       this.#drawPath(scaledCoordinates, datumLine.lineProperties, context);
@@ -158,7 +157,7 @@ export class LineChart extends ChartBase {
   #xScale(values: number[]): d3Scale.ScaleLinear<number, number, never> {
     return d3Scale
       .scaleLinear()
-      .domain(this.#xDomain ?? [0, values.length - 1])
+      .domain(this.#xDomain!)
       .range([
         this.marginsProps.left,
         this.chartProps.width! - this.marginsProps.right,
@@ -175,20 +174,22 @@ export class LineChart extends ChartBase {
       ]);
   }
 
-  #scaleCoordinates<T extends number[] | [number, number][]>(
+  #scaleCoordinates<T extends (number | [number, number])[]>(
     values: T,
     arrayType: ArrayType,
     xScale: d3Scale.ScaleLinear<number, number>,
     yScale: d3Scale.ScaleLinear<number, number>
   ): Coordinate[] {
     return values.map((value, index) => {
-      if (arrayType === ArrayType.SingleNumbers) {
-        const y = value as number;
-        return [xScale(index), yScale(y)];
-      } else {
-        const [x, y] = value as [number, number];
-        return [xScale(x), yScale(y)];
-      }
+      const x =
+        arrayType === ArrayType.SingleNumbers
+          ? index
+          : (value as [number, number])[0];
+      const y =
+        arrayType === ArrayType.SingleNumbers
+          ? (value as number)
+          : (value as [number, number])[1];
+      return [xScale(x as number), yScale(y)];
     });
   }
 
@@ -258,9 +259,7 @@ function getAreaFillstyle(
   return area.fillStyle!;
 }
 
-function getArrayType(
-  values: number[] | [number, number][] | [number, Date][]
-): ArrayType {
+function getArrayType(values: (number | [number, number])[]): ArrayType {
   if (Array.isArray(values) && values.length > 0) {
     const firstValue = values[0];
     if (typeof firstValue === 'number') {
@@ -271,11 +270,6 @@ function getArrayType(
         typeof firstValue[1] === 'number'
       ) {
         return ArrayType.NumberPairs;
-      } else if (
-        typeof firstValue[0] === 'number' &&
-        firstValue[1] instanceof Date
-      ) {
-        return ArrayType.NumberDatePairs;
       }
     }
   }
