@@ -9,6 +9,13 @@ import { LinearGradient } from './linear-gradient';
 export type Coordinate = [number, number];
 export type Range = [number, number];
 
+enum ArrayType {
+  Unknown = 'Unknown',
+  SingleNumbers = 'SingleNumbers',
+  NumberPairs = 'NumberPairs',
+  NumberDatePairs = 'NumberDatePairs',
+}
+
 export interface AreaProperties {
   fillStyle?: string | LinearGradient; // default: "black with opacity 0.3"
 }
@@ -51,7 +58,7 @@ export class LineChart extends ChartBase {
       : defaultLineProps;
   }
 
-  render(values: number[], tmp: [number, number][]): HTMLCanvasElement {
+  render(values: number[] | [number, number][]): HTMLCanvasElement {
     const context = super.renderChartBase();
 
     if (values.length < 2) {
@@ -60,9 +67,21 @@ export class LineChart extends ChartBase {
       return context.canvas;
     }
 
-    this.#yDomain = this.#yDomain ?? (d3Array.extent(values) as Range);
+    const arrayType = getArrayType(values);
 
-    const xScale = this.#xScale(values);
+    this.#xDomain =
+      this.#xDomain ??
+      ((arrayType === ArrayType.SingleNumbers
+        ? [0, values.length] // index in array defines the x domain
+        : d3Array.extent(values as [number, number][], (d) => d[0])) as Range);
+
+    this.#yDomain =
+      this.#yDomain ??
+      ((arrayType === ArrayType.SingleNumbers
+        ? d3Array.extent(values as number[])
+        : d3Array.extent(values as [number, number][], (d) => d[1])) as Range);
+
+    const xScale = this.#xScale(this.#xDomain);
     const yScale = this.#yScale(this.#yDomain);
 
     this.#xDatumLines.forEach((datumLine) => {
@@ -83,8 +102,11 @@ export class LineChart extends ChartBase {
     });
 
     if (this.#lineProps) {
-      const scaledCoordinates = values.map(
-        (v, i) => [xScale(i), yScale(v)] as Coordinate
+      const scaledCoordinates = this.#scaleCoordinates(
+        values,
+        arrayType,
+        xScale,
+        yScale
       );
       this.#drawPath(scaledCoordinates, this.#lineProps, context);
     }
@@ -153,6 +175,23 @@ export class LineChart extends ChartBase {
       ]);
   }
 
+  #scaleCoordinates<T extends number[] | [number, number][]>(
+    values: T,
+    arrayType: ArrayType,
+    xScale: d3Scale.ScaleLinear<number, number>,
+    yScale: d3Scale.ScaleLinear<number, number>
+  ): Coordinate[] {
+    return values.map((value, index) => {
+      if (arrayType === ArrayType.SingleNumbers) {
+        const y = value as number;
+        return [xScale(index), yScale(y)];
+      } else {
+        const [x, y] = value as [number, number];
+        return [xScale(x), yScale(y)];
+      }
+    });
+  }
+
   #datum(
     datumLines: DatumLine[],
     position: number,
@@ -219,6 +258,27 @@ function getAreaFillstyle(
   return area.fillStyle!;
 }
 
-function is2DArray(array: any[]): boolean {
-  return array.every((element) => Array.isArray(element));
+function getArrayType(
+  values: number[] | [number, number][] | [number, Date][]
+): ArrayType {
+  if (Array.isArray(values) && values.length > 0) {
+    const firstValue = values[0];
+    if (typeof firstValue === 'number') {
+      return ArrayType.SingleNumbers;
+    } else if (Array.isArray(firstValue) && firstValue.length === 2) {
+      if (
+        typeof firstValue[0] === 'number' &&
+        typeof firstValue[1] === 'number'
+      ) {
+        return ArrayType.NumberPairs;
+      } else if (
+        typeof firstValue[0] === 'number' &&
+        firstValue[1] instanceof Date
+      ) {
+        return ArrayType.NumberDatePairs;
+      }
+    }
+  }
+
+  return ArrayType.Unknown;
 }
