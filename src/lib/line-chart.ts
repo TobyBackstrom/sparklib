@@ -90,7 +90,10 @@ export class LineChart extends ChartBase {
     if (this.#fillStyle) {
       this.#drawArea(scaledCoordinates, yScale(0), this.#fillStyle!, context);
     }
-    this.#drawPath(scaledCoordinates, this.#lineProps, context);
+
+    if (this.#lineProps.lineWidth !== 0) {
+      this.#drawPath(scaledCoordinates, this.#lineProps, context);
+    }
 
     return context.canvas;
   }
