@@ -1,19 +1,12 @@
 import * as d3Array from 'd3-array';
-import * as d3Color from 'd3-color';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
-import { ChartBase, ChartProperties } from './chart-base';
+import { ArrayType, ChartBase, ChartProperties } from './chart-base';
 import { LinearGradient } from './linear-gradient';
 
 export type Coordinate = [number, number];
 export type Range = [number, number];
-
-enum ArrayType {
-  Unknown = 'Unknown',
-  SingleNumbers = 'SingleNumbers',
-  NumberPairs = 'NumberPairs',
-}
 
 export interface LineProperties {
   strokeStyle?: string | LinearGradient; // default: "black"
@@ -26,7 +19,7 @@ interface DatumLine {
   lineProperties: Required<LineProperties>;
 }
 
-export interface SparklineParameters {
+export interface LineChartParameters {
   lineProps?: LineProperties;
   chartProps?: ChartProperties;
 }
@@ -41,7 +34,7 @@ export class LineChart extends ChartBase {
   #xDomain: Range | undefined;
   #yDomain: Range | undefined;
 
-  constructor(params?: SparklineParameters) {
+  constructor(params?: LineChartParameters) {
     super(params?.chartProps);
 
     const defaultLineProps: Required<LineProperties> = {
@@ -64,7 +57,7 @@ export class LineChart extends ChartBase {
       return context.canvas;
     }
 
-    const arrayType = getArrayType(values);
+    const arrayType = this.getArrayType(values);
 
     const xDomain = this.#getXDomain(values, arrayType);
     const yDomain = this.#getYDomain(values, arrayType);
@@ -129,10 +122,8 @@ export class LineChart extends ChartBase {
     return this;
   }
 
-  fillStyle(fillStyle?: string | LinearGradient) {
-    if (fillStyle) {
-      this.#fillStyle = fillStyle;
-    }
+  fillStyle(fillStyle?: string | LinearGradient | null) {
+    this.#fillStyle = fillStyle ?? undefined;
     return this;
   }
 
@@ -239,12 +230,12 @@ export class LineChart extends ChartBase {
     const scaledCoordinates: Coordinate[] =
       axis === 'x'
         ? [
-            [xScale(datumLine.position ?? 0), yScale(domain[0])],
-            [xScale(datumLine.position ?? 0), yScale(domain[1])],
+            [xScale(datumLine.position), yScale(domain[0])],
+            [xScale(datumLine.position), yScale(domain[1])],
           ]
         : [
-            [xScale(domain[0]), yScale(datumLine.position ?? 0)],
-            [xScale(domain[1]), yScale(datumLine.position ?? 0)],
+            [xScale(domain[0]), yScale(datumLine.position)],
+            [xScale(domain[1]), yScale(datumLine.position)],
           ];
 
     this.#drawPath(scaledCoordinates, datumLine.lineProperties, context);
@@ -302,22 +293,4 @@ export class LineChart extends ChartBase {
     context.stroke();
     context.closePath();
   }
-}
-
-function getArrayType(values: (number | [number, number])[]): ArrayType {
-  if (Array.isArray(values) && values.length > 0) {
-    const firstValue = values[0];
-    if (typeof firstValue === 'number') {
-      return ArrayType.SingleNumbers;
-    } else if (Array.isArray(firstValue) && firstValue.length === 2) {
-      if (
-        typeof firstValue[0] === 'number' &&
-        typeof firstValue[1] === 'number'
-      ) {
-        return ArrayType.NumberPairs;
-      }
-    }
-  }
-
-  return ArrayType.Unknown;
 }
