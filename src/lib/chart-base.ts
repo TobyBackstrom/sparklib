@@ -25,14 +25,14 @@ export class ChartBase {
   protected chartProps: ChartProperties = { width: 250, height: 50 };
   protected backgroundProps: string | LinearGradient | undefined = undefined;
 
-  marginsProps: ChartMargins = {
+  protected marginsProps: ChartMargins = {
     bottom: 2,
     left: 2,
     right: 2,
     top: 2,
   };
 
-  constructor(props?: ChartProperties) {
+  constructor(props?: Partial<ChartProperties>) {
     this.chartProps = { ...this.chartProps, ...props };
   }
 
@@ -51,7 +51,7 @@ export class ChartBase {
     return this;
   }
 
-  margins(margins?: ChartMargins) {
+  margins(margins?: Partial<ChartMargins>) {
     this.marginsProps = margins
       ? { ...this.marginsProps, ...margins }
       : NO_MARGINS;
