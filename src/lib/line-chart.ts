@@ -8,21 +8,21 @@ import { LinearGradient } from './linear-gradient';
 export type Coordinate = [number, number];
 export type Range = [number, number];
 
-export interface LineProperties {
+export type LineProperties = {
   strokeStyle?: string | LinearGradient; // default: "black"
   lineWidth?: number; // default: 1
   lineDash?: number[]; // default: [], https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash
-}
+};
 
-interface DatumLine {
+type DatumLine = {
   position: number; // x or y, default: 0
   lineProperties: Required<LineProperties>;
-}
+};
 
-export interface LineChartParameters {
+export type LineChartParameters = {
   lineProps?: LineProperties;
   chartProps?: ChartProperties;
-}
+};
 
 export class LineChart extends ChartBase {
   #lineProps: Required<LineProperties>;

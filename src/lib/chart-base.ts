@@ -6,18 +6,18 @@ export enum ArrayType {
   NumberPairs = 'NumberPairs',
 }
 
-export interface ChartMargins {
+export type ChartMargins = {
   left: number;
   top: number;
   right: number;
   bottom: number;
-}
+};
 
-export interface ChartProperties {
+export type ChartProperties = {
   width?: number;
   height?: number;
   dpi?: number;
-}
+};
 
 export const NO_MARGINS: ChartMargins = {
   bottom: 0,
