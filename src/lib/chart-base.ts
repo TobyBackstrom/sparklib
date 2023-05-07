@@ -14,8 +14,8 @@ export type ChartMargins = {
 };
 
 export type ChartProperties = {
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
   dpi?: number;
 };
 
@@ -70,8 +70,8 @@ export class ChartBase {
 
   protected renderChartBase(): CanvasRenderingContext2D {
     const context = dom.context2d(
-      this.chartProps.width!,
-      this.chartProps.height!,
+      this.chartProps.width,
+      this.chartProps.height,
       this.chartProps.dpi
     );
 
@@ -82,7 +82,7 @@ export class ChartBase {
           : this.backgroundProps;
 
       context.fillStyle = fillStyle;
-      context.fillRect(0, 0, this.chartProps.width!, this.chartProps.height!);
+      context.fillRect(0, 0, this.chartProps.width, this.chartProps.height);
     }
 
     return context;
