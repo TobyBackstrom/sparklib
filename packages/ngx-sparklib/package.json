@@ -1,0 +1,23 @@
+{
+  "name": "ngx-sparklib",
+  "version": "0.0.2",
+  "description": "Sparkly mini charts for your sparkling app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TobyBackstrom/sparklib.git"
+  },
+  "author": "Toby Backstrom",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TobyBackstrom/sparklib/issues"
+  },
+  "homepage": "https://github.com/TobyBackstrom/sparklib#readme",
+  "peerDependencies": {
+    "@angular/common": "^16.0.0",
+    "@angular/core": "^16.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

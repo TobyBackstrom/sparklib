@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "ngx-sparklib": ["packages/ngx-sparklib/src/index.ts"],
       "sparklib": ["packages/sparklib/src/index.ts"]
     }
   },
