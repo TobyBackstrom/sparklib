@@ -26,7 +26,7 @@ export const NO_MARGINS: ChartMargins = {
   top: 0,
 };
 
-export class ChartBase {
+export abstract class BaseChart {
   protected chartProps: ChartProperties = { width: 250, height: 50 };
   protected backgroundProps: string | LinearGradient | undefined = undefined;
 
@@ -51,7 +51,7 @@ export class ChartBase {
     return this;
   }
 
-  dpi(dpi: number) {
+  dpi(dpi?: number) {
     this.chartProps.dpi = dpi;
     return this;
   }
@@ -63,7 +63,7 @@ export class ChartBase {
     return this;
   }
 
-  background(backgroundProps: string | LinearGradient) {
+  background(backgroundProps: string | LinearGradient | undefined) {
     this.backgroundProps = backgroundProps;
     return this;
   }

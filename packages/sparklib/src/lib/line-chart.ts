@@ -2,7 +2,7 @@ import * as d3Array from 'd3-array';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
-import { ArrayType, ChartBase, ChartProperties } from './chart-base';
+import { ArrayType, BaseChart, ChartProperties } from './base-chart';
 import { LinearGradient } from './linear-gradient';
 
 export type Coordinate = [number, number];
@@ -24,7 +24,7 @@ export type LineChartParameters = {
   chartProps?: ChartProperties;
 };
 
-export class LineChart extends ChartBase {
+export class LineChart extends BaseChart {
   #lineProps: Required<LineProperties>;
   #fillStyle?: string | LinearGradient;
 
@@ -294,3 +294,8 @@ export class LineChart extends ChartBase {
     context.closePath();
   }
 }
+
+// factory function (for simplicity to keep the fluid API going)
+export const lineChart = (params?: LineChartParameters) => {
+  return new LineChart(params);
+};
