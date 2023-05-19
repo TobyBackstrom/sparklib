@@ -1,7 +1,4 @@
-# ngx-sparklib
+# sparklib
 
-This library was generated with [Nx](https://nx.dev).
-
-## Running unit tests
-
-Run `nx test ngx-sparklib` to execute the unit tests.
+THIS IS STILL WORK IN PROGRESS!
+Sparkly mini charts for your sparkling app
