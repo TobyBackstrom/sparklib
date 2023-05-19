@@ -17,6 +17,7 @@ export type ChartProperties = {
   width: number;
   height: number;
   dpi?: number;
+  background?: string | LinearGradient | undefined;
 };
 
 export const NO_MARGINS: ChartMargins = {
@@ -27,8 +28,12 @@ export const NO_MARGINS: ChartMargins = {
 };
 
 export abstract class BaseChart {
-  protected chartProps: ChartProperties = { width: 250, height: 50 };
-  protected backgroundProps: string | LinearGradient | undefined = undefined;
+  protected chartProps: ChartProperties = {
+    width: 250,
+    height: 50,
+    dpi: undefined,
+    background: undefined,
+  };
 
   protected marginsProps: ChartMargins = {
     bottom: 2,
@@ -64,7 +69,7 @@ export abstract class BaseChart {
   }
 
   background(backgroundProps: string | LinearGradient | undefined) {
-    this.backgroundProps = backgroundProps;
+    this.chartProps.background = backgroundProps;
     return this;
   }
 
@@ -75,11 +80,11 @@ export abstract class BaseChart {
       this.chartProps.dpi
     );
 
-    if (this.backgroundProps) {
+    if (this.chartProps.background) {
       const fillStyle =
-        this.backgroundProps instanceof LinearGradient
-          ? this.backgroundProps.getCanvasGradient(context)
-          : this.backgroundProps;
+        this.chartProps.background instanceof LinearGradient
+          ? this.chartProps.background.getCanvasGradient(context)
+          : this.chartProps.background;
 
       context.fillStyle = fillStyle;
       context.fillRect(0, 0, this.chartProps.width, this.chartProps.height);

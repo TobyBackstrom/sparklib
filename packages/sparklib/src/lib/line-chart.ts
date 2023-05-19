@@ -81,6 +81,7 @@ export class LineChart extends BaseChart {
     );
 
     if (this.#fillStyle) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.#drawArea(scaledCoordinates, yScale(0), this.#fillStyle!, context);
     }
 
@@ -288,14 +289,16 @@ export class LineChart extends BaseChart {
 
     context.strokeStyle = strokeStyle;
     context.lineCap = 'round';
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     context.setLineDash(lineProperties.lineDash!);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     context.lineWidth = lineProperties.lineWidth!;
     context.stroke();
     context.closePath();
   }
 }
 
-// factory function (for simplicity to keep the fluid API going)
+// factory function for the fluid API
 export const lineChart = (params?: LineChartParameters) => {
   return new LineChart(params);
 };
