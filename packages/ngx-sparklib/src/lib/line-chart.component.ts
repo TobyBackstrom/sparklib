@@ -17,10 +17,10 @@ import { ChartMargins, lineChart } from 'sparklib';
 })
 export class LineChartComponent implements AfterViewInit {
   // mandatory properties
-  @Input({ required: true }) width!: number;
-  @Input({ required: true }) height!: number;
   @Input({ required: true }) values!: (number | [number, number])[];
   // optional properties
+  @Input({ required: false }) width?: number;
+  @Input({ required: false }) height?: number;
   @Input({ required: false }) background?: string;
   @Input({ required: false }) dpi?: number;
   @Input({ required: false }) margins?: Partial<ChartMargins>;
@@ -29,7 +29,15 @@ export class LineChartComponent implements AfterViewInit {
   //  constructor() {}
 
   ngAfterViewInit(): void {
-    const chart = lineChart().width(this.width).height(this.height);
+    const chart = lineChart();
+
+    if (this.width) {
+      chart.width(this.width);
+    }
+
+    if (this.height) {
+      chart.height(this.height);
+    }
 
     if (this.margins) {
       // TODO: check if margins were actually set as they might be called with margins() to trigger a NO_MARGINS setting.
