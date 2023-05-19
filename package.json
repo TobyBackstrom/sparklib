@@ -1,6 +1,7 @@
 {
-  "name": "sparklib",
-  "version": "1.0.16-alpha",
+  "name": "@sparklib/source",
+  "version": "0.0.0",
+  "license": "ISC",
   "description": "Sparkly mini charts for your sparkling app",
   "main": "dist/index.js",
   "module": "esm/index.js",
@@ -8,37 +9,46 @@
     "dist",
     "esm"
   ],
-  "scripts": {
-    "clean": "rimraf dist esm",
-    "prebuild": "npm run clean",
-    "preversion": "npm run build",
-    "build:cjs": "tsc --module commonjs --outDir dist",
-    "build:esm": "tsc --target es2018 --outDir esm",
-    "build": "npm run build:esm && npm run build:cjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "scripts": {},
+  "private": true,
+  "dependencies": {
+    "d3-array": "^3.2.2",
+    "d3-color": "^3.1.0",
+    "d3-scale": "^4.0.2",
+    "d3-shape": "^3.2.0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TobyBackstrom/sparklib.git"
   },
   "author": "Toby Backstrom",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/TobyBackstrom/sparklib/issues"
   },
   "homepage": "https://github.com/TobyBackstrom/sparklib#readme",
   "devDependencies": {
+    "@nx/eslint-plugin": "16.2.1",
+    "@nx/jest": "16.2.1",
+    "@nx/js": "16.2.1",
+    "@nx/linter": "16.2.1",
+    "@nx/workspace": "16.2.1",
     "@types/d3-array": "^3.0.4",
     "@types/d3-color": "^3.1.0",
     "@types/d3-scale": "^4.0.3",
     "@types/d3-shape": "^3.1.1",
-    "rimraf": "^4.1.2",
-    "typescript": "^4.9.4"
-  },
-  "dependencies": {
-    "d3-array": "^3.2.2",
-    "d3-color": "^3.1.0",
-    "d3-scale": "^4.0.2",
-    "d3-shape": "^3.2.0"
+    "@types/jest": "^29.4.0",
+    "@types/node": "16.11.7",
+    "@typescript-eslint/eslint-plugin": "^5.58.0",
+    "@typescript-eslint/parser": "^5.58.0",
+    "eslint": "~8.15.0",
+    "eslint-config-prettier": "8.1.0",
+    "jest": "^29.4.1",
+    "jest-environment-jsdom": "^29.4.1",
+    "nx": "16.2.1",
+    "prettier": "^2.6.2",
+    "ts-jest": "^29.1.0",
+    "ts-node": "10.9.1",
+    "tslib": "^2.5.2",
+    "typescript": "~5.0.4"
   }
 }

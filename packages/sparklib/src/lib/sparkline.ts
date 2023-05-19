@@ -1,5 +1,5 @@
-import { LineChartParameters } from './lib';
-import { LineChart } from './lib';
+import { LineChartParameters } from '.';
+import { LineChart } from '.';
 
 // factory function (for simplicity to keep the fluid API going)
 export const sparkline = (params?: LineChartParameters) => {

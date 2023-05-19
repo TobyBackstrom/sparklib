@@ -1,4 +1,4 @@
-import * as dom from '../dom';
+import * as dom from './dom';
 import { LinearGradient } from './linear-gradient';
 
 export enum ArrayType {
