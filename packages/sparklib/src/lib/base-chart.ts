@@ -1,31 +1,11 @@
-import * as dom from './dom';
+import {
+  ArrayType,
+  ChartMargins,
+  ChartProperties,
+  NO_MARGINS,
+} from './base-chart-models';
 import { LinearGradient } from './linear-gradient';
-
-export enum ArrayType {
-  SingleNumbers = 'SingleNumbers',
-  NumberPairs = 'NumberPairs',
-}
-
-export type ChartMargins = {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-};
-
-export type ChartProperties = {
-  width: number;
-  height: number;
-  dpi?: number;
-  background?: string | LinearGradient | undefined;
-};
-
-export const NO_MARGINS: ChartMargins = {
-  bottom: 0,
-  left: 0,
-  right: 0,
-  top: 0,
-};
+import * as dom from './dom';
 
 export abstract class BaseChart {
   protected chartProps: ChartProperties = {
