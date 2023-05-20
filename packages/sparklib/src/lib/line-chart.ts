@@ -20,7 +20,7 @@ type DatumLine = {
   lineProperties: Required<LineProperties>;
 };
 
-export type LineChartParameters = {
+export type LineChartProperties = {
   lineProps?: LineProperties;
   chartProps?: ChartProperties;
 };
@@ -35,8 +35,8 @@ export class LineChart extends BaseChart {
   #xDomain: Range | undefined;
   #yDomain: Range | undefined;
 
-  constructor(params?: LineChartParameters) {
-    super(params?.chartProps);
+  constructor(props?: LineChartProperties) {
+    super(props?.chartProps);
 
     const defaultLineProps: Required<LineProperties> = {
       strokeStyle: 'black',
@@ -44,8 +44,8 @@ export class LineChart extends BaseChart {
       lineWidth: 1,
     };
 
-    this.#lineProps = params?.lineProps
-      ? { ...defaultLineProps, ...params.lineProps }
+    this.#lineProps = props?.lineProps
+      ? { ...defaultLineProps, ...props.lineProps }
       : defaultLineProps;
   }
 
@@ -300,6 +300,6 @@ export class LineChart extends BaseChart {
 }
 
 // factory function for the fluid API
-export const lineChart = (params?: LineChartParameters) => {
-  return new LineChart(params);
+export const lineChart = (props?: LineChartProperties) => {
+  return new LineChart(props);
 };
