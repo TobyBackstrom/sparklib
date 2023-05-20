@@ -2,8 +2,8 @@ import * as d3Array from 'd3-array';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
-import { BaseChart } from './base-chart';
-import { ArrayType, ChartProperties } from './base-chart-models';
+import { ArrayType, BaseChart } from './base-chart';
+import { ChartProperties } from './base-chart-models';
 import { LinearGradient } from './linear-gradient';
 
 export type Coordinate = [number, number];

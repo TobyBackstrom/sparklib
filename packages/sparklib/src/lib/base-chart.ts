@@ -1,11 +1,11 @@
-import {
-  ArrayType,
-  ChartMargins,
-  ChartProperties,
-  NO_MARGINS,
-} from './base-chart-models';
+import { ChartMargins, ChartProperties, NO_MARGINS } from './base-chart-models';
 import { LinearGradient } from './linear-gradient';
 import * as dom from './dom';
+
+export enum ArrayType {
+  SingleNumbers = 'SingleNumbers',
+  NumberPairs = 'NumberPairs',
+}
 
 export abstract class BaseChart {
   protected chartProps: ChartProperties = {

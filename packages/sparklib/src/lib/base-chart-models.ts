@@ -1,10 +1,5 @@
 import { LinearGradient } from './linear-gradient';
 
-export enum ArrayType {
-  SingleNumbers = 'SingleNumbers',
-  NumberPairs = 'NumberPairs',
-}
-
 export type ChartMargins = {
   left: number;
   top: number;
