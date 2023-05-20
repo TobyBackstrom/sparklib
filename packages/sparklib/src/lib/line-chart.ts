@@ -52,7 +52,7 @@ export class LineChart extends BaseChart {
   render(values: (number | [number, number])[]): HTMLCanvasElement {
     const context = super.renderChartBase();
 
-    if (values.length < 2) {
+    if (!values || values.length < 2) {
       // This is a line chart, remember? It requires at least a pair of coordinates.
       // Instead of throwing an error just return the empty canvas.
       return context.canvas;
