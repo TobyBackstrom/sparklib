@@ -2,9 +2,10 @@ import * as d3Array from 'd3-array';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
-import { ArrayType, BaseChart } from './base-chart';
+import { BaseChart } from './base-chart';
 import { ChartProperties } from './base-chart-models';
 import { LinearGradient } from './linear-gradient';
+import { ArrayType, getArrayType } from './utils';
 
 export type Coordinate = [number, number];
 export type Range = [number, number];
@@ -58,7 +59,7 @@ export class LineChart extends BaseChart {
       return context.canvas;
     }
 
-    const arrayType = this.getArrayType(values);
+    const arrayType = getArrayType({ values });
 
     const xDomain = this.#getXDomain(values, arrayType);
     const yDomain = this.#getYDomain(values, arrayType);

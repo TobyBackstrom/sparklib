@@ -1,4 +1,4 @@
-import { sparklib } from './sparklib';
+import { sparklib } from '../lib/sparklib';
 
 describe('sparklib', () => {
   it('should work', () => {
