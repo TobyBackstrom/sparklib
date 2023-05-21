@@ -1,4 +1,4 @@
-import { LinearGradient } from './linear-gradient';
+import { LinearGradient } from './models';
 
 export type ChartMargins = {
   left: number;

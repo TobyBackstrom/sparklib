@@ -1,4 +1,4 @@
-import { LinearGradient, linearGradient } from '../lib/linear-gradient';
+import { LinearGradient, linearGradient } from '../lib/models';
 import 'jest-canvas-mock';
 
 describe('LinearGradient', () => {

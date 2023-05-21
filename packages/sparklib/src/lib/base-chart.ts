@@ -1,5 +1,5 @@
 import { ChartMargins, ChartProperties, NO_MARGINS } from './base-chart-models';
-import { LinearGradient } from './linear-gradient';
+import { LinearGradient } from './models';
 import * as dom from './dom';
 
 export abstract class BaseChart {

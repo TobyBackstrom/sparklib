@@ -4,7 +4,7 @@ import * as d3Shape from 'd3-shape';
 
 import { BaseChart } from './base-chart';
 import { ChartProperties } from './base-chart-models';
-import { LinearGradient } from './linear-gradient';
+import { LinearGradient } from './models';
 import { ArrayType, getArrayType } from './utils';
 
 export type Coordinate = [number, number];
