@@ -1,6 +1,6 @@
 {
   "name": "sparklib",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "Sparkly mini charts for your sparkling app",
   "type": "commonjs",
   "repository": {

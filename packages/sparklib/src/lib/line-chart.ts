@@ -90,32 +90,6 @@ export class LineChart extends BaseChart {
     return context.canvas;
   }
 
-  // minX - maxX
-  xDomain(xDomain: Range) {
-    this.#props.xDomain = xDomain;
-    return this;
-  }
-
-  // minY - maxY
-  yDomain(yDomain: Range) {
-    this.#props.yDomain = yDomain;
-    return this;
-  }
-
-  // add horizontal reference lines in the y domain
-  yDatum(y: number, lineProps?: LineProperties) {
-    this.#datum(this.#props.yDatumLines, y, lineProps);
-
-    return this;
-  }
-
-  // add vertical reference lines in the x domain
-  xDatum(x: number, lineProps?: LineProperties) {
-    this.#datum(this.#props.xDatumLines, x, lineProps);
-
-    return this;
-  }
-
   strokeStyle(strokeStyle: string | LinearGradient) {
     this.#props.lineProps.strokeStyle = strokeStyle;
     return this;
@@ -133,6 +107,42 @@ export class LineChart extends BaseChart {
 
   lineWidth(lineWidth: number) {
     this.#props.lineProps.lineWidth = lineWidth;
+    return this;
+  }
+
+  // minX - maxX
+  xDomain(xDomain: Range) {
+    this.#props.xDomain = xDomain;
+    return this;
+  }
+
+  // minY - maxY
+  yDomain(yDomain: Range) {
+    this.#props.yDomain = yDomain;
+    return this;
+  }
+
+  // add vertical reference lines in the x domain
+  xDatum(x: number, lineProps?: LineProperties) {
+    this.#datum(this.#props.xDatumLines, x, lineProps);
+
+    return this;
+  }
+
+  xDatumLines(datumLines: DatumLine[]) {
+    this.#props.xDatumLines.push(...datumLines);
+    return this;
+  }
+
+  // add horizontal reference lines in the y domain
+  yDatum(y: number, lineProps?: LineProperties) {
+    this.#datum(this.#props.yDatumLines, y, lineProps);
+
+    return this;
+  }
+
+  yDatumLines(datumLines: DatumLine[]) {
+    this.#props.yDatumLines.push(...datumLines);
     return this;
   }
 

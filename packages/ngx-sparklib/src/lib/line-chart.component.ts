@@ -6,7 +6,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChartMargins, lineChart } from 'sparklib';
+import {
+  ChartMargins,
+  DatumLine,
+  LinearGradient,
+  LineChart,
+  lineChart,
+  LineChartProperties,
+  Range,
+} from 'sparklib';
 
 @Component({
   selector: 'sparklib-line-chart',
@@ -19,35 +27,59 @@ export class LineChartComponent implements AfterViewInit {
   // mandatory properties
   @Input({ required: true }) values!: (number | [number, number])[];
   // optional properties
-  @Input({ required: false }) width?: number;
-  @Input({ required: false }) height?: number;
-  @Input({ required: false }) background?: string;
-  @Input({ required: false }) dpi?: number;
-  @Input({ required: false }) margins?: Partial<ChartMargins>;
+  @Input() width?: number;
+  @Input() height?: number;
+  @Input() dpi?: number;
+  @Input() background?: string;
+  @Input() margins?: Partial<ChartMargins>;
+  @Input() strokeStyle?: string | LinearGradient;
+  @Input() fillStyle?: string | LinearGradient;
+  @Input() lineDash?: number[];
+  @Input() lineWidth?: number;
+  @Input() xDomain?: Range;
+  @Input() yDomain?: Range;
+  @Input() xDatumLines?: DatumLine[];
+  @Input() yDatumLines?: DatumLine[];
+  @Input() properties?: LineChartProperties;
+
   @ViewChild('canvasRef') canvasRef!: ElementRef<HTMLCanvasElement>;
 
-  //  constructor() {}
-
   ngAfterViewInit(): void {
-    const chart = lineChart();
-
-    if (this.width) {
-      chart.width(this.width);
-    }
-
-    if (this.height) {
-      chart.height(this.height);
-    }
-
-    if (this.margins) {
-      // TODO: check if margins were actually set as they might be called with margins() to trigger a NO_MARGINS setting.
-      chart.margins(this.margins);
-    }
-
-    if (this.background) {
-      chart.background(this.background);
-    }
-
+    const chart = lineChart(this.properties);
+    this.#setChartProperties(chart);
     this.canvasRef.nativeElement.replaceWith(chart.render(this.values));
+  }
+
+  #setChartProperties(chart: LineChart) {
+    const inputMappings = this.#getInputToChartMappings(chart);
+
+    Object.entries(inputMappings).forEach(([key, method]) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const value = (this as any)[key];
+      if (value !== undefined && method) {
+        method.call(chart, value);
+      }
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  #getInputToChartMappings(
+    chart: LineChart
+  ): Record<string, (arg: any) => LineChart> {
+    return {
+      width: chart.width,
+      height: chart.height,
+      dpi: chart.dpi,
+      margins: chart.margins,
+      background: chart.background,
+      strokeStyle: chart.strokeStyle,
+      fillStyle: chart.fillStyle,
+      lineDash: chart.lineDash,
+      lineWidth: chart.lineWidth,
+      xDomain: chart.xDomain,
+      yDomain: chart.yDomain,
+      xDatumLines: chart.xDatumLines,
+      yDatumLines: chart.yDatumLines,
+    };
   }
 }
