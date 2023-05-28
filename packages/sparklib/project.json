@@ -9,6 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/sparklib",
+        "rootDir": "packages/sparklib/src",
         "main": "packages/sparklib/src/index.ts",
         "tsConfig": "packages/sparklib/tsconfig.lib.json",
         "assets": ["packages/sparklib/*.md"]
