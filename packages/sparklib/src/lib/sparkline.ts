@@ -1,7 +1,10 @@
 import { LineChartProperties } from '.';
 import { LineChart } from '.';
 
-// factory function (for simplicity to keep the fluid API going)
-export const sparkline = (props?: LineChartProperties) => {
+/**
+ *
+ * @deprecated
+ */
+export const _sparkline = (props?: LineChartProperties) => {
   return new LineChart(props);
 };

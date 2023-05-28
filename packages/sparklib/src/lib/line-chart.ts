@@ -297,6 +297,6 @@ export class LineChart extends BaseChart {
 }
 
 // factory function for the fluid API
-export const lineChart = (props?: LineChartProperties) => {
+export const lineChart = (props?: Partial<LineChartProperties>) => {
   return new LineChart(props);
 };
