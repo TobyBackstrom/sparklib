@@ -12,6 +12,7 @@ export type ChartProperties = {
   height: number;
   dpi?: number;
   background?: string | LinearGradient | undefined;
+  margins?: ChartMargins;
 };
 
 export const NO_MARGINS: ChartMargins = {

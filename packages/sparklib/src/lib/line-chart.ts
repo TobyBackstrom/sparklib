@@ -165,8 +165,8 @@ export class LineChart extends BaseChart {
       .scaleLinear()
       .domain(xDomain)
       .range([
-        this.marginsProps.left,
-        this.chartProps.width - this.marginsProps.right,
+        this.chartProps.margins.left,
+        this.chartProps.width - this.chartProps.margins.right,
       ]);
   }
 
@@ -175,8 +175,8 @@ export class LineChart extends BaseChart {
       .scaleLinear()
       .domain(yDomain)
       .range([
-        this.chartProps.height - this.marginsProps.top,
-        this.marginsProps.bottom,
+        this.chartProps.height - this.chartProps.margins.top,
+        this.chartProps.margins.bottom,
       ]);
   }
 
