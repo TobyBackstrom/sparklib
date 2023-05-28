@@ -3,40 +3,22 @@ import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
 import { BaseChart } from './base-chart';
-import { ChartProperties } from './base-chart-models';
-import { LinearGradient } from './models';
+import { LinearGradient, Range } from './models';
+import { LineProperties } from './models/line-properties';
+import { DatumLine } from './models/datum-line';
+import { Coordinate } from './models';
 import { ArrayType, getArrayType } from './utils';
+import { LineChartProperties } from './line-chart-models';
 
-export type Coordinate = [number, number];
-export type Range = [number, number];
-
-export type LineProperties = {
-  strokeStyle?: string | LinearGradient; // default: "black"
-  lineWidth?: number; // default: 1
-  lineDash?: number[]; // default: [], https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash
-};
-
-type DatumLine = {
-  position: number; // x or y, default: 0
-  lineProperties: Required<LineProperties>;
-};
-
-export type LineChartProperties = {
-  lineProps?: LineProperties;
-  chartProps?: ChartProperties;
-};
+// LineChart props only (BaseChart excluded), with required lineProps.
+type Properties = {
+  lineProps: Required<LineProperties>;
+} & Omit<LineChartProperties, 'chartProps'>;
 
 export class LineChart extends BaseChart {
-  #lineProps: Required<LineProperties>;
-  #fillStyle?: string | LinearGradient;
+  #props: Properties;
 
-  #xDatumLines: DatumLine[] = [];
-  #yDatumLines: DatumLine[] = [];
-
-  #xDomain: Range | undefined;
-  #yDomain: Range | undefined;
-
-  constructor(props?: LineChartProperties) {
+  constructor(props?: Partial<LineChartProperties>) {
     super(props?.chartProps);
 
     const defaultLineProps: Required<LineProperties> = {
@@ -45,9 +27,19 @@ export class LineChart extends BaseChart {
       lineWidth: 1,
     };
 
-    this.#lineProps = props?.lineProps
-      ? { ...defaultLineProps, ...props.lineProps }
-      : defaultLineProps;
+    this.#props = {
+      lineProps: props?.lineProps
+        ? { ...defaultLineProps, ...props.lineProps }
+        : defaultLineProps,
+
+      fillStyle: props?.fillStyle,
+
+      xDatumLines: [...(props?.xDatumLines || [])],
+      yDatumLines: [...(props?.yDatumLines || [])],
+
+      xDomain: props?.xDomain,
+      yDomain: props?.yDomain,
+    };
   }
 
   render(values: (number | [number, number])[]): HTMLCanvasElement {
@@ -67,11 +59,11 @@ export class LineChart extends BaseChart {
     const xScale = this.#xScale(xDomain);
     const yScale = this.#yScale(yDomain);
 
-    this.#xDatumLines.forEach((datumLine) =>
+    this.#props.xDatumLines.forEach((datumLine) =>
       this.#drawDatumLine('x', datumLine, yDomain, xScale, yScale, context)
     );
 
-    this.#yDatumLines.forEach((datumLine) =>
+    this.#props.yDatumLines.forEach((datumLine) =>
       this.#drawDatumLine('y', datumLine, xDomain, xScale, yScale, context)
     );
 
@@ -82,13 +74,17 @@ export class LineChart extends BaseChart {
       yScale
     );
 
-    if (this.#fillStyle) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this.#drawArea(scaledCoordinates, yScale(0), this.#fillStyle!, context);
+    if (this.#props.fillStyle) {
+      this.#drawArea(
+        scaledCoordinates,
+        yScale(0),
+        this.#props.fillStyle,
+        context
+      );
     }
 
-    if (this.#lineProps.lineWidth !== 0) {
-      this.#drawPath(scaledCoordinates, this.#lineProps, context);
+    if (this.#props.lineProps.lineWidth !== 0) {
+      this.#drawPath(scaledCoordinates, this.#props.lineProps, context);
     }
 
     return context.canvas;
@@ -96,47 +92,47 @@ export class LineChart extends BaseChart {
 
   // minX - maxX
   xDomain(xDomain: Range) {
-    this.#xDomain = xDomain;
+    this.#props.xDomain = xDomain;
     return this;
   }
 
   // minY - maxY
   yDomain(yDomain: Range) {
-    this.#yDomain = yDomain;
+    this.#props.yDomain = yDomain;
     return this;
   }
 
   // add horizontal reference lines in the y domain
   yDatum(y: number, lineProps?: LineProperties) {
-    this.#datum(this.#yDatumLines, y, lineProps);
+    this.#datum(this.#props.yDatumLines, y, lineProps);
 
     return this;
   }
 
   // add vertical reference lines in the x domain
   xDatum(x: number, lineProps?: LineProperties) {
-    this.#datum(this.#xDatumLines, x, lineProps);
+    this.#datum(this.#props.xDatumLines, x, lineProps);
 
     return this;
   }
 
   strokeStyle(strokeStyle: string | LinearGradient) {
-    this.#lineProps.strokeStyle = strokeStyle;
+    this.#props.lineProps.strokeStyle = strokeStyle;
     return this;
   }
 
   fillStyle(fillStyle?: string | LinearGradient | null) {
-    this.#fillStyle = fillStyle ?? undefined;
+    this.#props.fillStyle = fillStyle ?? undefined;
     return this;
   }
 
   lineDash(lineDash: number[]) {
-    this.#lineProps.lineDash = lineDash;
+    this.#props.lineProps.lineDash = lineDash;
     return this;
   }
 
   lineWidth(lineWidth: number) {
-    this.#lineProps.lineWidth = lineWidth;
+    this.#props.lineProps.lineWidth = lineWidth;
     return this;
   }
 
@@ -145,7 +141,7 @@ export class LineChart extends BaseChart {
     arrayType: ArrayType
   ): Range {
     return (
-      this.#xDomain ??
+      this.#props.xDomain ??
       ((arrayType === ArrayType.SingleNumbers
         ? [0, values.length - 1] // index in array defines the x domain
         : d3Array.extent(values as [number, number][], (d) => d[0])) as Range)
@@ -157,7 +153,7 @@ export class LineChart extends BaseChart {
     arrayType: ArrayType
   ): Range {
     return (
-      this.#yDomain ??
+      this.#props.yDomain ??
       ((arrayType === ArrayType.SingleNumbers
         ? d3Array.extent(values as number[])
         : d3Array.extent(values as [number, number][], (d) => d[1])) as Range)
