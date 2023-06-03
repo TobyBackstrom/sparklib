@@ -19,13 +19,19 @@ export class LinearGradient {
    * @param y0 The y-coordinate of the gradient line's start point.
    * @param x1 The x-coordinate of the gradient line's end point.
    * @param y1 The y-coordinate of the gradient line's end point.
+   * @param colorStops An optional array of color stops to add to the gradient.
    */
   constructor(
     private x0: number,
     private y0: number,
     private x1: number,
-    private y1: number
-  ) {}
+    private y1: number,
+    colorStops?: ColorStop[]
+  ) {
+    if (colorStops) {
+      this.colorStops = colorStops;
+    }
+  }
 
   /**
    * Add a color stop to the linear gradient.
@@ -63,13 +69,15 @@ export class LinearGradient {
  * @param y0 The y-coordinate of the gradient line's start point.
  * @param x1 The x-coordinate of the gradient line's end point.
  * @param y1 The y-coordinate of the gradient line's end point.
+ * @param colorStops An optional array of color stops to add to the gradient.
  * @returns A new LinearGradient instance.
  */
 export const linearGradient = (
   x0: number,
   y0: number,
   x1: number,
-  y1: number
+  y1: number,
+  colorStops?: ColorStop[]
 ) => {
-  return new LinearGradient(x0, y0, x1, y1);
+  return new LinearGradient(x0, y0, x1, y1, colorStops);
 };
