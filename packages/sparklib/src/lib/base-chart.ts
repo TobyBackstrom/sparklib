@@ -53,6 +53,17 @@ export abstract class BaseChart {
     return this;
   }
 
+  protected getFillStyle(
+    fillStyle: string | LinearGradient,
+    context: CanvasRenderingContext2D
+  ): string | CanvasGradient {
+    if (typeof fillStyle === 'string') {
+      return fillStyle;
+    }
+
+    return dom.createLinearGradient(fillStyle as LinearGradient, context);
+  }
+
   protected renderChartBase(): CanvasRenderingContext2D {
     const context = dom.context2d(
       this.chartProps.width,
@@ -60,15 +71,14 @@ export abstract class BaseChart {
       this.chartProps.dpi
     );
 
-    if (this.chartProps.background) {
-      const fillStyle =
-        this.chartProps.background instanceof LinearGradient
-          ? this.chartProps.background.getCanvasGradient(context)
-          : this.chartProps.background;
-
-      context.fillStyle = fillStyle;
-      context.fillRect(0, 0, this.chartProps.width, this.chartProps.height);
+    if (this.chartProps.background !== undefined) {
+      context.fillStyle = this.getFillStyle(
+        this.chartProps.background,
+        context
+      );
     }
+
+    context.fillRect(0, 0, this.chartProps.width, this.chartProps.height);
 
     return context;
   }

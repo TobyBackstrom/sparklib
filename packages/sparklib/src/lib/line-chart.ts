@@ -256,10 +256,7 @@ export class LineChart extends BaseChart {
     fillStyle: string | LinearGradient,
     context: CanvasRenderingContext2D
   ) {
-    const usedFillStyle =
-      fillStyle instanceof LinearGradient
-        ? fillStyle.getCanvasGradient(context)
-        : fillStyle;
+    const usedFillStyle = this.getFillStyle(fillStyle, context);
 
     context.beginPath();
 
@@ -281,10 +278,7 @@ export class LineChart extends BaseChart {
     lineProperties: Required<LineProperties>,
     context: CanvasRenderingContext2D
   ) {
-    const strokeStyle =
-      lineProperties.strokeStyle instanceof LinearGradient
-        ? lineProperties.strokeStyle.getCanvasGradient(context)
-        : lineProperties.strokeStyle;
+    const strokeStyle = this.getFillStyle(lineProperties.strokeStyle, context);
 
     context.beginPath();
 
