@@ -1,4 +1,4 @@
-import { LinearGradient } from './models';
+import { LinearGradient, LinearGradientBuilder } from './models';
 
 export type ChartMargins = {
   left: number;
@@ -11,7 +11,7 @@ export type ChartProperties = {
   width: number;
   height: number;
   dpi?: number;
-  background?: string | LinearGradient | undefined;
+  background?: string | LinearGradient | LinearGradientBuilder | undefined;
   margins?: ChartMargins;
 };
 

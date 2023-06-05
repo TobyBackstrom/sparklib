@@ -1,4 +1,9 @@
-import { LinearGradient } from '../lib/models';
+import {
+  ColorStop,
+  LinearGradient,
+  LinearGradientBuilder,
+  linearGradient,
+} from '../lib/models';
 import { createLinearGradient } from '../lib/dom';
 import 'jest-canvas-mock';
 
@@ -53,5 +58,53 @@ describe('createLinearGradient function', () => {
     // Check that the addColorStop method was called correctly for each color stop
     expect(canvasGradient.addColorStop).toHaveBeenCalledWith(0.5, 'red');
     expect(canvasGradient.addColorStop).toHaveBeenCalledWith(1, 'blue');
+  });
+});
+
+describe('LinearGradientBuilder', () => {
+  it('should correctly build a linear gradient', () => {
+    const linearGradientInstance = new LinearGradientBuilder(0, 0, 100, 100)
+      .addColorStop(0, 'red')
+      .addColorStop(1, 'blue')
+      .build();
+
+    expect(linearGradientInstance).toEqual({
+      x0: 0,
+      y0: 0,
+      x1: 100,
+      y1: 100,
+      colorStops: [
+        { offset: 0, color: 'red' },
+        { offset: 1, color: 'blue' },
+      ],
+    });
+  });
+});
+
+describe('linearGradient function', () => {
+  it('should create a builder and correctly build a linear gradient', () => {
+    const colorStops: ColorStop[] = [
+      { offset: 0, color: 'red' },
+      { offset: 1, color: 'blue' },
+    ];
+
+    const linearGradientInstance = linearGradient(
+      0,
+      0,
+      100,
+      100,
+      colorStops
+    ).build();
+
+    expect(linearGradientInstance).toEqual({
+      x0: 0,
+      y0: 0,
+      x1: 100,
+      y1: 100,
+      colorStops: [
+        { offset: 0, color: 'red' },
+        { offset: 1, color: 'blue' },
+      ],
+    });
   });
 });

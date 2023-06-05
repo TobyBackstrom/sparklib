@@ -3,7 +3,7 @@ import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
 import { BaseChart } from './base-chart';
-import { LinearGradient, Range } from './models';
+import { LinearGradient, LinearGradientBuilder, Range } from './models';
 import { LineProperties } from './models/line-properties';
 import { DatumLine } from './models/datum-line';
 import { Coordinate } from './models';
@@ -90,12 +90,14 @@ export class LineChart extends BaseChart {
     return context.canvas;
   }
 
-  strokeStyle(strokeStyle: string | LinearGradient) {
+  strokeStyle(strokeStyle: string | LinearGradient | LinearGradientBuilder) {
     this.#props.lineProps.strokeStyle = strokeStyle;
     return this;
   }
 
-  fillStyle(fillStyle?: string | LinearGradient | null) {
+  fillStyle(
+    fillStyle?: string | LinearGradient | LinearGradientBuilder | null
+  ) {
     this.#props.fillStyle = fillStyle ?? undefined;
     return this;
   }
@@ -253,7 +255,7 @@ export class LineChart extends BaseChart {
   #drawArea(
     coordinates: Coordinate[],
     y0: number,
-    fillStyle: string | LinearGradient,
+    fillStyle: string | LinearGradient | LinearGradientBuilder,
     context: CanvasRenderingContext2D
   ) {
     const usedFillStyle = this.getFillStyle(fillStyle, context);

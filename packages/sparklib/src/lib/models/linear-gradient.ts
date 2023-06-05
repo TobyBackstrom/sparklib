@@ -1,3 +1,4 @@
+import { LinearGradientBuilder } from './linear-gradient-builder';
 import { ColorStop } from './color-stop';
 
 /**
@@ -22,4 +23,14 @@ export type LinearGradient = {
   x1: number;
   y1: number;
   colorStops: ColorStop[];
+};
+
+export const linearGradient = (
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+  colorStops?: ColorStop[]
+) => {
+  return new LinearGradientBuilder(x0, y0, x1, y1, colorStops);
 };

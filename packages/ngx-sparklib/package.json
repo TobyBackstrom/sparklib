@@ -15,7 +15,7 @@
   "peerDependencies": {
     "@angular/common": "^16.0.0",
     "@angular/core": "^16.0.0",
-    "sparklib": "^1.0.20"
+    "sparklib": "^1.0.29"
   },
   "dependencies": {
     "tslib": "^2.3.0"

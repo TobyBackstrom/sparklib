@@ -1,5 +1,5 @@
 import { ChartMargins, ChartProperties, NO_MARGINS } from './base-chart-models';
-import { LinearGradient } from './models';
+import { LinearGradient, LinearGradientBuilder } from './models';
 import * as dom from './dom';
 
 const DEFAULT_MARGINS: ChartMargins = {
@@ -48,20 +48,24 @@ export abstract class BaseChart {
     return this;
   }
 
-  background(backgroundProps: string | LinearGradient | undefined) {
+  background(
+    backgroundProps: string | LinearGradient | LinearGradientBuilder | undefined
+  ) {
     this.chartProps.background = backgroundProps;
     return this;
   }
 
   protected getFillStyle(
-    fillStyle: string | LinearGradient,
+    fillStyle: string | LinearGradient | LinearGradientBuilder,
     context: CanvasRenderingContext2D
   ): string | CanvasGradient {
     if (typeof fillStyle === 'string') {
       return fillStyle;
+    } else if (fillStyle instanceof LinearGradientBuilder) {
+      return dom.createLinearGradient(fillStyle.build(), context);
+    } else {
+      return dom.createLinearGradient(fillStyle as LinearGradient, context);
     }
-
-    return dom.createLinearGradient(fillStyle as LinearGradient, context);
   }
 
   protected renderChartBase(): CanvasRenderingContext2D {
