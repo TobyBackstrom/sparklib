@@ -80,9 +80,8 @@ export abstract class BaseChart {
         this.chartProps.background,
         context
       );
+      context.fillRect(0, 0, this.chartProps.width, this.chartProps.height);
     }
-
-    context.fillRect(0, 0, this.chartProps.width, this.chartProps.height);
 
     return context;
   }
