@@ -4,4 +4,6 @@ export * from './datum-line';
 export * from './line-properties';
 export * from './linear-gradient';
 export * from './linear-gradient-builder';
+export * from './margins';
+export * from './margins-builder';
 export * from './range';

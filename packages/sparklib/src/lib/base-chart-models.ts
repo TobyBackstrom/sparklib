@@ -1,21 +1,19 @@
-import { LinearGradient, LinearGradientBuilder } from './models';
-
-export type ChartMargins = {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-};
+import { Margins } from './models/margins';
+import {
+  LinearGradient,
+  LinearGradientBuilder,
+  MarginsBuilder,
+} from './models';
 
 export type ChartProperties = {
   width: number;
   height: number;
   dpi?: number;
   background?: string | LinearGradient | LinearGradientBuilder | undefined;
-  margins?: ChartMargins;
+  margins?: Margins | MarginsBuilder;
 };
 
-export const NO_MARGINS: ChartMargins = {
+export const NO_MARGINS: Margins = {
   bottom: 0,
   left: 0,
   right: 0,

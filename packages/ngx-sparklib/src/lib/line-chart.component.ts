@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  ChartMargins,
+  Margins,
   DatumLine,
   LinearGradient,
   LineChart,
@@ -31,7 +31,7 @@ export class LineChartComponent implements AfterViewInit {
   @Input() height?: number;
   @Input() dpi?: number;
   @Input() background?: string;
-  @Input() margins?: Partial<ChartMargins>;
+  @Input() margins?: Partial<Margins>;
   @Input() strokeStyle?: string | LinearGradient;
   @Input() fillStyle?: string | LinearGradient;
   @Input() lineDash?: number[];
@@ -62,9 +62,9 @@ export class LineChartComponent implements AfterViewInit {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   #getInputToChartMappings(
     chart: LineChart
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Record<string, (arg: any) => LineChart> {
     return {
       width: chart.width,

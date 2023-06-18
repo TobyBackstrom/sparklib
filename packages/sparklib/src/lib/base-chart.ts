@@ -1,17 +1,22 @@
-import { ChartMargins, ChartProperties, NO_MARGINS } from './base-chart-models';
+import { ChartProperties, NO_MARGINS } from './base-chart-models';
+import { Margins, MarginsBuilder } from './models';
 import { LinearGradient, LinearGradientBuilder } from './models';
 import * as dom from './dom';
 
-const DEFAULT_MARGINS: ChartMargins = {
+const DEFAULT_MARGINS: Margins = {
   bottom: 2,
   left: 2,
   right: 2,
   top: 2,
 };
 
-type BaseProperties = {
-  margins: Required<ChartMargins>;
-} & ChartProperties;
+type BaseProperties = Omit<ChartProperties, 'margins'> & {
+  margins: Required<Margins>;
+};
+
+type PartialBaseProperties = Partial<Omit<ChartProperties, 'margins'>> & {
+  margins?: Margins | MarginsBuilder;
+};
 
 export abstract class BaseChart {
   protected chartProps: BaseProperties = {
@@ -22,8 +27,21 @@ export abstract class BaseChart {
     margins: DEFAULT_MARGINS,
   };
 
-  constructor(props?: Partial<ChartProperties>) {
-    this.chartProps = { ...this.chartProps, ...props };
+  constructor(props?: PartialBaseProperties) {
+    if (props?.margins) {
+      // eslint-disable-next-line prefer-const
+      let { margins, ...otherProps } = props;
+
+      if (margins !== undefined) {
+        margins = this.getMargins(margins);
+      } else {
+        margins = this.chartProps.margins;
+      }
+
+      props.margins = this.getMargins(props.margins);
+
+      this.chartProps = { ...this.chartProps, ...otherProps, margins };
+    }
   }
 
   width(width: number) {
@@ -41,10 +59,8 @@ export abstract class BaseChart {
     return this;
   }
 
-  margins(margins?: Partial<ChartMargins>) {
-    this.chartProps.margins = margins
-      ? { ...DEFAULT_MARGINS, ...margins }
-      : NO_MARGINS;
+  margins(margins?: Partial<Margins> | MarginsBuilder) {
+    this.chartProps.margins = this.getMargins(margins);
     return this;
   }
 
@@ -65,6 +81,14 @@ export abstract class BaseChart {
       return dom.createLinearGradient(fillStyle.build(), context);
     } else {
       return dom.createLinearGradient(fillStyle as LinearGradient, context);
+    }
+  }
+
+  protected getMargins(margins?: Partial<Margins> | MarginsBuilder) {
+    if (margins instanceof MarginsBuilder) {
+      return margins.build();
+    } else {
+      return margins ? { ...DEFAULT_MARGINS, ...margins } : NO_MARGINS;
     }
   }
 
