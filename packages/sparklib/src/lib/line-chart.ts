@@ -3,7 +3,12 @@ import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
 import { BaseChart } from './base-chart';
-import { LinearGradient, LinearGradientBuilder, Range } from './models';
+import {
+  DatumLineBuilder,
+  LinearGradient,
+  LinearGradientBuilder,
+  Range,
+} from './models';
 import { LineProperties } from './models/line-properties';
 import { DatumLine } from './models/datum-line';
 import { Coordinate } from './models';
@@ -124,9 +129,25 @@ export class LineChart extends BaseChart {
     return this;
   }
 
-  // add vertical reference lines in the x domain
-  xDatum(x: number, lineProps?: LineProperties) {
-    this.#datum(this.#props.xDatumLines, x, lineProps);
+  // add a vertical reference line in the x domain
+  xDatum(
+    xPositionOrDatumLineBuilder: number | DatumLineBuilder,
+    lineProps?: LineProperties
+  ): LineChart {
+    if (typeof xPositionOrDatumLineBuilder === 'number') {
+      this.#datum(
+        this.#props.xDatumLines,
+        xPositionOrDatumLineBuilder,
+        lineProps
+      );
+    } else {
+      const datumLine = xPositionOrDatumLineBuilder.build();
+      this.#datum(
+        this.#props.xDatumLines,
+        datumLine.position,
+        datumLine.lineProperties
+      );
+    }
 
     return this;
   }
@@ -136,9 +157,25 @@ export class LineChart extends BaseChart {
     return this;
   }
 
-  // add horizontal reference lines in the y domain
-  yDatum(y: number, lineProps?: LineProperties) {
-    this.#datum(this.#props.yDatumLines, y, lineProps);
+  // add a horizontal reference line in the y domain
+  yDatum(
+    yPositionOrDatumLineBuilder: number | DatumLineBuilder,
+    lineProps?: LineProperties
+  ) {
+    if (typeof yPositionOrDatumLineBuilder === 'number') {
+      this.#datum(
+        this.#props.yDatumLines,
+        yPositionOrDatumLineBuilder,
+        lineProps
+      );
+    } else {
+      const datumLine = yPositionOrDatumLineBuilder.build();
+      this.#datum(
+        this.#props.yDatumLines,
+        datumLine.position,
+        datumLine.lineProperties
+      );
+    }
 
     return this;
   }
