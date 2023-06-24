@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 
 import { LineChartComponent } from 'ngx-sparklib';
 
-import { lineChart, margins } from 'sparklib';
+import { datumLine, lineChart, lineProperties, margins } from 'sparklib';
 import {
   monoDataValues,
   pairDataValues,
@@ -46,8 +46,27 @@ export class AppComponent implements AfterViewInit {
       .yDomain([-10, 10])
       .render(singleValues);
 
+    const yDatumLine = datumLine(
+      0,
+      lineProperties()
+        .setLineDash([1, 1])
+        .setLineWidth(2)
+        .setStrokeStyle('gray')
+    );
+
+    const chart2 = lineChart()
+      .width(150)
+      .height(250)
+      .margins(margins().bottom(10).left(10).right(10).top(10))
+      //.yDatum()
+      .yDatum(5)
+      .yDatum(-5)
+      .yDomain([-10, 10])
+      .render(singleValues);
+
     this.#append(chart0, 'chart0');
     this.#append(chart1, 'chart1');
+    this.#append(chart2, 'chart2');
   }
 
   #append(chart: HTMLCanvasElement, label: string) {
