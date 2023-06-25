@@ -2,7 +2,7 @@ import { NO_MARGINS } from '../base-chart-models';
 import { Margins } from './margins';
 
 export class MarginsBuilder {
-  private margins: Margins = NO_MARGINS;
+  private margins: Margins = { ...NO_MARGINS };
 
   left(value: number): MarginsBuilder {
     this.margins.left = value;
