@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { LineChartComponent } from 'ngx-sparklib';
 
 import {
+  Margins,
   datumLine,
   lineChart,
   lineProperties,
@@ -30,6 +31,22 @@ export class AppComponent implements AfterViewInit {
   monoDataValues = monoDataValues;
   pairDataValues = pairDataValues;
   pairSegmentValues = pairSegmentValues;
+
+  marginsBuilder = margins().bottom(25).left(25).right(25).top(25);
+  margins = margins().bottom(5).left(5).right(5).top(5).build();
+
+  hGradientBuilder = linearGradient(0, 0, 250, 0)
+    .addColorStop(0, 'blue')
+    .addColorStop(1, 'lightgreen');
+
+  hGradient = linearGradient(0, 0, 250, 0)
+    .addColorStop(0, 'lightgreen')
+    .addColorStop(1, 'black')
+    .build();
+
+  vGradient = linearGradient(0, 0, 0, 50)
+    .addColorStop(0, 'yellow')
+    .addColorStop(1, 'red');
 
   ngAfterViewInit(): void {
     const chart0 = lineChart()

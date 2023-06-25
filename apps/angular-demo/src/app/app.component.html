@@ -5,10 +5,23 @@
   [background]="'lightyellow'"
   [values]="monoDataValues"
 ></sparklib-line-chart>
-<br />
 <sparklib-line-chart
-  [background]="'lightgreen'"
+  [width]="250"
+  [height]="100"
+  [margins]="marginsBuilder"
+  [background]="hGradientBuilder"
+  [values]="monoDataValues"
+></sparklib-line-chart>
+<br />
+
+<sparklib-line-chart
   [margins]="{ top: 10, bottom: 10, left: 10, right: 10 }"
+  [background]="'lightgreen'"
+  [values]="pairDataValues"
+></sparklib-line-chart>
+<sparklib-line-chart
+  [margins]="margins"
+  [background]="vGradient"
   [values]="pairDataValues"
 ></sparklib-line-chart>
 <br />
@@ -16,6 +29,29 @@
   [background]="'lightgray'"
   [margins]="{ top: 10, bottom: 10, left: 10, right: 10 }"
   [values]="pairSegmentValues"
+></sparklib-line-chart>
+<sparklib-line-chart
+  [background]="'lightgray'"
+  [margins]="{ top: 10, bottom: 10, left: 10, right: 10 }"
+  [strokeStyle]="hGradient"
+  [values]="pairSegmentValues"
+></sparklib-line-chart>
+<br />
+<sparklib-line-chart
+  [width]="250"
+  [height]="100"
+  [margins]="{ top: 0, bottom: 0, left: 10, right: 10 }"
+  [background]="'lightyellow'"
+  [fillStyle]="'black'"
+  [values]="monoDataValues"
+></sparklib-line-chart>
+<sparklib-line-chart
+  [width]="250"
+  [height]="100"
+  [margins]="{ top: 0, bottom: 0, left: 10, right: 10 }"
+  [background]="'lightyellow'"
+  [fillStyle]="hGradient"
+  [values]="monoDataValues"
 ></sparklib-line-chart>
 <br />
 

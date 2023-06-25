@@ -14,6 +14,8 @@ import {
   lineChart,
   LineChartProperties,
   Range,
+  LinearGradientBuilder,
+  MarginsBuilder,
 } from 'sparklib';
 
 @Component({
@@ -30,10 +32,10 @@ export class LineChartComponent implements AfterViewInit {
   @Input() width?: number;
   @Input() height?: number;
   @Input() dpi?: number;
-  @Input() background?: string;
-  @Input() margins?: Partial<Margins>;
-  @Input() strokeStyle?: string | LinearGradient;
-  @Input() fillStyle?: string | LinearGradient;
+  @Input() background?: string | LinearGradient | LinearGradientBuilder;
+  @Input() margins?: Partial<Margins> | MarginsBuilder;
+  @Input() strokeStyle?: string | LinearGradient | LinearGradientBuilder;
+  @Input() fillStyle?: string | LinearGradient | LinearGradientBuilder;
   @Input() lineDash?: number[];
   @Input() lineWidth?: number;
   @Input() xDomain?: Range;
