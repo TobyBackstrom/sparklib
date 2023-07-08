@@ -16,6 +16,10 @@ import {
   pairDataValues,
   pairSegmentValues,
   singleValues,
+  stripe_x10_0_and_1,
+  stripe_x10_1_and_0,
+  stripe_x10_mostly_0,
+  stripe_x10_mostly_1,
 } from './data';
 
 @Component({
@@ -96,9 +100,9 @@ export class AppComponent implements AfterViewInit {
             .setStrokeStyle(
               linearGradient(10, 0, 10, 250)
                 .addColorStop(0, 'blue')
-                .addColorStop(1, 'lightgreen')
-            )
-        )
+                .addColorStop(1, 'lightgreen'),
+            ),
+        ),
       )
       .yDatum(
         datumLine(
@@ -106,23 +110,27 @@ export class AppComponent implements AfterViewInit {
           lineProperties()
             .setLineDash([1, 1])
             .setLineWidth(1)
-            .setStrokeStyle('gray')
-        )
+            .setStrokeStyle('gray'),
+        ),
       )
       .yDatum(5)
       .yDatum(-5)
       .yDomain([-10, 10])
       .render(singleValues);
 
-    const stripeChart0 = stripeChart()
-      .background('darkgreen')
-      .render(singleValues);
+    const stripeChart0 = stripeChart().width(10).render(stripe_x10_1_and_0);
+    const stripeChart1 = stripeChart().width(10).render(stripe_x10_mostly_0);
+    const stripeChart2 = stripeChart().width(10).render(stripe_x10_0_and_1);
+    const stripeChart3 = stripeChart().width(10).render(stripe_x10_mostly_1);
 
     this.#append(chart0, 'chart0');
     this.#append(chart1, 'chart1');
     this.#append(chart2, 'chart2');
 
     this.#append(stripeChart0, 'stripeChart0');
+    this.#append(stripeChart1, 'stripeChart1');
+    this.#append(stripeChart2, 'stripeChart2');
+    this.#append(stripeChart3, 'stripeChart3');
   }
 
   #append(chart: HTMLCanvasElement, label: string) {

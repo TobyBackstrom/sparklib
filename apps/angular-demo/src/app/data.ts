@@ -94,3 +94,8 @@ export const pairSegmentValues = [
   [220, 13.56],
   [230, -6.15],
 ] as [number, number][];
+
+export const stripe_x10_1_and_0 = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
+export const stripe_x10_0_and_1 = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1];
+export const stripe_x10_mostly_0 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+export const stripe_x10_mostly_1 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 0];
