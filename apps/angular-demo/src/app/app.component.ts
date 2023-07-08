@@ -9,6 +9,7 @@ import {
   lineProperties,
   linearGradient,
   margins,
+  stripeChart,
 } from 'sparklib';
 import {
   monoDataValues,
@@ -113,9 +114,15 @@ export class AppComponent implements AfterViewInit {
       .yDomain([-10, 10])
       .render(singleValues);
 
+    const stripeChart0 = stripeChart()
+      .background('darkgreen')
+      .render(singleValues);
+
     this.#append(chart0, 'chart0');
     this.#append(chart1, 'chart1');
     this.#append(chart2, 'chart2');
+
+    this.#append(stripeChart0, 'stripeChart0');
   }
 
   #append(chart: HTMLCanvasElement, label: string) {
