@@ -56,7 +56,7 @@ export class LineChart extends BaseChart {
       return context.canvas;
     }
 
-    const arrayType = getArrayType({ values });
+    const arrayType = getArrayType(values);
 
     const xDomain = this.#getXDomain(values, arrayType);
     const yDomain = this.#getYDomain(values, arrayType);

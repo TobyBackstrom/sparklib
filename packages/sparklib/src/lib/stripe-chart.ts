@@ -29,7 +29,7 @@ export class StripeChart extends BaseChart {
       return context.canvas;
     }
 
-    if (getArrayType({ values }) !== ArrayType.SingleNumbers) {
+    if (getArrayType(values) !== ArrayType.SingleNumbers) {
       throw new Error('Invalid input format. Expected an array of numbers.');
     }
 

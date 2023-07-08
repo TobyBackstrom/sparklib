@@ -25,11 +25,7 @@ export enum ArrayType {
  *
  * @todo Maybe add a check for non-pair elements in a pairs array, although this would be a fairly expensive operation.
  */
-export function getArrayType({
-  values,
-}: {
-  values: (number | [number, number])[];
-}): ArrayType {
+export function getArrayType(values: (number | [number, number])[]): ArrayType {
   if (Array.isArray(values) && values.length > 0) {
     const firstValue = values[0];
     if (typeof firstValue === 'number') {
