@@ -24,6 +24,10 @@ export function createGradientColorScale(
   colors: string[],
   numColorLevels: number,
 ) {
+  if (domain[0] > domain[1]) {
+    throw new Error('Invalid domain, max must be larger than min');
+  }
+
   // a continuous RGB color interpolator
   const colorInterpolator = d3Interpolate.interpolateRgbBasis(colors);
 

@@ -1,4 +1,4 @@
-import { getArrayType, ArrayType } from '../lib/utils'; // replace with your actual module path
+import { getArrayType, ArrayType } from '../lib/utils/get-array-type';
 
 describe('getArrayType function', () => {
   it('should return ArrayType.SingleNumbers for an array of single numbers', () => {
@@ -18,7 +18,7 @@ describe('getArrayType function', () => {
   it('should throw an error for empty array', () => {
     const values: (number | [number, number])[] = [];
     expect(() => getArrayType(values)).toThrowError(
-      'Invalid input format. Expected an array of numbers or an array of number pairs.'
+      'Invalid input format. Expected an array of numbers or an array of number pairs.',
     );
   });
 

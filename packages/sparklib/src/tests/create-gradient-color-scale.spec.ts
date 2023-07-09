@@ -1,4 +1,4 @@
-import { createGradientColorScale } from '../lib/utils';
+import { createGradientColorScale } from '../lib/utils/create-gradient-color-scale';
 
 describe('createGradientColorScale', () => {
   it('should create a valid color scale with normal inputs', () => {
