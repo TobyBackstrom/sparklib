@@ -204,14 +204,26 @@ export class AppComponent implements AfterViewInit {
       .gradientColors(this.prideColors, 40)
       .render(monotonicDay);
 
-    const stripeChart8 = stripeChart()
+    const stripeChart8a = stripeChart()
       .width(randomDay1.length)
       .height(25)
       .gradientColors(this.prideColors)
       .render(randomDay1);
 
-    const stripeChart9 = stripeChart()
+    const stripeChart8b = stripeChart()
+      .width(randomDay1.length / 4)
+      .height(25)
+      .gradientColors(this.prideColors)
+      .render(randomDay1);
+
+    const stripeChart9a = stripeChart()
       .width(randomDay2.length)
+      .height(25)
+      .gradientColors(this.redColors, this.redColors.length)
+      .render(randomDay2);
+
+    const stripeChart9b = stripeChart()
+      .width(randomDay2.length / 4)
       .height(25)
       .gradientColors(this.redColors, this.redColors.length)
       .render(randomDay2);
@@ -225,8 +237,10 @@ export class AppComponent implements AfterViewInit {
     this.#append(stripeChart5, 'stripeChart5');
     this.#append(stripeChart6, 'stripeChart6');
     this.#append(stripeChart7, 'stripeChart7');
-    this.#append(stripeChart8, 'stripeChart8');
-    this.#append(stripeChart9, 'stripeChart9');
+    this.#append(stripeChart8a, 'stripeChart8a');
+    this.#append(stripeChart8b, 'stripeChart8b');
+    this.#append(stripeChart9a, 'stripeChart9a');
+    this.#append(stripeChart9b, 'stripeChart9b');
 
     this.#append(chart0, 'chart0');
     this.#append(chart1, 'chart1');
