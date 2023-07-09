@@ -114,3 +114,24 @@ export const monotonicIncreasing = (
 
   return result;
 };
+
+export const randomInRange = (
+  minV: number,
+  maxV: number,
+  length: number,
+  zeroProbability: number,
+): number[] => {
+  const result = [];
+
+  for (let i = 0; i < length; ++i) {
+    const randomNum = Math.random();
+
+    if (randomNum < zeroProbability) {
+      result.push(0);
+    } else {
+      result.push(randomNum * (maxV - minV) + minV);
+    }
+  }
+
+  return result;
+};

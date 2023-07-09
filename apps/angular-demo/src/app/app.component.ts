@@ -16,6 +16,7 @@ import {
   monotonicIncreasing,
   pairDataValues,
   pairSegmentValues,
+  randomInRange,
   singleValues,
   stripe_x10_0_and_1,
   stripe_x10_0_to_9,
@@ -40,6 +41,35 @@ export class AppComponent implements AfterViewInit {
 
   marginsBuilder = margins().bottom(25).left(25).right(25).top(25);
   margins = margins().bottom(5).left(5).right(5).top(5).build();
+
+  prideColors: string[] = [
+    '#ed2224',
+    '#f35b22',
+    '#f99621',
+    '#f5c11e',
+    '#f1eb1b',
+    '#f1eb1b',
+    '#f1eb1b',
+    '#63c720',
+    '#0c9b49',
+    '#21878d',
+    '#3954a5',
+    '#61379b',
+    '#93288e',
+  ];
+
+  redColors = [
+    '#ffffff',
+    '#fff5f0',
+    '#fee0d2',
+    '#fcbba1',
+    '#fc9272',
+    '#fb6a4a',
+    '#ef3b2c',
+    '#cb181d',
+    // '#a50f15',
+    // '#67000d',
+  ];
 
   prideGradient = linearGradient(0, 0, 250, 0)
     .addColorStop(0.077, '#ed2224')
@@ -135,32 +165,68 @@ export class AppComponent implements AfterViewInit {
       .height(25)
       .render(stripe_x10_0_and_1);
 
-    const stripeChart3 = stripeChart()
+    const stripeChart3a = stripeChart()
       .width(stripe_x10_mostly_1.length * 4)
       .height(25)
       .render(stripe_x10_mostly_1);
 
+    const stripeChart3b = stripeChart()
+      .width(stripe_x10_0_to_9.length * 4)
+      .height(25)
+      .render(stripe_x10_0_to_9);
+
     const monotonic100 = monotonicIncreasing(0, 100);
     const monotonicDay = monotonicIncreasing(0, 24 * 60);
+    const randomDay1 = randomInRange(0, 5, 24 * 60, 0);
+    const randomDay2 = randomInRange(0, 5, 24 * 60, 0.8);
 
     const stripeChart4 = stripeChart()
       .width(monotonic100.length * 2)
       .height(25)
-      .colorScale(['red', 'green', 'blue'])
+      .gradientColors(['red', 'green', 'blue'], 3)
       .render(monotonic100);
 
     const stripeChart5 = stripeChart()
       .width(monotonicDay.length)
       .height(25)
-      .colorScale(['red', 'green', 'blue'])
+      .gradientColors(['red', 'green', 'blue'])
       .render(monotonicDay);
+
+    const stripeChart6 = stripeChart()
+      .width(monotonicDay.length)
+      .height(25)
+      .gradientColors(this.prideColors, monotonicDay.length)
+      .render(monotonicDay);
+
+    const stripeChart7 = stripeChart()
+      .width(monotonicDay.length)
+      .height(25)
+      .gradientColors(this.prideColors, 40)
+      .render(monotonicDay);
+
+    const stripeChart8 = stripeChart()
+      .width(randomDay1.length)
+      .height(25)
+      .gradientColors(this.prideColors)
+      .render(randomDay1);
+
+    const stripeChart9 = stripeChart()
+      .width(randomDay2.length)
+      .height(25)
+      .gradientColors(this.redColors, this.redColors.length)
+      .render(randomDay2);
 
     this.#append(stripeChart0, 'stripeChart0', true);
     this.#append(stripeChart1, 'stripeChart1', true);
     this.#append(stripeChart2, 'stripeChart2', true);
-    this.#append(stripeChart3, 'stripeChart3', true);
-    this.#append(stripeChart4, 'stripeChart4', true);
-    this.#append(stripeChart5, 'stripeChart5', true);
+    this.#append(stripeChart3a, 'stripeChart3a', true);
+    this.#append(stripeChart3b, 'stripeChart3b', true);
+    this.#append(stripeChart4, 'stripeChart4');
+    this.#append(stripeChart5, 'stripeChart5');
+    this.#append(stripeChart6, 'stripeChart6');
+    this.#append(stripeChart7, 'stripeChart7');
+    this.#append(stripeChart8, 'stripeChart8');
+    this.#append(stripeChart9, 'stripeChart9');
 
     this.#append(chart0, 'chart0');
     this.#append(chart1, 'chart1');

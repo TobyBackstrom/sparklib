@@ -1,31 +1,48 @@
 import * as d3Array from 'd3-array';
-import * as d3Scale from 'd3-scale';
 
 import { BaseChart } from './base-chart';
 import { ChartProperties, NO_MARGINS } from './base-chart-models';
 import { Range } from './models';
-import { ArrayType, getArrayType } from './utils';
+import { ArrayType, createGradientColorScale, getArrayType } from './utils';
 
 export type StripeChartProperties = {
   chartProps: ChartProperties;
-  colorScale?: string[];
-  domain?: Range | undefined;
+  gradientColors: string[];
+  numGradientColorLevels: number;
+  domain: Range | undefined;
 };
 
 type Properties = Omit<StripeChartProperties, 'chartProps'>;
 
 export class StripeChart extends BaseChart {
   #props: Properties;
+  defaultColorScale: string[] = [
+    '#ffffff',
+    '#f0f0f0',
+    '#d9d9d9',
+    '#bdbdbd',
+    '#969696',
+    '#737373',
+    '#525252',
+    '#252525',
+    '#000000',
+  ];
 
   constructor(props?: Partial<StripeChartProperties>) {
     super(props?.chartProps);
+
+    const defaultProperties: Properties = {
+      gradientColors: this.defaultColorScale,
+      numGradientColorLevels: this.defaultColorScale.length,
+      domain: undefined,
+    };
 
     if (props?.chartProps?.margins === undefined) {
       // default to no margins for the stripe chart
       this.margins(NO_MARGINS);
     }
 
-    this.#props = { domain: props?.domain };
+    this.#props = { ...defaultProperties, ...props };
   }
 
   render(values: number[]): HTMLCanvasElement {
@@ -50,10 +67,11 @@ export class StripeChart extends BaseChart {
       this.chartProps.margins.bottom -
       this.chartProps.margins.top;
 
-    const colorScale = d3Scale
-      .scaleQuantize<string>()
-      .domain(this.#getDomain(values))
-      .range(this.#getColorScale());
+    const gradientColorScale = createGradientColorScale(
+      this.#getDomain(values),
+      this.#props.gradientColors,
+      this.#props.numGradientColorLevels,
+    );
 
     values.forEach((value, i) => {
       context.beginPath();
@@ -63,7 +81,7 @@ export class StripeChart extends BaseChart {
         stripeWidth,
         stripeHeight,
       );
-      context.fillStyle = colorScale(value);
+      context.fillStyle = gradientColorScale(value);
       context.fill();
       context.closePath();
     });
@@ -71,30 +89,16 @@ export class StripeChart extends BaseChart {
     return context.canvas;
   }
 
-  colorScale(colorScale: string[]) {
-    this.#props.colorScale = colorScale;
+  gradientColors(colors: string[], numLevels?: number) {
+    this.#props.gradientColors = colors;
+    const n = Math.round(numLevels ?? colors.length);
+    this.#props.numGradientColorLevels = n >= 1 ? n : 1;
     return this;
   }
 
   domain(domain: Range) {
     this.#props.domain = domain;
     return this;
-  }
-
-  #getColorScale(): string[] {
-    return (
-      this.#props.colorScale ?? [
-        '#ffffff',
-        '#f0f0f0',
-        '#d9d9d9',
-        '#bdbdbd',
-        '#969696',
-        '#737373',
-        '#525252',
-        '#252525',
-        '#000000',
-      ]
-    );
   }
 
   #getDomain(values: number[]): Range {
