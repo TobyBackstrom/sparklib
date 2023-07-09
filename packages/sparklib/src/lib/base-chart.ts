@@ -65,7 +65,11 @@ export abstract class BaseChart {
   }
 
   background(
-    backgroundProps: string | LinearGradient | LinearGradientBuilder | undefined
+    backgroundProps:
+      | string
+      | LinearGradient
+      | LinearGradientBuilder
+      | undefined,
   ) {
     this.chartProps.background = backgroundProps;
     return this;
@@ -73,7 +77,7 @@ export abstract class BaseChart {
 
   protected getFillStyle(
     fillStyle: string | LinearGradient | LinearGradientBuilder,
-    context: CanvasRenderingContext2D
+    context: CanvasRenderingContext2D,
   ): string | CanvasGradient {
     if (typeof fillStyle === 'string') {
       return fillStyle;
@@ -88,7 +92,7 @@ export abstract class BaseChart {
     if (margins instanceof MarginsBuilder) {
       return margins.build();
     } else {
-      return margins ? { ...DEFAULT_MARGINS, ...margins } : NO_MARGINS;
+      return margins ? { ...DEFAULT_MARGINS, ...margins } : { ...NO_MARGINS };
     }
   }
 
@@ -96,13 +100,13 @@ export abstract class BaseChart {
     const context = dom.context2d(
       this.chartProps.width,
       this.chartProps.height,
-      this.chartProps.dpi
+      this.chartProps.dpi,
     );
 
     if (this.chartProps.background !== undefined) {
       context.fillStyle = this.getFillStyle(
         this.chartProps.background,
-        context
+        context,
       );
       context.fillRect(0, 0, this.chartProps.width, this.chartProps.height);
     }

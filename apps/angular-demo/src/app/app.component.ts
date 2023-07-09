@@ -13,10 +13,12 @@ import {
 } from 'sparklib';
 import {
   monoDataValues,
+  monotonicIncreasing,
   pairDataValues,
   pairSegmentValues,
   singleValues,
   stripe_x10_0_and_1,
+  stripe_x10_0_to_9,
   stripe_x10_1_and_0,
   stripe_x10_mostly_0,
   stripe_x10_mostly_1,
@@ -118,32 +120,66 @@ export class AppComponent implements AfterViewInit {
       .yDomain([-10, 10])
       .render(singleValues);
 
-    const stripeChart0 = stripeChart().width(10).render(stripe_x10_1_and_0);
-    const stripeChart1 = stripeChart().width(10).render(stripe_x10_mostly_0);
-    const stripeChart2 = stripeChart().width(10).render(stripe_x10_0_and_1);
-    const stripeChart3 = stripeChart().width(10).render(stripe_x10_mostly_1);
+    const stripeChart0 = stripeChart()
+      .width(stripe_x10_1_and_0.length * 4)
+      .height(25)
+      .render(stripe_x10_1_and_0);
+
+    const stripeChart1 = stripeChart()
+      .width(stripe_x10_mostly_0.length * 4)
+      .height(25)
+      .render(stripe_x10_mostly_0);
+
+    const stripeChart2 = stripeChart()
+      .width(stripe_x10_0_and_1.length * 4)
+      .height(25)
+      .render(stripe_x10_0_and_1);
+
+    const stripeChart3 = stripeChart()
+      .width(stripe_x10_mostly_1.length * 4)
+      .height(25)
+      .render(stripe_x10_mostly_1);
+
+    const monotonic100 = monotonicIncreasing(0, 100);
+    const monotonicDay = monotonicIncreasing(0, 24 * 60);
+
+    const stripeChart4 = stripeChart()
+      .width(monotonic100.length * 2)
+      .height(25)
+      .colorScale(['red', 'green', 'blue'])
+      .render(monotonic100);
+
+    const stripeChart5 = stripeChart()
+      .width(monotonicDay.length)
+      .height(25)
+      .colorScale(['red', 'green', 'blue'])
+      .render(monotonicDay);
+
+    this.#append(stripeChart0, 'stripeChart0', true);
+    this.#append(stripeChart1, 'stripeChart1', true);
+    this.#append(stripeChart2, 'stripeChart2', true);
+    this.#append(stripeChart3, 'stripeChart3', true);
+    this.#append(stripeChart4, 'stripeChart4', true);
+    this.#append(stripeChart5, 'stripeChart5', true);
 
     this.#append(chart0, 'chart0');
     this.#append(chart1, 'chart1');
     this.#append(chart2, 'chart2');
-
-    this.#append(stripeChart0, 'stripeChart0');
-    this.#append(stripeChart1, 'stripeChart1');
-    this.#append(stripeChart2, 'stripeChart2');
-    this.#append(stripeChart3, 'stripeChart3');
   }
 
-  #append(chart: HTMLCanvasElement, label: string) {
+  #append(chart: HTMLCanvasElement, label: string, border = true) {
     const div = document.createElement('div');
     div.textContent = label;
     this.container?.nativeElement.appendChild(div);
 
     this.container?.nativeElement.appendChild(chart);
 
-    chart.style.borderWidth = '1px';
-    chart.style.borderStyle = 'solid';
-    chart.style.borderColor = 'lightgray';
-    chart.style.margin = '4px';
+    if (border) {
+      chart.style.borderWidth = '1px';
+      chart.style.borderStyle = 'solid';
+      chart.style.borderColor = 'lightgray';
+      chart.style.margin = '4px';
+    }
 
     this.container?.nativeElement.appendChild(chart);
   }

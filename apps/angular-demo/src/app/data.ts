@@ -99,3 +99,18 @@ export const stripe_x10_1_and_0 = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
 export const stripe_x10_0_and_1 = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1];
 export const stripe_x10_mostly_0 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
 export const stripe_x10_mostly_1 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 0];
+
+export const stripe_x10_0_to_9 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+export const monotonicIncreasing = (
+  first: number,
+  length: number,
+): number[] => {
+  const result = [];
+
+  for (let i = 0; i < length; ++i) {
+    result.push(first++);
+  }
+
+  return result;
+};
