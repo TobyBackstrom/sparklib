@@ -22,8 +22,8 @@ import {
   selector: 'sparklib-line-chart',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.scss'],
+  template: '<canvas #canvasRef></canvas>',
+  styles: [],
 })
 export class LineChartComponent implements AfterViewInit {
   // mandatory properties
@@ -65,7 +65,7 @@ export class LineChartComponent implements AfterViewInit {
   }
 
   #getInputToChartMappings(
-    chart: LineChart
+    chart: LineChart,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Record<string, (arg: any) => LineChart> {
     return {
