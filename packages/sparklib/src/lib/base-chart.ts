@@ -10,16 +10,16 @@ const DEFAULT_MARGINS: Margins = {
   top: 2,
 };
 
-type BaseProperties = Omit<ChartProperties, 'margins'> & {
+type BaseChartProperties = Omit<ChartProperties, 'margins'> & {
   margins: Required<Margins>;
 };
 
-type PartialBaseProperties = Partial<Omit<ChartProperties, 'margins'>> & {
+type PartialBaseChartProperties = Partial<Omit<ChartProperties, 'margins'>> & {
   margins?: Margins | MarginsBuilder;
 };
 
 export abstract class BaseChart {
-  protected chartProps: BaseProperties = {
+  protected chartProps: BaseChartProperties = {
     width: 250,
     height: 50,
     dpi: undefined,
@@ -27,7 +27,7 @@ export abstract class BaseChart {
     margins: DEFAULT_MARGINS,
   };
 
-  constructor(props?: PartialBaseProperties) {
+  constructor(props?: PartialBaseChartProperties) {
     if (props?.margins) {
       // eslint-disable-next-line prefer-const
       let { margins, ...otherProps } = props;
