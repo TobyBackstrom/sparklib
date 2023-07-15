@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { LineChartComponent } from 'ngx-sparklib';
+import { LineChartComponent, StripeChartComponent } from 'ngx-sparklib';
 
 import {
   datumLine,
@@ -27,7 +27,7 @@ import {
 
 @Component({
   standalone: true,
-  imports: [LineChartComponent, RouterModule],
+  imports: [LineChartComponent, StripeChartComponent, RouterModule],
   selector: 'sparklib-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
@@ -38,6 +38,11 @@ export class AppComponent implements AfterViewInit {
   monoDataValues = monoDataValues;
   pairDataValues = pairDataValues;
   pairSegmentValues = pairSegmentValues;
+  stripe_x10_1_and_0 = stripe_x10_1_and_0;
+  stripe_x10_0_and_1 = stripe_x10_0_and_1;
+  stripe_x10_mostly_0 = stripe_x10_mostly_0;
+  stripe_x10_mostly_1 = stripe_x10_mostly_1;
+  stripe_x10_0_to_9 = stripe_x10_0_to_9;
 
   marginsBuilder = margins().bottom(25).left(25).right(25).top(25);
   margins = margins().bottom(5).left(5).right(5).top(5).build();
