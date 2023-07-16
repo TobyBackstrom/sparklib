@@ -1,11 +1,11 @@
-import { ChartProperties } from './base-chart-models';
+import { BaseChartProperties } from './base-chart-models';
 import { LinearGradient, LinearGradientBuilder, Range } from './models';
 import { LineProperties } from './models/line-properties';
 import { DatumLine } from './models/datum-line';
 
 export type LineChartProperties = {
   lineProps: LineProperties;
-  chartProps: ChartProperties;
+  baseChartProps: BaseChartProperties;
 
   fillStyle?: string | LinearGradient | LinearGradientBuilder;
 

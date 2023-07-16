@@ -18,13 +18,13 @@ import { LineChartProperties } from './line-chart-models';
 // LineChart props only (BaseChart excluded), with required lineProps.
 type Properties = {
   lineProps: Required<LineProperties>;
-} & Omit<LineChartProperties, 'chartProps'>;
+} & Omit<LineChartProperties, 'baseChartProps'>;
 
 export class LineChart extends BaseChart {
   #props: Properties;
 
   constructor(props?: Partial<LineChartProperties>) {
-    super(props?.chartProps);
+    super(props?.baseChartProps);
 
     const defaultLineProps: Required<LineProperties> = {
       strokeStyle: 'black',
@@ -65,18 +65,18 @@ export class LineChart extends BaseChart {
     const yScale = this.#yScale(yDomain);
 
     this.#props.xDatumLines.forEach((datumLine) =>
-      this.#drawDatumLine('x', datumLine, yDomain, xScale, yScale, context)
+      this.#drawDatumLine('x', datumLine, yDomain, xScale, yScale, context),
     );
 
     this.#props.yDatumLines.forEach((datumLine) =>
-      this.#drawDatumLine('y', datumLine, xDomain, xScale, yScale, context)
+      this.#drawDatumLine('y', datumLine, xDomain, xScale, yScale, context),
     );
 
     const scaledCoordinates = this.#scaleCoordinates(
       values,
       arrayType,
       xScale,
-      yScale
+      yScale,
     );
 
     if (this.#props.fillStyle) {
@@ -84,7 +84,7 @@ export class LineChart extends BaseChart {
         scaledCoordinates,
         yScale(0),
         this.#props.fillStyle,
-        context
+        context,
       );
     }
 
@@ -101,7 +101,7 @@ export class LineChart extends BaseChart {
   }
 
   fillStyle(
-    fillStyle?: string | LinearGradient | LinearGradientBuilder | null
+    fillStyle?: string | LinearGradient | LinearGradientBuilder | null,
   ) {
     this.#props.fillStyle = fillStyle ?? undefined;
     return this;
@@ -132,20 +132,20 @@ export class LineChart extends BaseChart {
   // add a vertical reference line in the x domain
   xDatum(
     xPositionOrDatumLineBuilder: number | DatumLineBuilder,
-    lineProps?: LineProperties
+    lineProps?: LineProperties,
   ): LineChart {
     if (typeof xPositionOrDatumLineBuilder === 'number') {
       this.#datum(
         this.#props.xDatumLines,
         xPositionOrDatumLineBuilder,
-        lineProps
+        lineProps,
       );
     } else {
       const datumLine = xPositionOrDatumLineBuilder.build();
       this.#datum(
         this.#props.xDatumLines,
         datumLine.position,
-        datumLine.lineProperties
+        datumLine.lineProperties,
       );
     }
 
@@ -160,20 +160,20 @@ export class LineChart extends BaseChart {
   // add a horizontal reference line in the y domain
   yDatum(
     yPositionOrDatumLineBuilder: number | DatumLineBuilder,
-    lineProps?: LineProperties
+    lineProps?: LineProperties,
   ) {
     if (typeof yPositionOrDatumLineBuilder === 'number') {
       this.#datum(
         this.#props.yDatumLines,
         yPositionOrDatumLineBuilder,
-        lineProps
+        lineProps,
       );
     } else {
       const datumLine = yPositionOrDatumLineBuilder.build();
       this.#datum(
         this.#props.yDatumLines,
         datumLine.position,
-        datumLine.lineProperties
+        datumLine.lineProperties,
       );
     }
 
@@ -187,7 +187,7 @@ export class LineChart extends BaseChart {
 
   #getXDomain(
     values: (number | [number, number])[],
-    arrayType: ArrayType
+    arrayType: ArrayType,
   ): Range {
     return (
       this.#props.xDomain ??
@@ -199,7 +199,7 @@ export class LineChart extends BaseChart {
 
   #getYDomain(
     values: (number | [number, number])[],
-    arrayType: ArrayType
+    arrayType: ArrayType,
   ): Range {
     return (
       this.#props.yDomain ??
@@ -233,7 +233,7 @@ export class LineChart extends BaseChart {
     values: T,
     arrayType: ArrayType,
     xScale: d3Scale.ScaleLinear<number, number>,
-    yScale: d3Scale.ScaleLinear<number, number>
+    yScale: d3Scale.ScaleLinear<number, number>,
   ): Coordinate[] {
     return values.map((value, index) => {
       const x =
@@ -251,7 +251,7 @@ export class LineChart extends BaseChart {
   #datum(
     datumLines: DatumLine[],
     position: number,
-    datumLineProps?: LineProperties
+    datumLineProps?: LineProperties,
   ) {
     const defaultDatumLineProps = {
       strokeStyle: 'black',
@@ -273,7 +273,7 @@ export class LineChart extends BaseChart {
     domain: Range,
     xScale: d3Scale.ScaleLinear<number, number>,
     yScale: d3Scale.ScaleLinear<number, number>,
-    context: CanvasRenderingContext2D
+    context: CanvasRenderingContext2D,
   ) {
     const scaledCoordinates: Coordinate[] =
       axis === 'x'
@@ -293,7 +293,7 @@ export class LineChart extends BaseChart {
     coordinates: Coordinate[],
     y0: number,
     fillStyle: string | LinearGradient | LinearGradientBuilder,
-    context: CanvasRenderingContext2D
+    context: CanvasRenderingContext2D,
   ) {
     const usedFillStyle = this.getFillStyle(fillStyle, context);
 
@@ -315,7 +315,7 @@ export class LineChart extends BaseChart {
   #drawPath(
     coordinates: Coordinate[],
     lineProperties: Required<LineProperties>,
-    context: CanvasRenderingContext2D
+    context: CanvasRenderingContext2D,
   ) {
     const strokeStyle = this.getFillStyle(lineProperties.strokeStyle, context);
 

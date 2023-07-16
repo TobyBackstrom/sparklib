@@ -5,7 +5,7 @@ import {
   MarginsBuilder,
 } from './models';
 
-export type ChartProperties = {
+export type BaseChartProperties = {
   width: number;
   height: number;
   dpi?: number;

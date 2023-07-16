@@ -1,4 +1,4 @@
-import { ChartProperties, NO_MARGINS } from './base-chart-models';
+import { BaseChartProperties, NO_MARGINS } from './base-chart-models';
 import { Margins, MarginsBuilder } from './models';
 import { LinearGradient, LinearGradientBuilder } from './models';
 import * as dom from './dom';
@@ -10,16 +10,18 @@ const DEFAULT_MARGINS: Margins = {
   top: 2,
 };
 
-type BaseChartProperties = Omit<ChartProperties, 'margins'> & {
+type BaseChartPropertiesWithMargins = Omit<BaseChartProperties, 'margins'> & {
   margins: Required<Margins>;
 };
 
-type PartialBaseChartProperties = Partial<Omit<ChartProperties, 'margins'>> & {
+type PartialBaseChartProperties = Partial<
+  Omit<BaseChartProperties, 'margins'>
+> & {
   margins?: Margins | MarginsBuilder;
 };
 
 export abstract class BaseChart {
-  protected chartProps: BaseChartProperties = {
+  protected chartProps: BaseChartPropertiesWithMargins = {
     width: 250,
     height: 50,
     dpi: undefined,

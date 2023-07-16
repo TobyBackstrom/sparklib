@@ -1,18 +1,18 @@
 import * as d3Array from 'd3-array';
 
 import { BaseChart } from './base-chart';
-import { ChartProperties, NO_MARGINS } from './base-chart-models';
+import { BaseChartProperties, NO_MARGINS } from './base-chart-models';
 import { Range } from './models';
 import { ArrayType, createGradientColorScale, getArrayType } from './utils';
 
 export type StripeChartProperties = {
-  chartProps: ChartProperties;
+  baseChartProps: BaseChartProperties;
   gradientColors: string[];
   numGradientColorLevels: number;
   domain: Range | undefined;
 };
 
-type Properties = Omit<StripeChartProperties, 'chartProps'>;
+type Properties = Omit<StripeChartProperties, 'baseChartProps'>;
 
 export class StripeChart extends BaseChart {
   #props: Properties;
@@ -29,7 +29,7 @@ export class StripeChart extends BaseChart {
   ];
 
   constructor(props?: Partial<StripeChartProperties>) {
-    super(props?.chartProps);
+    super(props?.baseChartProps);
 
     const defaultProperties: Properties = {
       gradientColors: this.defaultColorScale,
@@ -37,7 +37,7 @@ export class StripeChart extends BaseChart {
       domain: undefined,
     };
 
-    if (props?.chartProps?.margins === undefined) {
+    if (props?.baseChartProps?.margins === undefined) {
       // default to no margins for the stripe chart
       this.margins(NO_MARGINS);
     }
