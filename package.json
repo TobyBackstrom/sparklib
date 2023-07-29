@@ -47,12 +47,13 @@
     "@angular/cli": "^16.0.0",
     "@angular/compiler-cli": "^16.0.0",
     "@angular/language-service": "^16.0.0",
-    "@nx/angular": "^16.2.1",
-    "@nx/eslint-plugin": "^16.2.1",
-    "@nx/jest": "^16.2.1",
-    "@nx/js": "^16.2.1",
-    "@nx/linter": "^16.2.1",
-    "@nx/workspace": "^16.2.1",
+    "@nx/angular": "16.5.5",
+    "@nx/eslint-plugin": "16.5.5",
+    "@nx/jest": "16.5.5",
+    "@nx/js": "16.5.5",
+    "@nx/linter": "16.5.5",
+    "@nx/react": "16.5.5",
+    "@nx/workspace": "16.5.5",
     "@schematics/angular": "^16.0.0",
     "@types/d3-array": "^3.0.4",
     "@types/d3-color": "^3.1.0",
@@ -71,7 +72,7 @@
     "jest-environment-jsdom": "^29.4.1",
     "jest-preset-angular": "^13.1.0",
     "ng-packagr": "^16.0.0",
-    "nx": "^16.2.1",
+    "nx": "16.5.5",
     "postcss": "^8.4.5",
     "postcss-import": "^15.1.0",
     "postcss-preset-env": "^9.0.0",
@@ -83,3 +84,4 @@
     "typescript": "^5.0.4"
   }
 }
+
