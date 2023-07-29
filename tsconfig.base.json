@@ -21,6 +21,9 @@
       "ngx-sparklib": [
         "packages/ngx-sparklib/src/index.ts"
       ],
+      "react-sparklib": [
+        "packages/react-sparklib/src/index.ts"
+      ],
       "sparklib": [
         "packages/sparklib/src/index.ts"
       ]
