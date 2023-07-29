@@ -1,2 +1,1 @@
-
-export * from './lib/react-sparklib';
+export * from './lib/line-chart';

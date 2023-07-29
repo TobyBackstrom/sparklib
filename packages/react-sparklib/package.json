@@ -1,6 +1,6 @@
 {
   "name": "react-sparklib",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Sparkly mini charts for your sparkling app",
   "repository": {
     "type": "git",
@@ -11,5 +11,9 @@
   "bugs": {
     "url": "https://github.com/TobyBackstrom/sparklib/issues"
   },
-  "homepage": "https://github.com/TobyBackstrom/sparklib#readme"
+  "homepage": "https://github.com/TobyBackstrom/sparklib#readme",
+  "peerDependencies": {
+    "sparklib": "^1.0.31"
+  },
+  "sideEffects": false
 }
