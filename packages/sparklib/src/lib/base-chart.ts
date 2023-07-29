@@ -98,11 +98,14 @@ export abstract class BaseChart {
     }
   }
 
-  protected renderChartBase(): CanvasRenderingContext2D {
+  protected renderChartBase(
+    canvas?: HTMLCanvasElement,
+  ): CanvasRenderingContext2D {
     const context = dom.context2d(
       this.chartProps.width,
       this.chartProps.height,
       this.chartProps.dpi,
+      canvas,
     );
 
     if (this.chartProps.background !== undefined) {

@@ -47,8 +47,11 @@ export class LineChart extends BaseChart {
     };
   }
 
-  render(values: (number | [number, number])[]): HTMLCanvasElement {
-    const context = super.renderChartBase();
+  render(
+    values: (number | [number, number])[],
+    canvas?: HTMLCanvasElement,
+  ): HTMLCanvasElement {
+    const context = super.renderChartBase(canvas);
 
     if (!values || values.length < 2) {
       // This is a line chart, remember? It requires at least a pair of coordinates.

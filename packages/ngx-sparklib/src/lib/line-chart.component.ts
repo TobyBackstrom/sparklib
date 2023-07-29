@@ -49,7 +49,7 @@ export class LineChartComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const chart = lineChart(this.properties);
     this.#setChartProperties(chart);
-    this.canvasRef.nativeElement.replaceWith(chart.render(this.values));
+    chart.render(this.values, this.canvasRef.nativeElement);
   }
 
   #setChartProperties(chart: LineChart) {

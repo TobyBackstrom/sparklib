@@ -39,7 +39,7 @@ export class StripeChartComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const chart = stripeChart(this.properties);
     this.#setChartProperties(chart);
-    this.canvasRef.nativeElement.replaceWith(chart.render(this.values));
+    chart.render(this.values, this.canvasRef.nativeElement);
   }
 
   #setChartProperties(chart: StripeChart) {

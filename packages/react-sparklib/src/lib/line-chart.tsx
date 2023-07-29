@@ -49,7 +49,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
 
     if (canvasRef.current) {
       setChartProperties(chart);
-      canvasRef.current.replaceWith(chart.render(props.values));
+      chart.render(props.values, canvasRef.current);
     }
   }, [props]);
 

@@ -45,8 +45,8 @@ export class StripeChart extends BaseChart {
     this.#props = { ...defaultProperties, ...props };
   }
 
-  render(values: number[]): HTMLCanvasElement {
-    const context = super.renderChartBase();
+  render(values: number[], canvas?: HTMLCanvasElement): HTMLCanvasElement {
+    const context = super.renderChartBase(canvas);
 
     if (!values || values.length == 0) {
       return context.canvas;

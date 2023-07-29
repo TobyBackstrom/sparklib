@@ -1,13 +1,14 @@
 export function context2d(
   width: number,
   height: number,
-  dpi?: number
+  dpi?: number,
+  canvas?: HTMLCanvasElement,
 ): CanvasRenderingContext2D {
   if (dpi == null) {
     dpi = window.devicePixelRatio;
   }
 
-  const canvas = document.createElement('canvas');
+  canvas = canvas || document.createElement('canvas');
 
   canvas.width = Math.floor(width * dpi);
   canvas.height = Math.floor(height * dpi);
