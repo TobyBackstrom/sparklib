@@ -29,7 +29,7 @@ interface LineChartProps {
   properties?: LineChartProperties;
 }
 
-const LineChart: React.FC<LineChartProps> = (props) => {
+export const LineChart = (props: LineChartProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
