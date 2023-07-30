@@ -2,20 +2,16 @@
   "name": "react-sparklib",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/react-sparklib/src",
-  "projectType": "library",
+  "prefix": "sparklib",
   "tags": [],
+  "projectType": "library",
   "targets": {
-    "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["packages/react-sparklib/**/*.{ts,tsx,js,jsx}"]
-      }
-    },
     "build": {
       "executor": "@nx/rollup:rollup",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "skipTypeField": true,
+        "format": ["esm", "cjs"],
         "outputPath": "dist/packages/react-sparklib",
         "tsConfig": "packages/react-sparklib/tsconfig.lib.json",
         "project": "packages/react-sparklib/package.json",
@@ -44,6 +40,13 @@
           "ci": true,
           "codeCoverage": true
         }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/react-sparklib/**/*.{ts,tsx,js,jsx}"]
       }
     }
   }
