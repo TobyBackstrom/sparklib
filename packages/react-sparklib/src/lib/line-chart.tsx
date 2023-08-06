@@ -1,41 +1,37 @@
-import React, { useEffect, useRef } from 'react';
-import {
-  Margins,
-  DatumLine,
-  LinearGradient,
-  LineChart as SparkLib_LineChart,
-  lineChart,
-  LineChartProperties,
-  Range,
-  LinearGradientBuilder,
-  MarginsBuilder,
-} from 'sparklib';
+import { useEffect, useRef } from 'react';
+import * as sparklib from 'sparklib';
 
 interface LineChartProps {
   values: (number | [number, number])[];
   width?: number;
   height?: number;
   dpi?: number;
-  background?: string | LinearGradient | LinearGradientBuilder;
-  margins?: Partial<Margins> | MarginsBuilder;
-  strokeStyle?: string | LinearGradient | LinearGradientBuilder;
-  fillStyle?: string | LinearGradient | LinearGradientBuilder;
+  background?:
+    | string
+    | sparklib.LinearGradient
+    | sparklib.LinearGradientBuilder;
+  margins?: Partial<sparklib.Margins> | sparklib.MarginsBuilder;
+  strokeStyle?:
+    | string
+    | sparklib.LinearGradient
+    | sparklib.LinearGradientBuilder;
+  fillStyle?: string | sparklib.LinearGradient | sparklib.LinearGradientBuilder;
   lineDash?: number[];
   lineWidth?: number;
   xDomain?: Range;
   yDomain?: Range;
-  xDatumLines?: DatumLine[];
-  yDatumLines?: DatumLine[];
-  properties?: LineChartProperties;
+  xDatumLines?: sparklib.DatumLine[];
+  yDatumLines?: sparklib.DatumLine[];
+  properties?: sparklib.LineChartProperties;
 }
 
 export const LineChart = (props: LineChartProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const chart = lineChart(props.properties);
+    const chart = sparklib.lineChart(props.properties);
 
-    const setChartProperties = (chart: SparkLib_LineChart) => {
+    const setChartProperties = (chart: sparklib.LineChart) => {
       const inputMappings = getInputToChartMappings(chart);
 
       Object.entries(inputMappings).forEach(([key, method]) => {
@@ -54,9 +50,9 @@ export const LineChart = (props: LineChartProps) => {
   }, [props]);
 
   const getInputToChartMappings = (
-    chart: SparkLib_LineChart,
+    chart: sparklib.LineChart,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): Record<string, (arg: any) => SparkLib_LineChart> => {
+  ): Record<string, (arg: any) => sparklib.LineChart> => {
     return {
       width: chart.width,
       height: chart.height,
