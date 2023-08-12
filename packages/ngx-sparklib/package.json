@@ -1,6 +1,6 @@
 {
   "name": "ngx-sparklib",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Sparkly mini charts for your sparkling app",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
   "peerDependencies": {
     "@angular/common": "^16.0.0",
     "@angular/core": "^16.0.0",
-    "sparklib": "^1.0.32"
+    "sparklib": "^1.0.33"
   },
   "sideEffects": false
 }
