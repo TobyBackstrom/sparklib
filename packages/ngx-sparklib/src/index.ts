@@ -6,6 +6,7 @@ export {
   lineProperties,
   linearGradient,
   margins,
+  stripeChart,
   DatumLine,
   DatumLineBuilder,
   LinearGradient,

@@ -1,8 +1,6 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { LineChartComponent, StripeChartComponent } from 'ngx-sparklib';
-
 import {
   datumLine,
   lineChart,
@@ -10,7 +8,10 @@ import {
   linearGradient,
   margins,
   stripeChart,
-} from 'sparklib';
+  LineChartComponent,
+  StripeChartComponent,
+} from 'ngx-sparklib';
+
 import {
   monoDataValues,
   monotonicIncreasing,
