@@ -14,7 +14,7 @@ export interface StripeChartProps {
   margins?: sparklib.Margins | sparklib.MarginsBuilder;
   gradientColors?: string[];
   nGradientColorLevels?: number;
-  domain?: Range | undefined;
+  domain?: sparklib.Range | undefined;
   properties?: sparklib.StripeChartProperties;
 }
 

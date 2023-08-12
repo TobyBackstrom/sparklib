@@ -18,8 +18,8 @@ interface LineChartProps {
   fillStyle?: string | sparklib.LinearGradient | sparklib.LinearGradientBuilder;
   lineDash?: number[];
   lineWidth?: number;
-  xDomain?: Range;
-  yDomain?: Range;
+  xDomain?: sparklib.Range;
+  yDomain?: sparklib.Range;
   xDatumLines?: sparklib.DatumLine[];
   yDatumLines?: sparklib.DatumLine[];
   properties?: sparklib.LineChartProperties;
