@@ -8,7 +8,7 @@ import { ArrayType, createGradientColorScale, getArrayType } from './utils';
 export type StripeChartProperties = {
   baseChartProps: BaseChartProperties;
   gradientColors: string[];
-  numGradientColorLevels: number;
+  nGradientColorLevels: number;
   domain: Range | undefined;
 };
 
@@ -33,7 +33,7 @@ export class StripeChart extends BaseChart {
 
     const defaultProperties: Properties = {
       gradientColors: this.defaultColorScale,
-      numGradientColorLevels: this.defaultColorScale.length,
+      nGradientColorLevels: this.defaultColorScale.length,
       domain: undefined,
     };
 
@@ -70,7 +70,7 @@ export class StripeChart extends BaseChart {
     const gradientColorScale = createGradientColorScale(
       this.#getDomain(values),
       this.#props.gradientColors,
-      this.#props.numGradientColorLevels,
+      this.#props.nGradientColorLevels,
     );
 
     values.forEach((value, i) => {
@@ -92,7 +92,12 @@ export class StripeChart extends BaseChart {
   gradientColors(colors: string[], numLevels?: number) {
     this.#props.gradientColors = colors;
     const n = Math.round(numLevels ?? colors.length);
-    this.#props.numGradientColorLevels = n >= 1 ? n : 1;
+    this.#props.nGradientColorLevels = n >= 1 ? n : 1;
+    return this;
+  }
+
+  nGradientColorLevels(numLevels: number) {
+    this.#props.nGradientColorLevels = numLevels >= 1 ? numLevels : 1;
     return this;
   }
 

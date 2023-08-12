@@ -13,7 +13,7 @@ export interface StripeChartProps {
     | undefined;
   margins?: sparklib.Margins | sparklib.MarginsBuilder;
   gradientColors?: string[];
-  numGradientColorLevels?: number; // TODO: fix usage
+  nGradientColorLevels?: number;
   domain?: Range | undefined;
   properties?: sparklib.StripeChartProperties;
 }
@@ -53,6 +53,7 @@ export const StripeChart = (props: StripeChartProps) => {
       margins: chart.margins,
       background: chart.background,
       gradientColors: chart.gradientColors,
+      nGradientColorLevels: chart.nGradientColorLevels,
       domain: chart.domain,
     };
   };

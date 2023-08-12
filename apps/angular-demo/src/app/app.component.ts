@@ -188,7 +188,8 @@ export class AppComponent implements AfterViewInit {
     const stripeChart4 = stripeChart()
       .width(monotonic100.length * 2)
       .height(25)
-      .gradientColors(['red', 'green', 'blue'], 3)
+      .gradientColors(['red', 'green', 'blue'])
+      .nGradientColorLevels(3)
       .render(monotonic100);
 
     const stripeChart5 = stripeChart()
