@@ -3,5 +3,6 @@
   "dest": "../../dist/packages/ngx-sparklib",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "allowedNonPeerDependencies": ["@angular/common", "@angular/core", "sparklib"]
 }
