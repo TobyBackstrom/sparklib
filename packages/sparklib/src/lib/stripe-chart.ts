@@ -1,8 +1,7 @@
 import * as d3Array from 'd3-array';
 
 import { BaseChart } from './base-chart';
-import { BaseChartProperties, NO_MARGINS } from './base-chart-models';
-import { Range } from './models';
+import { BaseChartProperties, NO_MARGINS, Range } from './models';
 import { ArrayType, createGradientColorScale, getArrayType } from './utils';
 
 export type StripeChartProperties = {

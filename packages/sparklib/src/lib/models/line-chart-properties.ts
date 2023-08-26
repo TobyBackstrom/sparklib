@@ -1,7 +1,11 @@
-import { BaseChartProperties } from './base-chart-models';
-import { LinearGradient, LinearGradientBuilder, Range } from './models';
-import { LineProperties } from './models/line-properties';
-import { DatumLine } from './models/datum-line';
+import {
+  BaseChartProperties,
+  DatumLine,
+  LinearGradient,
+  LinearGradientBuilder,
+  LineProperties,
+  Range,
+} from '.';
 
 /**
  * Represents the properties specific to a Line Chart.

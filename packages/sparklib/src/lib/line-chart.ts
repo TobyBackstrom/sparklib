@@ -11,9 +11,8 @@ import {
 } from './models';
 import { LineProperties } from './models/line-properties';
 import { DatumLine } from './models/datum-line';
-import { Coordinate } from './models';
+import { Coordinate, LineChartProperties } from './models';
 import { ArrayType, getArrayType } from './utils';
-import { LineChartProperties } from './line-chart-models';
 
 // LineChart props only (BaseChart excluded), with required lineProps.
 type Properties = {

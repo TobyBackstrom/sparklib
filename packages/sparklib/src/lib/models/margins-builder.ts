@@ -1,5 +1,4 @@
-import { NO_MARGINS } from '../base-chart-models';
-import { Margins } from './margins';
+import { Margins, NO_MARGINS } from '.';
 
 /**
  * A builder class for creating `Margins` objects.

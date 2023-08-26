@@ -1,9 +1,5 @@
-import { Margins } from './models/margins';
-import {
-  LinearGradient,
-  LinearGradientBuilder,
-  MarginsBuilder,
-} from './models';
+import { Margins } from './margins';
+import { LinearGradient, LinearGradientBuilder, MarginsBuilder } from '.';
 
 /**
  * Represents the base properties for a chart.
@@ -25,14 +21,4 @@ export type BaseChartProperties = {
   dpi?: number;
   background?: string | LinearGradient | LinearGradientBuilder | undefined;
   margins?: Margins | MarginsBuilder;
-};
-
-/**
- * A constant representing zero margins on all sides.
- */
-export const NO_MARGINS: Margins = {
-  bottom: 0,
-  left: 0,
-  right: 0,
-  top: 0,
 };

@@ -1,5 +1,9 @@
-import { BaseChartProperties, NO_MARGINS } from './base-chart-models';
-import { Margins, MarginsBuilder } from './models';
+import {
+  BaseChartProperties,
+  NO_MARGINS,
+  Margins,
+  MarginsBuilder,
+} from './models';
 import { LinearGradient, LinearGradientBuilder } from './models';
 import * as dom from './dom';
 
