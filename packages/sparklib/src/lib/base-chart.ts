@@ -1,11 +1,11 @@
+import { LinearGradientBuilder, MarginsBuilder } from './builders';
+import * as dom from './dom';
 import {
   BaseChartProperties,
-  NO_MARGINS,
+  LinearGradient,
   Margins,
-  MarginsBuilder,
+  NO_MARGINS,
 } from './models';
-import { LinearGradient, LinearGradientBuilder } from './models';
-import * as dom from './dom';
 
 const DEFAULT_MARGINS: Margins = {
   bottom: 2,

@@ -1,4 +1,4 @@
-import { Margins, NO_MARGINS } from '.';
+import { Margins, NO_MARGINS } from '../models';
 
 /**
  * A builder class for creating `Margins` objects.

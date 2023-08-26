@@ -1,5 +1,5 @@
 import { LinearGradient } from './linear-gradient';
-import { LinearGradientBuilder } from './linear-gradient-builder';
+import { LinearGradientBuilder } from '../builders';
 
 /**
  * Describes the properties for styling a line.

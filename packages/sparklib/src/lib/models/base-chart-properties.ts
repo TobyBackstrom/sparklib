@@ -1,5 +1,6 @@
 import { Margins } from './margins';
-import { LinearGradient, LinearGradientBuilder, MarginsBuilder } from '.';
+import { LinearGradient } from '.';
+import { LinearGradientBuilder, MarginsBuilder } from '../builders';
 
 /**
  * Represents the base properties for a chart.

@@ -3,15 +3,15 @@ import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
 import { BaseChart } from './base-chart';
+import { DatumLineBuilder, LinearGradientBuilder } from './builders';
 import {
-  DatumLineBuilder,
+  Coordinate,
+  LineChartProperties,
   LinearGradient,
-  LinearGradientBuilder,
   Range,
 } from './models';
-import { LineProperties } from './models/line-properties';
 import { DatumLine } from './models/datum-line';
-import { Coordinate, LineChartProperties } from './models';
+import { LineProperties } from './models/line-properties';
 import { ArrayType, getArrayType } from './utils';
 
 // LineChart props only (BaseChart excluded), with required lineProps.

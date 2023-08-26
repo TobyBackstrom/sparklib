@@ -1,4 +1,4 @@
-import { LinearGradientBuilder, LinePropertiesBuilder } from '../lib/models';
+import { LinearGradientBuilder, LinePropertiesBuilder } from '../lib/builders';
 import 'jest-canvas-mock';
 
 describe('LinePropertiesBuilder', () => {

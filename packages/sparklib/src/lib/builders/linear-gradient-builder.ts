@@ -1,5 +1,4 @@
-import { ColorStop } from './color-stop';
-import { LinearGradient } from './linear-gradient';
+import { ColorStop, LinearGradient } from '../models';
 
 /**
  * A builder class for creating `LinearGradient` objects.

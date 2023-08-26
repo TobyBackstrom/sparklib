@@ -2,7 +2,7 @@ import {
   LinePropertiesBuilder,
   lineProperties,
   DatumLineBuilder,
-} from '../lib/models';
+} from '../lib/builders';
 
 describe('DatumLineBuilder', () => {
   test('should create a DatumLine with default values', () => {
@@ -20,7 +20,7 @@ describe('DatumLineBuilder', () => {
   test('should create a DatumLine with custom position', () => {
     const linePropertiesBuilder = new LinePropertiesBuilder();
     const datumLineBuilder = new DatumLineBuilder(
-      linePropertiesBuilder
+      linePropertiesBuilder,
     ).setPosition(10);
 
     const datumLine = datumLineBuilder.build();

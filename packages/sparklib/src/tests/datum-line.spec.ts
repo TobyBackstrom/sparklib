@@ -1,4 +1,4 @@
-import { lineProperties, datumLine } from '../lib/models';
+import { lineProperties, datumLine } from '../lib/builders';
 
 describe('datumLine', () => {
   test('should create a DatumLineBuilder with default values', () => {

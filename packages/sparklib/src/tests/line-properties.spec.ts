@@ -1,4 +1,4 @@
-import { lineProperties, LinearGradientBuilder } from '../lib/models';
+import { lineProperties, LinearGradientBuilder } from '../lib/builders';
 
 describe('lineProperties', () => {
   test('should create a builder with default values', () => {

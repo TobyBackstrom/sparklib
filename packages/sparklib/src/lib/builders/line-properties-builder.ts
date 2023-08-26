@@ -1,6 +1,5 @@
-import { LinearGradient } from './linear-gradient';
+import { LinearGradient, LineProperties } from '../models';
 import { LinearGradientBuilder } from './linear-gradient-builder';
-import { LineProperties } from './line-properties';
 
 /**
  * A builder class for creating `LineProperties` objects.

@@ -2,10 +2,10 @@ import {
   BaseChartProperties,
   DatumLine,
   LinearGradient,
-  LinearGradientBuilder,
   LineProperties,
   Range,
 } from '.';
+import { LinearGradientBuilder } from '../builders';
 
 /**
  * Represents the properties specific to a Line Chart.

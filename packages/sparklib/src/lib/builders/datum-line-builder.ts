@@ -2,7 +2,7 @@ import {
   LinePropertiesBuilder,
   lineProperties,
 } from './line-properties-builder';
-import { DatumLine } from './datum-line';
+import { DatumLine } from '../models';
 
 /**
  * A builder class for creating `DatumLine` objects.

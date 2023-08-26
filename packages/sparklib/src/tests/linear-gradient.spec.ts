@@ -3,7 +3,7 @@ import {
   LinearGradient,
   LinearGradientBuilder,
   linearGradient,
-} from '../lib/models';
+} from '../lib';
 import { createLinearGradient } from '../lib/dom';
 import 'jest-canvas-mock';
 
@@ -44,7 +44,7 @@ describe('createLinearGradient function', () => {
   it('should create a CanvasGradient correctly', () => {
     const canvasGradient = createLinearGradient(
       linearGradient,
-      canvasContextMock
+      canvasContextMock,
     );
 
     // Check that the createLinearGradient method was called correctly
@@ -52,7 +52,7 @@ describe('createLinearGradient function', () => {
       0,
       0,
       100,
-      100
+      100,
     );
 
     // Check that the addColorStop method was called correctly for each color stop
@@ -93,7 +93,7 @@ describe('linearGradient function', () => {
       0,
       100,
       100,
-      colorStops
+      colorStops,
     ).build();
 
     expect(linearGradientInstance).toEqual({
