@@ -6,8 +6,6 @@ import { ColorStop } from './color-stop';
  * A linear gradient defines color transitions along a line.
  * This transition is defined by the color stops included in the gradient.
  *
- * @typedef {object} LinearGradient
- *
  * @property {number} x0 - The x-coordinate of the gradient line's start point.
  * @property {number} y0 - The y-coordinate of the gradient line's start point.
  *

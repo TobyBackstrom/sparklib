@@ -8,8 +8,6 @@ import { LinearGradientBuilder, MarginsBuilder } from '../builders';
  * This includes dimensions, resolution, background color or gradient,
  * and margins configuration.
  *
- * @typedef {object} BaseChartProperties
- *
  * @property {number} width - The width of the chart in pixels.
  * @property {number} height - The height of the chart in pixels.
  * @property {number} [dpi=undefined] - The resolution in dots per inch.

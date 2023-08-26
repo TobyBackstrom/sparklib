@@ -18,8 +18,6 @@ import { LineProperties } from './line-properties';
  * };
  * ```
  *
- * @typedef {object} DatumLine
- *
  * @property {number} position - The position of the line along the x or y axis. Defaults to 0.
  * @property {Required<LineProperties>} lineProperties - The visual properties of the line, such as stroke style, line width, and dash pattern.
  */

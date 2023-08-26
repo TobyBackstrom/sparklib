@@ -15,8 +15,6 @@
  * };
  * ```
  *
- * @typedef {object} Margins
- *
  * @property {number} left - The left margin in pixels.
  * @property {number} top - The top margin in pixels.
  * @property {number} right - The right margin in pixels.
