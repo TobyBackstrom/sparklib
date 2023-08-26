@@ -3,6 +3,7 @@ import { LineProperties } from './line-properties';
 /**
  * Represents a datum line, which is a reference line for data plotting.
  *
+ * @remarks
  * A datum line can be vertical or horizontal and is defined by its `position`
  * along the respective axis and its visual `lineProperties`.
  *
@@ -17,11 +18,15 @@ import { LineProperties } from './line-properties';
  *   }
  * };
  * ```
- *
- * @property {number} position - The position of the line along the x or y axis. Defaults to 0.
- * @property {Required<LineProperties>} lineProperties - The visual properties of the line, such as stroke style, line width, and dash pattern.
  */
 export type DatumLine = {
-  position: number; // x or y, default: 0
+  /**
+   * The position of the line along the x or y axis. Defaults to 0.
+   */
+  position: number;
+
+  /**
+   * The visual properties of the line, such as stroke style, line width, and dash pattern.
+   */
   lineProperties: Required<LineProperties>;
 };

@@ -8,8 +8,15 @@
  * ```typescript
  * const myRange: Range = [0, 100];
  * ```
- *
- * @property {number} 0 - The starting value of the range.
- * @property {number} 1 - The ending value of the range.
  */
-export type Range = [number, number];
+export type Range = [
+  /**
+   * The starting value of the range.
+   */
+  number,
+
+  /**
+   * The ending value of the range.
+   */
+  number,
+];

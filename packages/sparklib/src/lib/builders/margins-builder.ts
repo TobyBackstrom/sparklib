@@ -3,6 +3,8 @@ import { Margins, NO_MARGINS } from '../models';
 /**
  * A builder class for creating `Margins` objects.
  *
+ * @public
+ *
  * @example
  * ```typescript
  * const myMargins = new MarginsBuilder()

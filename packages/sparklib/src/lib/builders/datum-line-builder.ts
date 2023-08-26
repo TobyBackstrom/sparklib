@@ -7,6 +7,8 @@ import { DatumLine } from '../models';
 /**
  * A builder class for creating `DatumLine` objects.
  *
+ * @public
+ *
  * @example
  * ```typescript
  * const datumBuilder = new DatumLineBuilder(new LinePropertiesBuilder())

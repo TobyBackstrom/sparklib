@@ -4,6 +4,8 @@ import { LinearGradientBuilder } from './linear-gradient-builder';
 /**
  * A builder class for creating `LineProperties` objects.
  *
+ * @public
+ *
  * @example
  * ```typescript
  * const builder = new LinePropertiesBuilder()

@@ -3,6 +3,8 @@ import { ColorStop, LinearGradient } from '../models';
 /**
  * A builder class for creating `LinearGradient` objects.
  *
+ * @public
+ *
  * @example
  * ```typescript
  * const builder = new LinearGradientBuilder(0, 0, 100, 0);
