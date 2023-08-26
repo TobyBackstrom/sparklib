@@ -1,4 +1,4 @@
-import { margins } from '../lib/models/margins';
+import { margins } from '../lib/models/margins-builder';
 
 describe('MarginsBuilder', () => {
   it('should correctly build a margins type', () => {
