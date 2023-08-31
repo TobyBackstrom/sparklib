@@ -21,6 +21,7 @@ import {
 
 import {
   monoDataValues,
+  monoDataValuesWithGaps,
   monotonicIncreasing,
   pairDataValues,
   pairSegmentValues,
@@ -52,6 +53,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   weatherRecords: WeatherRecord[] = [];
 
   monoDataValues = monoDataValues;
+  monoDataValuesWithGaps = monoDataValuesWithGaps;
   pairDataValues = pairDataValues;
   pairSegmentValues = pairSegmentValues;
   stripe_x10_1_and_0 = stripe_x10_1_and_0;
@@ -279,10 +281,6 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   constructor(private weatherService: WeatherService) {}
-
-  convert(data: any): [number, number][] {
-    return data.map((value: any, index: any) => [index, value]);
-  }
 
   #append(chart: HTMLCanvasElement, label: string, border = true) {
     const div = document.createElement('div');

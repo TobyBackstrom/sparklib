@@ -47,7 +47,7 @@ export class LineChart extends BaseChart {
   }
 
   render(
-    values: (number | [number, number])[],
+    values: ((number | null) | [number, number | null])[],
     canvas?: HTMLCanvasElement,
   ): HTMLCanvasElement {
     const context = super.renderChartBase(canvas);
@@ -188,7 +188,7 @@ export class LineChart extends BaseChart {
   }
 
   #getXDomain(
-    values: (number | [number, number])[],
+    values: ((number | null) | [number, number | null])[],
     arrayType: ArrayType,
   ): Range {
     return (
@@ -200,7 +200,7 @@ export class LineChart extends BaseChart {
   }
 
   #getYDomain(
-    values: (number | [number, number])[],
+    values: ((number | null) | [number, number | null])[],
     arrayType: ArrayType,
   ): Range {
     return (
@@ -231,7 +231,7 @@ export class LineChart extends BaseChart {
       ]);
   }
 
-  #scaleCoordinates<T extends (number | [number, number])[]>(
+  #scaleCoordinates<T extends ((number | null) | [number, number | null])[]>(
     values: T,
     arrayType: ArrayType,
     xScale: d3Scale.ScaleLinear<number, number>,

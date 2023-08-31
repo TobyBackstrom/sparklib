@@ -25,7 +25,9 @@ export enum ArrayType {
  *
  * @todo Maybe add a check for non-pair elements in a pairs array, although this would be a fairly expensive operation.
  */
-export function getArrayType(values: (number | [number, number])[]): ArrayType {
+export function getArrayType(
+  values: ((number | null) | [number, number | null])[],
+): ArrayType {
   if (Array.isArray(values) && values.length > 0) {
     const firstValue = values[0];
     if (typeof firstValue === 'number') {
@@ -33,7 +35,7 @@ export function getArrayType(values: (number | [number, number])[]): ArrayType {
     } else if (Array.isArray(firstValue) && firstValue.length === 2) {
       if (
         typeof firstValue[0] === 'number' &&
-        typeof firstValue[1] === 'number'
+        (typeof firstValue[1] === 'number' || typeof firstValue[1] === null)
       ) {
         // TODO maybe: there is no check for non-pair elements in pairs array, which would be a fairly expensive operation
         return ArrayType.NumberPairs;
@@ -42,6 +44,6 @@ export function getArrayType(values: (number | [number, number])[]): ArrayType {
   }
 
   throw new Error(
-    'Invalid input format. Expected an array of numbers or an array of number pairs.'
+    'Invalid input format. Expected an array of numbers or an array of number pairs.',
   );
 }

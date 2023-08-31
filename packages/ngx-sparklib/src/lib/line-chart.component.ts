@@ -27,7 +27,10 @@ import {
 })
 export class LineChartComponent implements AfterViewInit {
   // mandatory properties
-  @Input({ required: true }) values!: (number | [number, number])[];
+  @Input({ required: true }) values!: (
+    | (number | null)
+    | [number, number | null]
+  )[];
   // optional properties
   @Input() width?: number;
   @Input() height?: number;

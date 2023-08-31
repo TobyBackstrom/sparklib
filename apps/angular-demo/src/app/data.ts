@@ -36,6 +36,33 @@ export const monoDataValues = [
   13.56, -6.15,
 ];
 
+export const monoDataValuesWithGaps = [
+  7.64,
+  -5.42,
+  11.89,
+  -1.33,
+  3.52,
+  -10.7,
+  8.25,
+  14.03,
+  -4.97,
+  6.84,
+  -9.16,
+  12.23,
+  2.64,
+  null,
+  null,
+  null,
+  10.61,
+  -13.5,
+  9.36,
+  null,
+  1.78,
+  -8.32,
+  13.56,
+  -6.15,
+];
+
 export const pairDataValues = [
   [0, 7.64],
   [10, -5.42],
