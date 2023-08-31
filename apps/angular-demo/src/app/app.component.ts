@@ -1,5 +1,12 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { WeatherRecord, WeatherService } from './weather.service';
 
 import {
   datumLine,
@@ -25,16 +32,24 @@ import {
   stripe_x10_mostly_0,
   stripe_x10_mostly_1,
 } from './data';
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
-  imports: [LineChartComponent, StripeChartComponent, RouterModule],
+  imports: [
+    CommonModule,
+    LineChartComponent,
+    StripeChartComponent,
+    RouterModule,
+  ],
   selector: 'sparklib-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit, OnInit {
   @ViewChild('container') container: ElementRef<HTMLDivElement> | undefined;
+
+  weatherRecords: WeatherRecord[] = [];
 
   monoDataValues = monoDataValues;
   pairDataValues = pairDataValues;
@@ -104,6 +119,15 @@ export class AppComponent implements AfterViewInit {
   vGradient = linearGradient(0, 0, 0, 50)
     .addColorStop(0, 'yellow')
     .addColorStop(1, 'red');
+
+  ngOnInit(): void {
+    this.weatherService.getWeatherRecords().subscribe({
+      next: (data: WeatherRecord[]) => {
+        this.weatherRecords = data;
+      },
+      error: (e) => console.error('Error fetching weather records:', e),
+    });
+  }
 
   ngAfterViewInit(): void {
     const chart0 = lineChart()
@@ -252,6 +276,12 @@ export class AppComponent implements AfterViewInit {
     this.#append(chart0, 'chart0');
     this.#append(chart1, 'chart1');
     this.#append(chart2, 'chart2');
+  }
+
+  constructor(private weatherService: WeatherService) {}
+
+  convert(data: any): [number, number][] {
+    return data.map((value: any, index: any) => [index, value]);
   }
 
   #append(chart: HTMLCanvasElement, label: string, border = true) {

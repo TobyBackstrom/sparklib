@@ -67,6 +67,38 @@
 ></sparklib-line-chart>
 <br />
 <hr />
+<div *ngFor="let record of weatherRecords">
+  <!-- Display properties of each record here -->
+  <p>Station Number: {{ record.stationNumber }}</p>
+  <p>From Date: {{ record.fromDate }}</p>
+  <p>To Date: {{ record.toDate }}</p>
+  <!-- Loop through maxT, meanT, minT arrays if needed -->
+  <div>
+    <strong>MaxT:</strong>
+
+    <sparklib-line-chart
+      style="margin-left: 5px"
+      [width]="record.maxT.length"
+      [height]="100"
+      [margins]="{ top: 0, bottom: 0, left: 10, right: 10 }"
+      [background]="'lightyellow'"
+      [fillStyle]="hGradient"
+      [values]="convert(record.maxT)"
+    ></sparklib-line-chart>
+
+    <span *ngFor="let maxTValue of record.maxT">{{ maxTValue }} </span>
+  </div>
+  <div>
+    <strong>MeanT:</strong>
+    <span *ngFor="let meanTValue of record.meanT">{{ meanTValue }} </span>
+  </div>
+  <div>
+    <strong>MinT:</strong>
+    <span *ngFor="let minTValue of record.minT">{{ minTValue }} </span>
+  </div>
+</div>
+<br />
+<hr />
 <span>stripe0</span><br />
 <sparklib-stripe-chart
   class="stripe-chart"
