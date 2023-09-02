@@ -51,6 +51,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   @ViewChild('container') container: ElementRef<HTMLDivElement> | undefined;
 
   weatherRecords: WeatherRecord[] = [];
+  lineChartHeight = 40;
 
   monoDataValues = monoDataValues;
   monoDataValuesWithGaps = monoDataValuesWithGaps;

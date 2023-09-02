@@ -74,49 +74,73 @@
 ></sparklib-line-chart>
 <br />
 <hr />
-<div *ngFor="let record of weatherRecords">
-  <!-- Display properties of each record here -->
-  <p>Station Number: {{ record.stationNumber }}</p>
-  <p>From Date: {{ record.fromDate }}</p>
-  <p>To Date: {{ record.toDate }}</p>
-  <!-- Loop through maxT, meanT, minT arrays if needed -->
-  <div>
-    <strong>MaxT, MeanT, MinT</strong><br />
-    <sparklib-line-chart
-      style="margin-left: 5px"
-      [width]="record.maxT.length"
-      [height]="50"
-      [margins]="{ top: 0, bottom: 0, left: 0, right: 0 }"
-      [yDomain]="[-45, 45]"
-      [background]="'lightyellow'"
-      [fillStyle]="hGradient"
-      [values]="record.maxT"
-    ></sparklib-line-chart>
-    <!-- <span *ngFor="let maxTValue of record.maxT">{{ maxTValue }} </span> -->
-    <sparklib-line-chart
-      style="margin-left: 5px"
-      [width]="record.maxT.length"
-      [height]="50"
-      [margins]="{ top: 0, bottom: 0, left: 0, right: 0 }"
-      [yDomain]="[-45, 45]"
-      [background]="'lightyellow'"
-      [fillStyle]="hGradient"
-      [values]="record.meanT"
-    ></sparklib-line-chart>
-    <!-- <span *ngFor="let meanTValue of record.meanT">{{ meanTValue }} </span> -->
-    <sparklib-line-chart
-      style="margin-left: 5px"
-      [width]="record.maxT.length"
-      [height]="50"
-      [margins]="{ top: 0, bottom: 0, left: 0, right: 0 }"
-      [yDomain]="[-45, 45]"
-      [background]="'lightyellow'"
-      [fillStyle]="hGradient"
-      [values]="record.minT"
-    ></sparklib-line-chart>
-    <!-- <span *ngFor="let minTValue of record.minT">{{ minTValue }} </span> -->
-  </div>
-</div>
+<!-- Table headers -->
+<table>
+  <thead>
+    <tr>
+      <th>Country</th>
+      <td></td>
+      <th>City</th>
+      <!-- <td></td>
+      <th>Station</th>
+      <td></td>
+      <th>From Date</th>
+      <th>To Date</th> -->
+      <td></td>
+      <th>Max °C</th>
+      <th>Mean °C</th>
+      <th>Min °C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Loop through records -->
+    <tr *ngFor="let record of weatherRecords">
+      <td>{{ record.country }}</td>
+      <td></td>
+      <td>{{ record.city }}</td>
+      <!-- <td></td>
+      <td>{{ record.stationNumber }}</td>
+      <td></td>
+      <td>{{ record.fromDate }}</td>
+      <td>{{ record.toDate }}</td> -->
+      <td></td>
+      <td>
+        <sparklib-line-chart
+          [width]="record.maxT.length"
+          [height]="lineChartHeight"
+          [margins]="{ top: 0, bottom: 0, left: 0, right: 0 }"
+          [yDomain]="[-45, 45]"
+          [background]="'lightyellow'"
+          [fillStyle]="prideGradient"
+          [values]="record.maxT"
+        ></sparklib-line-chart>
+      </td>
+      <td>
+        <sparklib-line-chart
+          [width]="record.maxT.length"
+          [height]="lineChartHeight"
+          [margins]="{ top: 0, bottom: 0, left: 0, right: 0 }"
+          [yDomain]="[-45, 45]"
+          [background]="'lightyellow'"
+          [fillStyle]="hGradient"
+          [values]="record.meanT"
+        ></sparklib-line-chart>
+      </td>
+      <td>
+        <sparklib-line-chart
+          [width]="record.maxT.length"
+          [height]="lineChartHeight"
+          [margins]="{ top: 0, bottom: 0, left: 0, right: 0 }"
+          [yDomain]="[-45, 45]"
+          [background]="'lightyellow'"
+          [fillStyle]="hGradient"
+          [values]="record.minT"
+        ></sparklib-line-chart>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 <br />
 <hr />
 <span>stripe0</span><br />

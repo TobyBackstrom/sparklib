@@ -4,6 +4,10 @@ import { Observable } from 'rxjs';
 
 export type WeatherRecord = {
   stationNumber: string;
+  region?: string;
+  country: string;
+  state?: string;
+  city?: string;
   fromDate: string;
   toDate: string;
   maxT: (number | null)[];
