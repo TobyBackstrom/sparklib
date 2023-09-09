@@ -17,9 +17,12 @@ Sparklines are not suited for detailed data analysis requiring full support for 
 ## More Examples
 
 ![Basic line chart](docs/images/sl-ac-g-weather-0.png)
-![Basic line chart](docs/images/sl-ac-g-weather-1.png)
+
 ![Basic line chart](docs/images/sl-ac-g-weather-2.png)
+
 ![Basic line chart](docs/images/sl-ac-g-weather-3.png)
+
+![Basic line chart](docs/images/sl-ac-g-weather-1.png)
 
 ## Further Reading
 
