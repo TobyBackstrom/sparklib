@@ -20,13 +20,15 @@ Sparklines are not suited for detailed data analysis requiring full support for 
 
 ![Basic line chart](docs/images/sl-ac-g-weather-0.png)
 
-![Basic line chart](docs/images/sl-ac-g-weather-2.png)
+![Basic line chart with horizontal gradient](docs/images/sl-ac-g-weather-2.png)
 
-![Basic line chart](docs/images/sl-ac-g-weather-3.png)
+![Basic line chart with vertical gradient](docs/images/sl-ac-g-weather-3.png)
 
-![Basic line chart](docs/images/sl-ac-g-weather-1.png)
+![Basic line chart with complex gradient](docs/images/sl-ac-g-weather-1.png)
 
-![Basic line chart](docs/images/sl-ac-g-weather-gaps-0.png)
+Gaps in your data series are handled gracefully.
+
+![Basic line chart with gaps in data](docs/images/sl-ac-g-weather-gaps-0.png)
 
 ## Further Reading
 
