@@ -320,14 +320,15 @@ export class LineChart extends BaseChart {
     context: CanvasRenderingContext2D,
   ) {
     const strokeStyle = this.getFillStyle(lineProperties.strokeStyle, context);
+    const lineWidthOffset = lineProperties.lineWidth === 1 ? 0.5 : 0; // offset to avoid anti-aliasing widening the line
 
     context.beginPath();
 
     d3Shape
       .line<Coordinate>()
       .defined((coordinate) => coordinate[1] != null)
-      .x((coordinate) => coordinate[0])
-      .y((coordinate) => coordinate[1])
+      .x((coordinate) => coordinate[0] + lineWidthOffset)
+      .y((coordinate) => coordinate[1] + lineWidthOffset)
       .context(context)(coordinates);
 
     context.strokeStyle = strokeStyle;
