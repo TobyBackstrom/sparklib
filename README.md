@@ -25,7 +25,13 @@ Sparklines are not suited for detailed data analysis requiring full support for 
 ```ts
 const data: number[] = [16, 15.1, 10, 14.2 /* ... */];
 
-const chart = lineChart().width(data.length).height(40).yDomain([0, 45]).background('lightyellow').render(data);
+// prettier-ignore
+const chart = lineChart()
+    .width(data.length)
+    .height(40)
+    .yDomain([0, 45])
+    .background('lightyellow')
+    .render(data);
 ```
 
 </details>
@@ -39,12 +45,16 @@ const chart = lineChart().width(data.length).height(40).yDomain([0, 45]).backgro
 ```ts
 const data: number[] = [16, 15.1, 10, 14.2 /* ... */];
 
+// prettier-ignore
 const chart = lineChart()
   .width(data.length)
   .height(40)
   .yDomain([0, 45])
   .background('lightyellow')
-  .fillStyle(linearGradient(0, 0, data.length, 0).addColorStop(0, 'lightgreen').addColorStop(1, 'black'))
+  .fillStyle(
+    linearGradient(0, 0, data.length, 0)
+        .addColorStop(0, 'lightgreen')
+        .addColorStop(1, 'black'))
   .render(data);
 ```
 
