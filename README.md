@@ -4,11 +4,6 @@
 
 A lightweight library featuring a fluid API for easy creation of sparkline charts. Separate packages for [Angular](https://www.npmjs.com/package/ngx-sparklib) and [React](https://www.npmjs.com/package/react-sparklib) components are available.
 
-![Basic line chart](docs/images/sl-ac-g-weather-0.png)
-![Basic line chart](docs/images/sl-ac-g-weather-1.png)
-![Basic line chart](docs/images/sl-ac-g-weather-2.png)
-![Basic line chart](docs/images/sl-ac-g-weather-3.png)
-
 ## What is a Sparkline Chart?
 
 A sparkline is a minimalist, word-sized graphic that shows data trends with typographic clarity. In its most basic form, a sparkline lacks axes, labels, and gridlines, although **sparklib** offers simple support for these elements. Sparklines can be seamlessly embedded in text, tables, or headlines to provide a quick, contextual view of data variations.
@@ -18,6 +13,13 @@ A sparkline is a minimalist, word-sized graphic that shows data trends with typo
 ## What Isn't a Sparkline Chart?
 
 Sparklines are not suited for detailed data analysis requiring full support for axes, labels, legends, or gridlines. If you need these features or interactivity, consider using a full-fledged charting library like [Chart.js](https://www.chartjs.org/).
+
+## More Examples
+
+![Basic line chart](docs/images/sl-ac-g-weather-0.png)
+![Basic line chart](docs/images/sl-ac-g-weather-1.png)
+![Basic line chart](docs/images/sl-ac-g-weather-2.png)
+![Basic line chart](docs/images/sl-ac-g-weather-3.png)
 
 ## Further Reading
 
