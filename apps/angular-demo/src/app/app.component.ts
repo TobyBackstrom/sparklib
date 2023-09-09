@@ -66,6 +66,30 @@ export class AppComponent implements AfterViewInit, OnInit {
   marginsBuilder = margins().bottom(25).left(25).right(25).top(25);
   margins = margins().bottom(5).left(5).right(5).top(5).build();
 
+  yDatumLines = [
+    datumLine(
+      0,
+      lineProperties()
+        .setLineDash([4, 2])
+        .setLineWidth(1)
+        .setStrokeStyle('darkgray'),
+    ).build(),
+  ];
+
+  temperatureColors: string[] = [
+    '#67001f',
+    '#b2182b',
+    '#d6604d',
+    '#f4a582',
+    '#fddbc7',
+    '#f7f7f7',
+    '#d1e5f0',
+    '#92c5de',
+    '#4393c3',
+    '#2166ac',
+    '#053061',
+  ];
+
   prideColors: string[] = [
     '#ed2224',
     '#f35b22',
@@ -109,6 +133,19 @@ export class AppComponent implements AfterViewInit, OnInit {
     .addColorStop(0.847, '#3954a5')
     .addColorStop(0.924, '#61379b')
     .addColorStop(1, '#93288e');
+
+  simpleTemperatureGradient = linearGradient(0, 0, 0, this.lineChartHeight)
+    .addColorStop(0.0, '#67001f')
+    .addColorStop(0.1, '#b2182b')
+    .addColorStop(0.2, '#d6604d')
+    .addColorStop(0.3, '#f4a582')
+    .addColorStop(0.4, '#fddbc7')
+    .addColorStop(0.5, '#f7f7f7')
+    .addColorStop(0.6, '#d1e5f0')
+    .addColorStop(0.7, '#92c5de')
+    .addColorStop(0.8, '#4393c3')
+    .addColorStop(0.9, '#2166ac')
+    .addColorStop(1.0, '#053061');
 
   hGradientBuilder = linearGradient(0, 0, 250, 0)
     .addColorStop(0, 'blue')
