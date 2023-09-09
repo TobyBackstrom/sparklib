@@ -34,6 +34,7 @@ import {
   stripe_x10_mostly_1,
 } from './data';
 import { CommonModule } from '@angular/common';
+import { NO_MARGINS } from 'sparklib';
 
 @Component({
   standalone: true,
@@ -164,6 +165,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.weatherService.getWeatherRecords().subscribe({
       next: (data: WeatherRecord[]) => {
         this.weatherRecords = data;
+        this.#addMoreExamples();
       },
       error: (e) => console.error('Error fetching weather records:', e),
     });
@@ -319,6 +321,26 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   constructor(private weatherService: WeatherService) {}
+
+  // used for the docs
+  #addMoreExamples() {
+    const data: number[] = [16, 15.1, 10, 14.2 /* and so on...*/];
+
+    const chart = lineChart()
+      .width(data.length)
+      .height(40)
+      .background('lightyellow')
+      .fillStyle(
+        linearGradient(0, 0, data.length, 0)
+          .addColorStop(0, 'lightgreen')
+          .addColorStop(1, 'black'),
+      )
+      .yDomain([0, 45])
+      .margins(NO_MARGINS)
+      .render(data);
+
+    this.#append(chart, 'exampleChart0');
+  }
 
   #append(chart: HTMLCanvasElement, label: string, border = true) {
     const div = document.createElement('div');
