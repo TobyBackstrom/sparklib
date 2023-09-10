@@ -151,7 +151,7 @@ export const randomInRange = (
   const result = [];
 
   for (let i = 0; i < length; ++i) {
-    const randomNum = Math.random();
+    const randomNum = parseFloat(Math.random().toFixed(1));
 
     if (randomNum < zeroProbability) {
       result.push(0);

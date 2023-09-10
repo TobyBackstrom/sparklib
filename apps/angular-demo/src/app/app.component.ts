@@ -166,6 +166,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       next: (data: WeatherRecord[]) => {
         this.weatherRecords = data;
         this.#addMoreExamples();
+        this.#addMoreStripeCharts();
       },
       error: (e) => console.error('Error fetching weather records:', e),
     });
@@ -318,6 +319,15 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.#append(chart0, 'chart0');
     this.#append(chart1, 'chart1');
     this.#append(chart2, 'chart2');
+
+    const barcodeData = this.#generateBarcode();
+
+    const barcodeStripeChart = stripeChart()
+      .width(barcodeData.length * 2)
+      .height(40)
+      .render(barcodeData);
+
+    this.#append(barcodeStripeChart, 'barcodeStripeChart');
   }
 
   constructor(private weatherService: WeatherService) {}
@@ -342,6 +352,43 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.#append(chart, 'exampleChart0');
   }
 
+  #addMoreStripeCharts() {
+    const random250_1 = randomInRange(0, 5, 250, 0);
+    const random250_2 = randomInRange(0, 5, 250, 0.8);
+    const monotonic250 = monotonicIncreasing(0, 250);
+
+    const scPride1_a = stripeChart()
+      .width(monotonic250.length)
+      .height(25)
+      .gradientColors(this.prideColors, monotonic250.length)
+      .render(monotonic250);
+
+    const scPride1_b = stripeChart()
+      .width(monotonic250.length)
+      .height(25)
+      .gradientColors(this.prideColors, 10)
+      .render(monotonic250);
+
+    const scPride2 = stripeChart()
+      .width(random250_1.length)
+      .height(25)
+      .gradientColors(this.prideColors, random250_1.length)
+      .render(random250_1);
+
+    const gradient = ['white', 'red'];
+
+    const sc2 = stripeChart()
+      .width(random250_2.length)
+      .height(25)
+      .gradientColors(gradient, gradient.length)
+      .render(random250_2);
+
+    this.#append(scPride1_a, 'monotonic250');
+    this.#append(scPride1_b, 'monotonic250 bin');
+    this.#append(scPride2, 'random250_1');
+    this.#append(sc2, 'random250_2');
+  }
+
   #append(chart: HTMLCanvasElement, label: string, border = true) {
     const div = document.createElement('div');
     div.textContent = label;
@@ -358,4 +405,82 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     this.container?.nativeElement.appendChild(chart);
   }
+
+  #generateBarcode(): number[] {
+    const characters = new Map([
+      ['*', '100101101101'],
+      ['A', '110101001011'],
+      ['B', '101101001011'],
+      ['I', '101101001101'],
+      ['K', '110101010011'],
+      ['L', '101101010011'],
+      ['P', '101101101001'],
+      ['R', '110101011001'],
+      ['S', '101101011001'],
+    ]);
+
+    const encodedString = Array.from('*SPARKLIB*')
+      .map((char) => characters.get(char) + '0') // Code 39 barcodes have a "space" between each "character".
+      .join('')
+      .slice(0, -1);
+
+    return Array.from(encodedString).map(Number);
+  }
+
+  _barcodeData = [
+    1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1,
+    0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1,
+    1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0,
+    1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1,
+    1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0,
+    1, 1, 0, 1,
+  ];
+
+  _random250_1 = [
+    3, 2, 2.5, 3, 4.5, 1, 0.5, 0, 1, 2, 4.5, 3.5, 4, 0.5, 0, 1.5, 3, 4.5, 0, 4,
+    2.5, 3, 4.5, 0.5, 3, 4, 1.5, 0.5, 1, 3.5, 4.5, 1.5, 2, 1, 4.5, 2.5, 3.5, 4,
+    0, 1.5, 0.5, 3, 2.5, 4, 2.5, 0.5, 2, 1.5, 4.5, 2, 2, 3, 5, 3.5, 2.5, 2.5, 3,
+    1.5, 0, 4.5, 3, 0.5, 3, 5, 2.5, 3.5, 4, 1, 2.5, 3.5, 1, 0, 3.5, 4, 0.5, 1,
+    4.5, 0, 3, 1, 3, 5, 4.5, 1.5, 1.5, 3.5, 1, 0.5, 1.5, 0, 1, 4, 4.5, 1, 3,
+    3.5, 4.5, 4, 4.5, 4.5, 3, 4, 1.5, 1.5, 0.5, 1.5, 2.5, 2.5, 2.5, 1.5, 4, 1,
+    4.5, 3, 3, 0.5, 2, 5, 3.5, 2, 2, 4, 1.5, 2.5, 2.5, 3, 0.5, 1.5, 3, 2, 1, 4,
+    1, 4, 1.5, 3.5, 3.5, 0, 4, 0.5, 2.5, 2.5, 2.5, 4, 2, 1.5, 3.5, 3, 4, 1.5, 4,
+    0, 1, 2.5, 4.5, 2, 0, 2, 1, 3, 4.5, 0.5, 4.5, 0, 3.5, 2.5, 2.5, 4.5, 3.5,
+    4.5, 1, 1.5, 4, 1, 0.5, 2, 2, 4, 3.5, 2, 5, 4, 3.5, 4, 3, 4.5, 3.5, 3.5,
+    2.5, 3.5, 0.5, 1, 0.5, 2, 1.5, 0.5, 1, 3.5, 3, 0.5, 0.5, 3, 3.5, 2, 3.5, 0,
+    3, 3.5, 2, 2.5, 3, 4.5, 3, 0, 2.5, 2.5, 3.5, 1, 0.5, 2, 3, 1.5, 3.5, 1.5,
+    1.5, 1.5, 3.5, 5, 3.5, 3, 4.5, 4, 2.5, 3, 3, 1.5, 0, 2, 1.5, 4, 5, 4, 5,
+    2.5, 1, 0.5, 0, 2, 0.5, 4.5,
+  ];
+  _random250_2 = [
+    0, 4.5, 0, 0, 0, 0, 0, 0, 4, 0, 0, 5, 0, 0, 0, 5, 0, 4, 0, 0, 0, 0, 0, 4.5,
+    5, 0, 4.5, 0, 0, 0, 0, 0, 0, 0, 0, 4.5, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4.5, 0, 4.5, 4.5, 4, 0, 0, 0, 0, 0,
+    0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 5, 0, 4, 4.5, 0, 0, 0, 0, 0, 0, 5,
+    0, 4.5, 4.5, 5, 4, 0, 0, 0, 4.5, 5, 0, 4, 0, 0, 0, 0, 0, 4, 0, 4.5, 0, 4, 0,
+    0, 0, 4, 0, 0, 0, 0, 4.5, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 4.5, 0,
+    0, 0, 0, 4.5, 0, 4.5, 0, 5, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 4.5, 0, 0, 0, 0,
+    5, 0, 0, 5, 4, 5, 0, 0, 0, 5, 0, 0, 4.5, 0, 0, 0, 0, 0, 4.5, 0, 0, 4.5, 0,
+    4.5, 0, 0, 0, 4.5, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 5, 0, 0, 4.5, 4.5,
+    0, 0, 4, 0, 4, 5, 0, 0, 4.5, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4.5, 5, 0,
+    0, 0, 0, 4.5, 4, 0, 0, 0, 4.5, 0, 0, 4.5, 0, 0,
+  ];
+  _monotonic250 = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+    40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58,
+    59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77,
+    78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96,
+    97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112,
+    113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142,
+    143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157,
+    158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172,
+    173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187,
+    188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202,
+    203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217,
+    218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232,
+    233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247,
+    248, 249,
+  ];
 }
