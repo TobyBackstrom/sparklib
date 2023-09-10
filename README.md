@@ -82,7 +82,7 @@ const chart = lineChart()
   .yDomain([0, 45])
   .background('lightyellow')
   .fillStyle(
-    // vertical gradient
+      // vertical gradient
       linearGradient(0, 0, 0, height)
           .addColorStop(0.0, '#67001f')
           .addColorStop(0.1, '#b2182b')
