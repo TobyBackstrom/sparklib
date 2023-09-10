@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export type WeatherRecordSet = {
+  credits: string;
+  weatherRecords: WeatherRecord[];
+};
+
 export type WeatherRecord = {
   stationNumber: string;
   region?: string;
@@ -21,7 +26,7 @@ export type WeatherRecord = {
 export class WeatherService {
   constructor(private http: HttpClient) {}
 
-  getWeatherRecords(): Observable<WeatherRecord[]> {
-    return this.http.get<WeatherRecord[]>('assets/weather-records.json');
+  getWeatherRecords(): Observable<WeatherRecordSet> {
+    return this.http.get<WeatherRecordSet>('assets/weather-records.json');
   }
 }

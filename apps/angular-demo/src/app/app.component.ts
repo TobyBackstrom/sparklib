@@ -6,7 +6,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { WeatherRecord, WeatherService } from './weather.service';
+import {
+  WeatherRecord,
+  WeatherRecordSet,
+  WeatherService,
+} from './weather.service';
 
 import {
   datumLine,
@@ -52,6 +56,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   @ViewChild('container') container: ElementRef<HTMLDivElement> | undefined;
 
   weatherRecords: WeatherRecord[] = [];
+  credits = '';
   lineChartHeight = 40;
 
   monoDataValues = monoDataValues;
@@ -163,8 +168,9 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.weatherService.getWeatherRecords().subscribe({
-      next: (data: WeatherRecord[]) => {
-        this.weatherRecords = data;
+      next: (data: WeatherRecordSet) => {
+        this.weatherRecords = data.weatherRecords;
+        this.credits = data.credits;
         this.#addMoreExamples();
         this.#addMoreStripeCharts();
       },
