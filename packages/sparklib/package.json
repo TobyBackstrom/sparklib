@@ -1,7 +1,7 @@
 {
   "name": "sparklib",
-  "version": "1.0.35",
-  "description": "Sparkly mini charts for your sparkling app",
+  "version": "1.0.36",
+  "description": "Small Charts, Big Impact",
   "type": "commonjs",
   "repository": {
     "type": "git",
