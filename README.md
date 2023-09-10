@@ -54,6 +54,7 @@ const chart = lineChart()
   .yDomain([0, 45])
   .background('lightyellow')
   .fillStyle(
+    // horizontal gradient
     linearGradient(0, 0, data.length, 0)
         .addColorStop(0, 'lightgreen')
         .addColorStop(1, 'black'))
@@ -64,9 +65,36 @@ const chart = lineChart()
 
 ![Basic line chart with horizontal gradient](docs/images/sl-ac-g-weather-2.png)
 
-![Basic line chart with vertical gradient](docs/images/sl-ac-g-weather-3.png)
-
 ![Basic line chart with complex gradient](docs/images/sl-ac-g-weather-1.png)
+
+<details>
+
+<summary>Basic chart with a vertical gradient</summary>
+
+```ts
+const data: number[] = [16, 15.1, 10, 14.2 /* ... */];
+const height = 40;
+
+// prettier-ignore
+const chart = lineChart()
+  .width(data.length)
+  .height(height)
+  .yDomain([0, 45])
+  .background('lightyellow')
+  .fillStyle(
+    // vertical gradient
+      linearGradient(0, 0, 0, height)
+          .addColorStop(0.0, '#67001f')
+          .addColorStop(0.1, '#b2182b')
+          // ... more color stops
+          .addColorStop(0.9, '#2166ac')
+          .addColorStop(1.0, '#053061'))
+  .render(data);
+```
+
+</details>
+
+![Basic line chart with vertical gradient](docs/images/sl-ac-g-weather-3.png)
 
 Gaps in your data series are handled gracefully.
 
