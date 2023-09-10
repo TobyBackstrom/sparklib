@@ -4,7 +4,7 @@ A lightweight library featuring a fluid API for easy creation of sparkline chart
 
 The library currently offers support for line charts, area charts, and stripe charts.
 
-More documentation is available at [GitHub](https://github.com/TobyBackstrom/sparklib).
+More documentation is available in the **sparklib** [repository](https://github.com/TobyBackstrom/sparklib).
 
 ## What is a Sparkline Chart?
 
