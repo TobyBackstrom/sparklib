@@ -19,8 +19,19 @@ type Properties = {
   lineProps: Required<LineProperties>;
 } & Omit<LineChartProperties, 'baseChartProps'>;
 
+type ChartScales = {
+  arrayType: ArrayType;
+
+  xDomain: Range;
+  yDomain: Range;
+
+  xScale: d3Scale.ScaleLinear<number, number, never>;
+  yScale: d3Scale.ScaleLinear<number, number, never>;
+};
+
 export class LineChart extends BaseChart {
   #props: Properties;
+  #scales?: ChartScales;
 
   constructor(props?: Partial<LineChartProperties>) {
     super(props?.baseChartProps);
@@ -53,38 +64,39 @@ export class LineChart extends BaseChart {
     const context = super.renderChartBase(canvas);
 
     if (!values || values.length < 2) {
-      // This is a line chart, remember? It requires at least a pair of coordinates.
+      // This is a line chart and it requires at least a pair of coordinates.
       // Instead of throwing an error just return the empty canvas.
       return context.canvas;
     }
 
-    const arrayType = getArrayType(values);
-
-    const xDomain = this.#getXDomain(values, arrayType);
-    const yDomain = this.#getYDomain(values, arrayType);
-
-    const xScale = this.#xScale(xDomain);
-    const yScale = this.#yScale(yDomain);
+    this.#setScales(values);
 
     this.#props.xDatumLines.forEach((datumLine) =>
-      this.#drawDatumLine('x', datumLine, yDomain, xScale, yScale, context),
+      this.#drawDatumLine(
+        'x',
+        datumLine,
+        this.scales,
+        this.scales.yDomain,
+        context,
+      ),
     );
 
     this.#props.yDatumLines.forEach((datumLine) =>
-      this.#drawDatumLine('y', datumLine, xDomain, xScale, yScale, context),
+      this.#drawDatumLine(
+        'y',
+        datumLine,
+        this.scales,
+        this.scales.xDomain,
+        context,
+      ),
     );
 
-    const scaledCoordinates = this.#scaleCoordinates(
-      values,
-      arrayType,
-      xScale,
-      yScale,
-    );
+    const scaledCoordinates = this.#scaleCoordinates(values, this.scales);
 
     if (this.#props.fillStyle) {
       this.#drawArea(
         scaledCoordinates,
-        yScale(0),
+        this.scales.yScale(0),
         this.#props.fillStyle,
         context,
       );
@@ -187,6 +199,13 @@ export class LineChart extends BaseChart {
     return this;
   }
 
+  private get scales(): ChartScales {
+    if (!this.#scales) {
+      throw new Error('ChartScales are not initialized.');
+    }
+    return this.#scales;
+  }
+
   #getXDomain(
     values: ((number | null) | [number, number | null])[],
     arrayType: ArrayType,
@@ -231,22 +250,38 @@ export class LineChart extends BaseChart {
       ]);
   }
 
+  #setScales(values: ((number | null) | [number, number | null])[]) {
+    const arrayType = getArrayType(values);
+
+    const xDomain = this.#getXDomain(values, arrayType);
+    const yDomain = this.#getYDomain(values, arrayType);
+
+    const xScale = this.#xScale(xDomain);
+    const yScale = this.#yScale(yDomain);
+
+    this.#scales = {
+      arrayType,
+      xDomain,
+      yDomain,
+      xScale,
+      yScale,
+    };
+  }
+
   #scaleCoordinates<T extends ((number | null) | [number, number | null])[]>(
     values: T,
-    arrayType: ArrayType,
-    xScale: d3Scale.ScaleLinear<number, number>,
-    yScale: d3Scale.ScaleLinear<number, number>,
+    scales: ChartScales,
   ): Coordinate[] {
     return values.map((value, index) => {
       const x =
-        arrayType === ArrayType.SingleNumbers
+        scales.arrayType === ArrayType.SingleNumbers
           ? index
           : (value as [number, number])[0];
       const y =
-        arrayType === ArrayType.SingleNumbers
+        scales.arrayType === ArrayType.SingleNumbers
           ? (value as number)
           : (value as [number, number])[1];
-      return [xScale(x as number), yScale(y)];
+      return [scales.xScale(x as number), scales.yScale(y)];
     });
   }
 
@@ -272,20 +307,19 @@ export class LineChart extends BaseChart {
   #drawDatumLine(
     axis: 'x' | 'y',
     datumLine: DatumLine,
+    scales: ChartScales,
     domain: Range,
-    xScale: d3Scale.ScaleLinear<number, number>,
-    yScale: d3Scale.ScaleLinear<number, number>,
     context: CanvasRenderingContext2D,
   ) {
     const scaledCoordinates: Coordinate[] =
       axis === 'x'
         ? [
-            [xScale(datumLine.position), yScale(domain[0])],
-            [xScale(datumLine.position), yScale(domain[1])],
+            [scales.xScale(datumLine.position), scales.yScale(domain[0])],
+            [scales.xScale(datumLine.position), scales.yScale(domain[1])],
           ]
         : [
-            [xScale(domain[0]), yScale(datumLine.position)],
-            [xScale(domain[1]), yScale(datumLine.position)],
+            [scales.xScale(domain[0]), scales.yScale(datumLine.position)],
+            [scales.xScale(domain[1]), scales.yScale(datumLine.position)],
           ];
 
     this.#drawPath(scaledCoordinates, datumLine.lineProperties, context);
