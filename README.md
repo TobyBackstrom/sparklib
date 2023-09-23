@@ -1,10 +1,10 @@
 # sparklib - Small Charts, Big Impact
 
-> **Note**: Documentation is very much work in progress and currently lacking in detail.
-
 A lightweight library featuring a fluid API for easy creation of sparkline charts. Separate packages with components for [Angular](https://www.npmjs.com/package/ngx-sparklib) and [React](https://www.npmjs.com/package/react-sparklib) are available.
 
 The library currently offers support for line charts, area charts, and stripe charts.
+
+> **Note**: Documentation is very much work in progress and currently lacking in detail.
 
 ## What is a Sparkline Chart?
 
@@ -31,7 +31,6 @@ const data: number[] = [16, 15.1, 10, 14.2 /* ... */];
 const chart = lineChart()
     .width(data.length)
     .height(40)
-    .yDomain([0, 45])
     .background('lightyellow')
     .render(data);
 ```
@@ -51,7 +50,6 @@ const data: number[] = [16, 15.1, 10, 14.2 /* ... */];
 const chart = lineChart()
   .width(data.length)
   .height(40)
-  .yDomain([0, 45])
   .background('lightyellow')
   .fillStyle(
     // horizontal gradient
@@ -79,7 +77,6 @@ const height = 40;
 const chart = lineChart()
   .width(data.length)
   .height(height)
-  .yDomain([0, 45])
   .background('lightyellow')
   .fillStyle(
       // vertical gradient
