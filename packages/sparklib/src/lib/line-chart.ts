@@ -57,6 +57,17 @@ export class LineChart extends BaseChart {
     };
   }
 
+  getDomainCoordinate(pixelX: number, pixelY: number): [number, number] {
+    return [
+      this.scales.xScale.invert(pixelX),
+      this.scales.yScale.invert(pixelY),
+    ];
+  }
+
+  getPixelCoordinate(domainX: number, domainY: number): [number, number] {
+    return [this.scales.xScale(domainX), this.scales.yScale(domainY)];
+  }
+
   render(
     values: ((number | null) | [number, number | null])[],
     canvas?: HTMLCanvasElement,
