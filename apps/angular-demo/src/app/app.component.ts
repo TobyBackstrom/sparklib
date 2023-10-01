@@ -38,7 +38,7 @@ import {
   stripe_x10_mostly_1,
 } from './data';
 import { CommonModule } from '@angular/common';
-import { NO_MARGINS } from 'sparklib';
+import { LineChart, NO_MARGINS } from 'sparklib';
 
 @Component({
   standalone: true,
@@ -166,6 +166,8 @@ export class AppComponent implements AfterViewInit, OnInit {
     .addColorStop(0, 'yellow')
     .addColorStop(1, 'red');
 
+  lineChart0: LineChart | null = null;
+
   ngOnInit(): void {
     this.weatherService.getWeatherRecords().subscribe({
       next: (data: WeatherRecordSet) => {
@@ -179,15 +181,16 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    const chart0 = lineChart()
+    this.lineChart0 = lineChart()
       .width(150)
       .height(250)
       .margins({ bottom: 0, left: 0, right: 0, top: 0 })
       .yDatum(0, { lineDash: [1, 1], strokeStyle: 'gray' })
       .yDatum(5)
       .yDatum(-5)
-      .yDomain([-10, 10])
-      .render(singleValues);
+      .yDomain([-10, 10]);
+    const chart0 = this.lineChart0.render(singleValues);
+    //this.#mouseOverChart(this.lineChart0, chart0);
 
     const chart1 = lineChart()
       .width(150)
@@ -337,6 +340,19 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   constructor(private weatherService: WeatherService) {}
+
+  #mouseOverChart(chart: LineChart, canvas: HTMLCanvasElement) {
+    canvas.addEventListener('mousemove', (event) => {
+      const rect = canvas.getBoundingClientRect();
+
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const domain = chart.getDomainCoordinate(x, y);
+
+      console.log(`${x},${y} [${domain}] (${event.clientX},${event.clientY})`);
+    });
+  }
 
   // used for the docs
   #addMoreExamples() {
