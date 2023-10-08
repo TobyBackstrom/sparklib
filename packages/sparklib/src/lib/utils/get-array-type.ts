@@ -29,13 +29,31 @@ export function getArrayType(
   values: ((number | null) | [number, number | null])[],
 ): ArrayType {
   if (Array.isArray(values) && values.length > 0) {
-    const firstValue = values[0];
-    if (typeof firstValue === 'number') {
+    let firstNonNullValue;
+
+    // Find the first non-null value
+    for (const value of values) {
+      if (value !== null) {
+        firstNonNullValue = value;
+        break;
+      }
+    }
+
+    // If we only have null values, throw an error
+    if (firstNonNullValue === undefined) {
+      throw new Error('Array contains only null values.');
+    }
+
+    if (typeof firstNonNullValue === 'number') {
       return ArrayType.SingleNumbers;
-    } else if (Array.isArray(firstValue) && firstValue.length === 2) {
+    } else if (
+      Array.isArray(firstNonNullValue) &&
+      firstNonNullValue.length === 2
+    ) {
       if (
-        typeof firstValue[0] === 'number' &&
-        (typeof firstValue[1] === 'number' || typeof firstValue[1] === null)
+        typeof firstNonNullValue[0] === 'number' &&
+        (typeof firstNonNullValue[1] === 'number' ||
+          typeof firstNonNullValue[1] === null)
       ) {
         // TODO maybe: there is no check for non-pair elements in pairs array, which would be a fairly expensive operation
         return ArrayType.NumberPairs;
