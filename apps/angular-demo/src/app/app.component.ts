@@ -14,6 +14,7 @@ import {
 
 import {
   datumLine,
+  getIndicesForPixelX,
   lineChart,
   lineProperties,
   linearGradient,
@@ -372,6 +373,80 @@ export class AppComponent implements AfterViewInit, OnInit {
       .render(data);
 
     this.#append(chart, 'exampleChart0');
+
+    const record = this.weatherRecords[0];
+
+    const mouseOverChart0 = lineChart()
+      .width(record.maxT.length / 2)
+      .height(40)
+      .background('lightyellow')
+      .margins(NO_MARGINS)
+      .yDomain([-15, 45])
+      .render(record.maxT);
+    mouseOverChart0.addEventListener('mousemove', (event) => {
+      const rect = mouseOverChart0.getBoundingClientRect();
+      const x = Math.floor(event.clientX - rect.left);
+      if (x >= 0 && x < mouseOverChart0.width) {
+        const idx = getIndicesForPixelX(
+          x,
+          record.maxT.length / 2,
+          record.maxT.length,
+        );
+        const value = record.maxT[idx.closestIndex];
+        console.log(
+          `${value}: ${x}/${mouseOverChart0.width} [${idx.startIndex}->${idx.endIndex}=${idx.closestIndex}] (${event.clientX},${event.clientY})`,
+        );
+      }
+    });
+    this.#append(mouseOverChart0, 'mouseOverChart0');
+
+    const mouseOverChart1 = lineChart()
+      .width(record.maxT.length)
+      .height(40)
+      .background('lightyellow')
+      .margins(NO_MARGINS)
+      .yDomain([-15, 45])
+      .render(record.maxT);
+    mouseOverChart1.addEventListener('mousemove', (event) => {
+      const rect = mouseOverChart1.getBoundingClientRect();
+      const x = Math.floor(event.clientX - rect.left);
+      if (x >= 0 && x < mouseOverChart1.width) {
+        const idx = getIndicesForPixelX(
+          x,
+          record.maxT.length,
+          record.maxT.length,
+        );
+        const value = record.maxT[idx.closestIndex];
+        console.log(
+          `${value}: ${x}/${mouseOverChart1.width} [${idx.startIndex}->${idx.endIndex}=${idx.closestIndex}] (${event.clientX},${event.clientY})`,
+        );
+      }
+    });
+    this.#append(mouseOverChart1, 'mouseOverChart1');
+
+    const mouseOverChart2 = lineChart()
+      .width(record.maxT.length * 2)
+      .height(40)
+      .background('lightyellow')
+      .margins(NO_MARGINS)
+      .yDomain([-15, 45])
+      .render(record.maxT);
+    mouseOverChart2.addEventListener('mousemove', (event) => {
+      const rect = mouseOverChart2.getBoundingClientRect();
+      const x = Math.floor(event.clientX - rect.left);
+      if (x >= 0 && x < mouseOverChart2.width) {
+        const idx = getIndicesForPixelX(
+          x,
+          record.maxT.length * 2,
+          record.maxT.length,
+        );
+        const value = record.maxT[idx.closestIndex];
+        console.log(
+          `${value}: ${x}/${mouseOverChart2.width} [${idx.startIndex}->${idx.endIndex}=${idx.closestIndex}] (${event.clientX},${event.clientY})`,
+        );
+      }
+    });
+    this.#append(mouseOverChart2, 'mouseOverChart2');
   }
 
   #addMoreStripeCharts() {

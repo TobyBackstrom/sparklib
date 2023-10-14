@@ -55,7 +55,9 @@ export function getIndicesForPixelX(
   }
 
   if (pixelX < 0 || pixelX >= pixelWidth) {
-    throw new Error('PixelX is out of bounds.');
+    throw new Error(
+      `PixelX (${pixelX}) is out of bounds[${0}->${pixelWidth}].`,
+    );
   }
 
   if (nValues === pixelWidth) {
