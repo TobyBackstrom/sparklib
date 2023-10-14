@@ -1,4 +1,4 @@
-import { getArrayType, ArrayType } from '../lib/utils/get-array-type';
+import { getArrayType, ArrayType } from '../../lib/utils/get-array-type';
 
 describe('getArrayType function', () => {
   it('should return ArrayType.SingleNumbers for an array of single numbers', () => {
