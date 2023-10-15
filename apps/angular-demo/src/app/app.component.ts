@@ -392,9 +392,9 @@ export class AppComponent implements AfterViewInit, OnInit {
           record.maxT.length / 2,
           record.maxT.length,
         );
-        const value = record.maxT[idx.closestIndex];
+        const value = record.maxT[idx.startIndex];
         console.log(
-          `${value}: ${x}/${mouseOverChart0.width} [${idx.startIndex}->${idx.endIndex}=${idx.closestIndex}] (${event.clientX},${event.clientY})`,
+          `${value}: ${x}/${mouseOverChart0.width} [${idx.startIndex}->${idx.endIndex}=${idx.startIndex}] (${event.clientX},${event.clientY})`,
         );
       }
     });
@@ -416,9 +416,9 @@ export class AppComponent implements AfterViewInit, OnInit {
           record.maxT.length,
           record.maxT.length,
         );
-        const value = record.maxT[idx.closestIndex];
+        const value = record.maxT[idx.startIndex];
         console.log(
-          `${value}: ${x}/${mouseOverChart1.width} [${idx.startIndex}->${idx.endIndex}=${idx.closestIndex}] (${event.clientX},${event.clientY})`,
+          `${value}: ${x}/${mouseOverChart1.width} [${idx.startIndex}->${idx.endIndex}=${idx.startIndex}] (${event.clientX},${event.clientY})`,
         );
       }
     });
@@ -440,9 +440,9 @@ export class AppComponent implements AfterViewInit, OnInit {
           record.maxT.length * 2,
           record.maxT.length,
         );
-        const value = record.maxT[idx.closestIndex];
+        const value = record.maxT[idx.startIndex];
         console.log(
-          `${value}: ${x}/${mouseOverChart2.width} [${idx.startIndex}->${idx.endIndex}=${idx.closestIndex}] (${event.clientX},${event.clientY})`,
+          `${value}: ${x}/${mouseOverChart2.width} [${idx.startIndex}->${idx.endIndex}=${idx.startIndex}] (${event.clientX},${event.clientY})`,
         );
       }
     });

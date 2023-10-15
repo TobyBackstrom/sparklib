@@ -6,7 +6,6 @@ describe('getIndicesForPixelX', () => {
     expect(result).toEqual({
       startIndex: 50,
       endIndex: 50,
-      closestIndex: 50,
     });
   });
 
@@ -15,7 +14,6 @@ describe('getIndicesForPixelX', () => {
     expect(result).toEqual({
       startIndex: 2,
       endIndex: 3,
-      closestIndex: 3,
     });
   });
 
@@ -24,25 +22,24 @@ describe('getIndicesForPixelX', () => {
     expect(result).toEqual({
       startIndex: 250,
       endIndex: 254,
-      closestIndex: 250,
     });
   });
 
   test('throws error if nValues or pixelWidth is 0 or negative', () => {
     expect(() => getIndicesForPixelX(10, -10, 100)).toThrow(
-      'Data length (n) and canvas width must both be greater than 0.',
+      'Data length (nValues) and canvas width must both be greater than 0.',
     );
     expect(() => getIndicesForPixelX(10, 100, -100)).toThrow(
-      'Data length (n) and canvas width must both be greater than 0.',
+      'Data length (nValues) and canvas width must both be greater than 0.',
     );
   });
 
   test('throws error if pixelX is out of bounds', () => {
     expect(() => getIndicesForPixelX(101, 100, 100)).toThrow(
-      'PixelX is out of bounds.',
+      'PixelX (101) is out of bounds [0,100].',
     );
     expect(() => getIndicesForPixelX(-1, 100, 100)).toThrow(
-      'PixelX is out of bounds.',
+      'PixelX (-1) is out of bounds [0,100].',
     );
   });
 
@@ -51,7 +48,6 @@ describe('getIndicesForPixelX', () => {
     expect(result).toEqual({
       startIndex: 0,
       endIndex: 0,
-      closestIndex: 0,
     });
   });
 
@@ -60,7 +56,6 @@ describe('getIndicesForPixelX', () => {
     expect(result).toEqual({
       startIndex: 99,
       endIndex: 99,
-      closestIndex: 99,
     });
   });
 
@@ -69,7 +64,6 @@ describe('getIndicesForPixelX', () => {
     expect(result).toEqual({
       startIndex: 0,
       endIndex: 0,
-      closestIndex: 0,
     });
   });
 
@@ -78,7 +72,6 @@ describe('getIndicesForPixelX', () => {
     expect(result).toEqual({
       startIndex: 0,
       endIndex: 99,
-      closestIndex: 0,
     });
   });
 
@@ -87,7 +80,6 @@ describe('getIndicesForPixelX', () => {
     expect(result).toEqual({
       startIndex: 12,
       endIndex: 13,
-      closestIndex: 12,
     });
   });
 
@@ -96,7 +88,6 @@ describe('getIndicesForPixelX', () => {
     expect(result).toEqual({
       startIndex: 1000,
       endIndex: 1001,
-      closestIndex: 1000,
     });
   });
 });

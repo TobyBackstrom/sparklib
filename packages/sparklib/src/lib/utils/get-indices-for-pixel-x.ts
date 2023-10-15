@@ -39,54 +39,41 @@ export function getIndicesForPixelX(
 ): {
   startIndex: number;
   endIndex: number;
-  closestIndex: number;
 } {
   // Helper function to reduce repetition
-  const createIndices = (start: number, end: number, closest: number) => ({
+  const indices = (start: number, end: number) => ({
     startIndex: start,
     endIndex: end,
-    closestIndex: closest,
   });
 
   if (nValues <= 0 || pixelWidth <= 0) {
     throw new Error(
-      'Data length (n) and canvas width must both be greater than 0.',
+      'Data length (nValues) and canvas width must both be greater than 0.',
     );
   }
 
   if (pixelX < 0 || pixelX >= pixelWidth) {
-    throw new Error(
-      `PixelX (${pixelX}) is out of bounds[${0}->${pixelWidth}].`,
-    );
+    throw new Error(`PixelX (${pixelX}) is out of bounds [0,${pixelWidth}].`);
+  }
+
+  if (nValues === 1) {
+    return indices(0, 0);
   }
 
   if (nValues === pixelWidth) {
-    return createIndices(pixelX, pixelX, pixelX);
+    return indices(pixelX, pixelX);
   }
 
   if (nValues > pixelWidth) {
     const nValuesPerPixel = nValues / pixelWidth;
     const start = Math.floor(pixelX * nValuesPerPixel);
     const end = Math.floor((pixelX + 1) * nValuesPerPixel) - 1;
-    return createIndices(start, end, start);
-  }
-
-  if (nValues === 1) {
-    return createIndices(0, 0, 0);
+    return indices(start, end);
   }
 
   const relativePosition = (pixelX * nValues) / pixelWidth;
   const start = Math.floor(relativePosition);
   const end = Math.ceil(relativePosition);
 
-  if (start === end) {
-    return createIndices(start, end, start);
-  }
-
-  const pixelStart = (start * pixelWidth) / nValues;
-  const pixelEnd = (end * pixelWidth) / nValues;
-  const distanceStart = Math.abs(pixelX - pixelStart);
-  const distanceEnd = Math.abs(pixelX - pixelEnd);
-  const closest = distanceStart <= distanceEnd ? start : end;
-  return createIndices(start, end, closest);
+  return indices(start, end);
 }
