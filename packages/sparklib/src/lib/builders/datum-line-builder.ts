@@ -18,6 +18,7 @@ import { DatumLine } from '../models';
  */
 export class DatumLineBuilder {
   private position = 0;
+  private zIndex?: number;
   private linePropertiesBuilder: LinePropertiesBuilder;
 
   /**
@@ -41,6 +42,17 @@ export class DatumLineBuilder {
   }
 
   /**
+   * Sets the position for the datum line.
+   *
+   * @param zIndex - The zIndex of the datum line.
+   * @returns The `DatumLineBuilder` instance for chaining.
+   */
+  setZIndex(zIndex: number): DatumLineBuilder {
+    this.zIndex = zIndex;
+    return this;
+  }
+
+  /**
    * Builds a `DatumLine` object based on the current state of the builder.
    *
    * @returns A `DatumLine` object with required properties.
@@ -48,6 +60,7 @@ export class DatumLineBuilder {
   build(): DatumLine {
     return {
       position: this.position,
+      zIndex: this.zIndex,
       lineProperties: this.linePropertiesBuilder.build(),
     };
   }
@@ -68,10 +81,15 @@ export class DatumLineBuilder {
 export const datumLine = (
   position?: number,
   linePropertiesBuilder?: LinePropertiesBuilder,
+  zIndex?: number,
 ) => {
   const builder = new DatumLineBuilder(
     linePropertiesBuilder ?? lineProperties(),
   );
+
+  if (zIndex !== undefined) {
+    builder.setZIndex(zIndex);
+  }
 
   if (position !== undefined) {
     builder.setPosition(position);

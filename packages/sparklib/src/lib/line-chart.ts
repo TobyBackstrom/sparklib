@@ -82,25 +82,38 @@ export class LineChart extends BaseChart {
 
     this.#setScales(values);
 
-    this.#props.xDatumLines.forEach((datumLine) =>
-      this.#drawDatumLine(
-        'x',
-        datumLine,
-        this.scales,
-        this.scales.yDomain,
-        context,
-      ),
-    );
+    const xDatumLinesWithZIndex: DatumLine[] = [];
+    const yDatumLinesWithZIndex: DatumLine[] = [];
 
-    this.#props.yDatumLines.forEach((datumLine) =>
-      this.#drawDatumLine(
-        'y',
-        datumLine,
-        this.scales,
-        this.scales.xDomain,
-        context,
-      ),
-    );
+    // TODO: refactor datum lines to separate method
+    this.#props.xDatumLines.forEach((datumLine) => {
+      if (datumLine.zIndex === 0) {
+        this.#drawDatumLine(
+          'x',
+          datumLine,
+          this.scales,
+          this.scales.yDomain,
+          context,
+        );
+      } else {
+        xDatumLinesWithZIndex.push(datumLine);
+      }
+    });
+
+    // TODO: refactor datum lines to separate method
+    this.#props.yDatumLines.forEach((datumLine) => {
+      if (datumLine.zIndex === 0) {
+        this.#drawDatumLine(
+          'y',
+          datumLine,
+          this.scales,
+          this.scales.xDomain,
+          context,
+        );
+      } else {
+        yDatumLinesWithZIndex.push(datumLine);
+      }
+    });
 
     const scaledCoordinates = this.#scaleCoordinates(values, this.scales);
 
@@ -116,6 +129,28 @@ export class LineChart extends BaseChart {
     if (this.#props.lineProps.lineWidth !== 0) {
       this.#drawPath(scaledCoordinates, this.#props.lineProps, context);
     }
+
+    // TODO: refactor datum lines to separate method
+    xDatumLinesWithZIndex.forEach((datumLine) =>
+      this.#drawDatumLine(
+        'x',
+        datumLine,
+        this.scales,
+        this.scales.yDomain,
+        context,
+      ),
+    );
+
+    // TODO: refactor datum lines to separate method
+    yDatumLinesWithZIndex.forEach((datumLine) =>
+      this.#drawDatumLine(
+        'y',
+        datumLine,
+        this.scales,
+        this.scales.xDomain,
+        context,
+      ),
+    );
 
     return context.canvas;
   }
@@ -158,12 +193,14 @@ export class LineChart extends BaseChart {
   xDatum(
     xPositionOrDatumLineBuilder: number | DatumLineBuilder,
     lineProps?: LineProperties,
+    zIndex?: number,
   ): LineChart {
     if (typeof xPositionOrDatumLineBuilder === 'number') {
       this.#datum(
         this.#props.xDatumLines,
         xPositionOrDatumLineBuilder,
         lineProps,
+        zIndex,
       );
     } else {
       const datumLine = xPositionOrDatumLineBuilder.build();
@@ -171,6 +208,7 @@ export class LineChart extends BaseChart {
         this.#props.xDatumLines,
         datumLine.position,
         datumLine.lineProperties,
+        datumLine.zIndex,
       );
     }
 
@@ -186,12 +224,14 @@ export class LineChart extends BaseChart {
   yDatum(
     yPositionOrDatumLineBuilder: number | DatumLineBuilder,
     lineProps?: LineProperties,
+    zIndex?: number,
   ) {
     if (typeof yPositionOrDatumLineBuilder === 'number') {
       this.#datum(
         this.#props.yDatumLines,
         yPositionOrDatumLineBuilder,
         lineProps,
+        zIndex,
       );
     } else {
       const datumLine = yPositionOrDatumLineBuilder.build();
@@ -199,6 +239,7 @@ export class LineChart extends BaseChart {
         this.#props.yDatumLines,
         datumLine.position,
         datumLine.lineProperties,
+        datumLine.zIndex,
       );
     }
 
@@ -300,6 +341,7 @@ export class LineChart extends BaseChart {
     datumLines: DatumLine[],
     position: number,
     datumLineProps?: LineProperties,
+    zIndex?: number,
   ) {
     const defaultDatumLineProps = {
       strokeStyle: 'black',
@@ -312,7 +354,7 @@ export class LineChart extends BaseChart {
       ...datumLineProps,
     } as Required<LineProperties>;
 
-    datumLines.push({ position, lineProperties });
+    datumLines.push({ position, lineProperties, zIndex });
   }
 
   #drawDatumLine(

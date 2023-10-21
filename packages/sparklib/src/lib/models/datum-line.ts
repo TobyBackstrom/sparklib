@@ -26,6 +26,11 @@ export type DatumLine = {
   position: number;
 
   /**
+   * The zIndex of the line. Set to 0 to draw the line on the background, under the values.
+   */
+  zIndex?: number;
+
+  /**
    * The visual properties of the line, such as stroke style, line width, and dash pattern.
    */
   lineProperties: Required<LineProperties>;

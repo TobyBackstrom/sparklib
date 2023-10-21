@@ -233,6 +233,70 @@ export class AppComponent implements AfterViewInit, OnInit {
       .yDomain([-10, 10])
       .render(singleValues);
 
+    const chart2b = lineChart()
+      .width(150)
+      .height(150)
+      .margins(margins().bottom(10).left(10).right(10).top(10))
+      .xDatum(
+        datumLine(
+          10,
+          lineProperties()
+            .setLineDash([2, 2])
+            .setStrokeStyle(
+              linearGradient(10, 0, 10, 250)
+                .addColorStop(0, 'blue')
+                .addColorStop(1, 'lightgreen'),
+            ),
+        ),
+      )
+      .yDatum(
+        datumLine(
+          0,
+          lineProperties()
+            .setLineDash([1, 1])
+            .setLineWidth(1)
+            .setStrokeStyle('gray'),
+        ),
+      )
+      .yDatum(5)
+      .yDatum(-5)
+      .yDomain([-10, 10])
+      .fillStyle('lightgreen')
+      .render(singleValues);
+
+    const chart2c = lineChart()
+      .width(150)
+      .height(150)
+      .margins(margins().bottom(10).left(10).right(10).top(10))
+      .xDatum(
+        datumLine(
+          10,
+          lineProperties()
+            .setLineDash([2, 2])
+            .setStrokeStyle(
+              linearGradient(10, 0, 10, 250)
+                .addColorStop(0, 'blue')
+                .addColorStop(1, 'lightgreen'),
+            ),
+          0,
+        ),
+      )
+      .yDatum(
+        datumLine(
+          0,
+          lineProperties()
+            .setLineDash([1, 1])
+            .setLineWidth(1)
+            .setStrokeStyle('gray'),
+          0,
+        ),
+      )
+      .yDatum(5, undefined, 0)
+      .yDatum(-5, undefined, 0)
+      .yDomain([-10, 10])
+      .fillStyle('lightgreen')
+      .render(singleValues);
+
     const stripeChart0 = stripeChart()
       .width(stripe_x10_1_and_0.length * 4)
       .height(25)
@@ -329,6 +393,8 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.#append(chart0, 'chart0');
     this.#append(chart1, 'chart1');
     this.#append(chart2, 'chart2');
+    this.#append(chart2b, 'chart2b');
+    this.#append(chart2c, 'chart2c');
 
     const barcodeData = this.#generateBarcode();
 

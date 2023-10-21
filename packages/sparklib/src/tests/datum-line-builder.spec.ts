@@ -12,6 +12,7 @@ describe('DatumLineBuilder', () => {
     const datumLine = datumLineBuilder.build();
 
     expect(datumLine.position).toBe(0);
+    expect(datumLine.zIndex).toBe(undefined);
     expect(datumLine.lineProperties.strokeStyle).toBe('black');
     expect(datumLine.lineProperties.lineWidth).toBe(1);
     expect(datumLine.lineProperties.lineDash).toEqual([]);
@@ -26,6 +27,17 @@ describe('DatumLineBuilder', () => {
     const datumLine = datumLineBuilder.build();
 
     expect(datumLine.position).toBe(10);
+  });
+
+  test('should create a DatumLine with custom zIndex', () => {
+    const linePropertiesBuilder = new LinePropertiesBuilder();
+    const datumLineBuilder = new DatumLineBuilder(
+      linePropertiesBuilder,
+    ).setZIndex(10);
+
+    const datumLine = datumLineBuilder.build();
+
+    expect(datumLine.zIndex).toBe(10);
   });
 
   test('should create a DatumLine with custom lineProperties', () => {
