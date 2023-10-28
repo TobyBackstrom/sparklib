@@ -12,8 +12,7 @@
         "rootDir": "packages/sparklib/src",
         "main": "packages/sparklib/src/index.ts",
         "tsConfig": "packages/sparklib/tsconfig.lib.json",
-        "assets": ["packages/sparklib/*.md"],
-        "updateBuildableProjectDepsInPackageJson": true
+        "assets": ["packages/sparklib/*.md"]
       }
     },
     "publish": {
@@ -21,7 +20,7 @@
       "dependsOn": ["build"]
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["packages/sparklib/**/*.ts"]
