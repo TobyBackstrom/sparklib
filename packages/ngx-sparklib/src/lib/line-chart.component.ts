@@ -2,7 +2,11 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
+  OnDestroy,
+  Output,
+  Renderer2,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -25,7 +29,7 @@ import {
   template: '<canvas #canvasRef></canvas>',
   styles: [],
 })
-export class LineChartComponent implements AfterViewInit {
+export class LineChartComponent implements AfterViewInit, OnDestroy {
   // mandatory properties
   @Input({ required: true }) values!: (
     | (number | null)
@@ -47,12 +51,58 @@ export class LineChartComponent implements AfterViewInit {
   @Input() yDatumLines?: DatumLine[];
   @Input() properties?: LineChartProperties;
 
+  @Output() mouseMove = new EventEmitter<{
+    x: number;
+    y: number;
+    mouseEvent: MouseEvent;
+  }>();
+
   @ViewChild('canvasRef') canvasRef!: ElementRef<HTMLCanvasElement>;
+
+  #unlisten?: () => void;
+
+  constructor(private renderer: Renderer2) {}
 
   ngAfterViewInit(): void {
     const chart = lineChart(this.properties);
     this.#setChartProperties(chart);
     chart.render(this.values, this.canvasRef.nativeElement);
+    this.#addMouseMoveListener();
+  }
+
+  ngOnDestroy() {
+    this.#removeMouseMoveListener();
+  }
+
+  onMouseMove(event: MouseEvent) {
+    // TODO: investigate why sometimes event.offsetX == -1 and x < 0.
+    // TODO: handle when the app is reloaded and the user has zoomed the browser viewport
+    const element = this.canvasRef.nativeElement;
+
+    const rect = element.getBoundingClientRect();
+
+    const cssScaleX = element.width / element.offsetWidth;
+    const cssScaleY = element.height / element.offsetHeight;
+
+    const x = (event.clientX - rect.left) * cssScaleX;
+    const y = (rect.bottom - event.clientY) * cssScaleY;
+
+    this.mouseMove.emit({ x, y, mouseEvent: event });
+  }
+
+  #addMouseMoveListener() {
+    if (this.mouseMove.observed && !this.#unlisten) {
+      this.#unlisten = this.renderer.listen(
+        this.canvasRef.nativeElement,
+        'mousemove',
+        this.onMouseMove.bind(this),
+      );
+    }
+  }
+  #removeMouseMoveListener() {
+    if (this.#unlisten) {
+      this.#unlisten();
+    }
   }
 
   #setChartProperties(chart: LineChart) {

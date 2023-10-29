@@ -61,7 +61,7 @@ export function getIndicesForPixelX(
   }
 
   if (nValues === pixelWidth) {
-    return indices(pixelX, pixelX);
+    return indices(Math.round(pixelX), Math.round(pixelX));
   }
 
   if (nValues > pixelWidth) {

@@ -19,7 +19,7 @@
   </thead>
   <tbody>
     <!-- Loop through records -->
-    <tr *ngFor="let record of weatherRecords">
+    <tr *ngFor="let record of weatherRecords; let i = index">
       <td>{{ record.country }}</td>
       <td></td>
       <td>{{ record.city }}</td>
@@ -29,7 +29,7 @@
       <td>{{ record.fromDate }}</td>
       <td>{{ record.toDate }}</td> -->
       <td></td>
-      <td>
+      <td style="width: 243">
         <sparklib-line-chart
           [width]="record.maxT.length"
           [height]="lineChartHeight"
@@ -38,6 +38,7 @@
           [background]="'lightyellow'"
           [yDatumLines]="yDatumLines"
           [values]="record.maxT"
+          (mouseMove)="handleMouseOver($event, i)"
         ></sparklib-line-chart>
       </td>
       <td>
