@@ -65,6 +65,9 @@ export function App() {
         lineDash={[2, 2, 10]}
         strokeStyle={hGradient}
         yDomain={[2, 6]}
+        onMouseMove={(event) => {
+          console.log(event);
+        }}
       />
       <br></br>
       <sparklib.StripeChart
