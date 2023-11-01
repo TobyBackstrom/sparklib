@@ -29,7 +29,7 @@
       <td>{{ record.fromDate }}</td>
       <td>{{ record.toDate }}</td> -->
       <td></td>
-      <td style="width: 243">
+      <td>
         <sparklib-line-chart
           [width]="record.maxT.length"
           [height]="lineChartHeight"
@@ -38,7 +38,7 @@
           [background]="'lightyellow'"
           [yDatumLines]="yDatumLines"
           [values]="record.maxT"
-          (mouseMove)="handleMouseOver($event, i)"
+          (mouseMove)="handleMouseMove($event, i)"
         ></sparklib-line-chart>
       </td>
       <td>

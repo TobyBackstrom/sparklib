@@ -408,27 +408,23 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   constructor(private weatherService: WeatherService) {}
 
-  handleMouseOver(
+  handleMouseMove(
     event: {
       x: number;
       y: number;
+      startIndex: number;
+      endIndex: number;
       mouseEvent: MouseEvent;
     },
-    index: number,
+    rowIndex: number,
   ) {
-    const record = this.weatherRecords[index];
+    const record = this.weatherRecords[rowIndex];
 
     if (event.x >= 0) {
-      const recordIndices = getIndicesForPixelX(
-        event.x,
-        record.maxT.length,
-        record.maxT.length,
-      );
-
-      const value = record.maxT[recordIndices.startIndex];
+      const value = record.maxT[event.startIndex];
       console.log(
-        `handleMouseOver ${index}/${record.maxT.length}: (${event.x},${event.y} = ${value}`,
-        recordIndices,
+        `handleMouseMove [${rowIndex}:${event.startIndex}/${event.endIndex}]: (${event.x},${event.y}) = ${value}`,
+        event,
       );
     }
   }

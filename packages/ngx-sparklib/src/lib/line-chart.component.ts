@@ -20,6 +20,7 @@ import {
   Range,
   LinearGradientBuilder,
   MarginsBuilder,
+  getIndicesForPixelX,
 } from 'sparklib';
 
 @Component({
@@ -54,19 +55,28 @@ export class LineChartComponent implements AfterViewInit, OnDestroy {
   @Output() mouseMove = new EventEmitter<{
     x: number;
     y: number;
+    startIndex: number;
+    endIndex: number;
     mouseEvent: MouseEvent;
   }>();
 
   @ViewChild('canvasRef') canvasRef!: ElementRef<HTMLCanvasElement>;
 
   #unlisten?: () => void;
+  #valueLength = 0;
 
   constructor(private renderer: Renderer2) {}
 
   ngAfterViewInit(): void {
     const chart = lineChart(this.properties);
     this.#setChartProperties(chart);
+
     chart.render(this.values, this.canvasRef.nativeElement);
+
+    // remember length of values at the time of rendering
+    // this is needed when mapping mouse coordinates to domain coordinates
+    this.#valueLength = this.values.length;
+
     this.#addMouseMoveListener();
   }
 
@@ -76,18 +86,32 @@ export class LineChartComponent implements AfterViewInit, OnDestroy {
 
   onMouseMove(event: MouseEvent) {
     // TODO: investigate why sometimes event.offsetX == -1 and x < 0.
-    // TODO: handle when the app is reloaded and the user has zoomed the browser viewport
+    // TODO: automatically handle when the app is reloaded and the user has zoomed the browser viewport which means the dpi has changed
+    // TODO: automatically handle when the canvas is moved to a display with a different dpi
     const element = this.canvasRef.nativeElement;
 
     const rect = element.getBoundingClientRect();
 
-    const cssScaleX = element.width / element.offsetWidth;
-    const cssScaleY = element.height / element.offsetHeight;
+    let x = Math.round(event.clientX - rect.left);
+    const y = Math.round(rect.bottom - event.clientY);
 
-    const x = (event.clientX - rect.left) * cssScaleX;
-    const y = (rect.bottom - event.clientY) * cssScaleY;
+    // emit only if values are within bounds to avoid errors from rounding
+    x = x < 0 ? 0 : x >= element.width ? element.width - 1 : x;
 
-    this.mouseMove.emit({ x, y, mouseEvent: event });
+    const indices = getIndicesForPixelX(x, element.width, this.#valueLength);
+
+    indices.endIndex =
+      indices.endIndex < this.#valueLength
+        ? indices.endIndex
+        : this.#valueLength - 1;
+
+    this.mouseMove.emit({
+      x,
+      y,
+      startIndex: indices.startIndex,
+      endIndex: indices.endIndex,
+      mouseEvent: event,
+    });
   }
 
   #addMouseMoveListener() {
