@@ -8,7 +8,7 @@ The library currently offers support for line charts, area charts, and stripe ch
 
 ## What is a Sparkline Chart?
 
-A sparkline is a minimalist, word-sized graphic that shows data trends with typographic clarity. In its most basic form, a sparkline lacks axes, labels, and gridlines, although **sparklib** offers basic support for these elements. Sparklines can be seamlessly embedded in text, tables, or headlines to provide a quick, contextual view of data variations.
+A sparkline is a minimalist, word-sized graphic that shows data trends with typographic clarity. In its most basic form, a sparkline lacks axes, labels, and gridlines, although **sparklib** offers some support for these elements. Sparklines can be seamlessly embedded in text, tables, or headlines to provide a quick, contextual view of data variations.
 
 ![Basic line charts in a table](docs/images/sparklib-weather-table.png)
 
@@ -148,6 +148,6 @@ const chart = stripeChart()
 
 ## Further Reading
 
-The concept of miniaturized data visualization has historical antecedents, but the term 'sparkline' and its modern interpretation were formalized by Edward Tufte in his 2006 book, [Beautiful Evidence](https://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0001OR) in 2006.
+The concept of miniaturized data visualization has historical antecedents, but the term 'sparkline' and its modern interpretation were formalized by Edward Tufte in his 2006 book, [Beautiful Evidence](https://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0001OR).
 
 Wikipedia also has an entry for [sparklines](https://en.wikipedia.org/wiki/Sparkline).
