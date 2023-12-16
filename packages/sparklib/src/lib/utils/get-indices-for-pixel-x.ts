@@ -15,7 +15,6 @@
  * @returns An object containing:
  * - `startIndex`: The starting index of the data array that corresponds to the `pixelX`.
  * - `endIndex`: The ending index of the data array that corresponds to the `pixelX` (this may be the same as the `startIndex` if there's a 1-to-1 mapping).
- * - `closestIndex`: In scenarios where `pixelX` is between two indices, this represents the index closer to the `pixelX`.
  *
  * @example
  * ```typescript
@@ -24,7 +23,6 @@
  * // {
  * //   startIndex: 2,
  * //   endIndex: 3,
- * //   closestIndex: 2
  * // }
  * ```
  *
