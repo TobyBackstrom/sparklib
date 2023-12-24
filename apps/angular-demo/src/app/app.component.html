@@ -101,6 +101,7 @@
   [background]="'lightyellow'"
   [values]="monoDataValues"
 ></sparklib-line-chart>
+
 <sparklib-line-chart
   style="margin-left: 5px"
   [width]="250"
@@ -109,6 +110,7 @@
   [background]="hGradientBuilder"
   [values]="monoDataValues"
 ></sparklib-line-chart>
+
 <sparklib-line-chart
   style="margin-left: 5px"
   [width]="250"
@@ -117,6 +119,32 @@
   [background]="prideGradient"
   [values]="monoDataValues"
 ></sparklib-line-chart>
+
+<br />
+<hr />
+<br />
+Object arrays
+<sparklib-line-chart
+  style="margin-left: 5px"
+  [width]="250"
+  [height]="100"
+  [margins]="marginsBuilder"
+  [background]="prideGradient"
+  [values]="monoObjectValuesWithGaps"
+  [yAccessor]="yAccessor"
+></sparklib-line-chart>
+
+<sparklib-line-chart
+  style="margin-left: 5px"
+  [background]="'lightgray'"
+  [margins]="{ top: 10, bottom: 10, left: 10, right: 10 }"
+  [strokeStyle]="hGradient"
+  [values]="pairObjectSegmentValues"
+  [xAccessor]="xAccessor"
+  [yAccessor]="yAccessor"
+></sparklib-line-chart>
+<br />
+<hr />
 <br />
 
 <sparklib-line-chart

@@ -1,9 +1,14 @@
 import { getArrayType, ArrayType } from '../../lib/utils/get-array-type';
 
+interface TestObject {
+  x: number;
+  y: number;
+}
+
 describe('getArrayType function', () => {
   it('should return ArrayType.SingleNumbers for an array of single numbers', () => {
     const values: (number | [number, number])[] = [1, 2, 3, 4, 5];
-    expect(getArrayType(values)).toEqual(ArrayType.SingleNumbers);
+    expect(getArrayType(values)).toEqual(ArrayType.SingleValue);
   });
 
   it('should return ArrayType.NumberPairs for an array of number pairs', () => {
@@ -12,7 +17,7 @@ describe('getArrayType function', () => {
       [3, 4],
       [5, 6],
     ];
-    expect(getArrayType(values)).toEqual(ArrayType.NumberPairs);
+    expect(getArrayType(values)).toEqual(ArrayType.TupleValue);
   });
 
   it('should throw an error for empty array', () => {
@@ -30,7 +35,7 @@ describe('getArrayType function', () => {
       4,
       5,
     ];
-    expect(getArrayType(values)).toEqual(ArrayType.SingleNumbers);
+    expect(getArrayType(values)).toEqual(ArrayType.SingleValue);
   });
 
   it('should return ArrayType.NumberPairs for an array starting with null values followed by number pairs', () => {
@@ -40,7 +45,7 @@ describe('getArrayType function', () => {
       [3, 4],
       [5, 6],
     ];
-    expect(getArrayType(values)).toEqual(ArrayType.NumberPairs);
+    expect(getArrayType(values)).toEqual(ArrayType.TupleValue);
   });
 
   it('should throw an error for an array of only null values', () => {
@@ -56,7 +61,7 @@ describe('getArrayType function', () => {
 
   it('should return ArrayType.SingleNumbers when encountering a number after multiple null values', () => {
     const values: (number | null | [number, number | null])[] = [null, null, 5];
-    expect(getArrayType(values)).toEqual(ArrayType.SingleNumbers);
+    expect(getArrayType(values)).toEqual(ArrayType.SingleValue);
   });
 
   it('should return ArrayType.NumberPairs when encountering a number pair after multiple null values', () => {
@@ -65,7 +70,26 @@ describe('getArrayType function', () => {
       null,
       [1, 2],
     ];
-    expect(getArrayType(values)).toEqual(ArrayType.NumberPairs);
+    expect(getArrayType(values)).toEqual(ArrayType.TupleValue);
+  });
+
+  it('should return ArrayType.ObjectValue for an array of objects', () => {
+    const values: TestObject[] = [
+      { x: 1, y: 2 },
+      { x: 3, y: 4 },
+      { x: 5, y: 6 },
+    ];
+    expect(getArrayType(values)).toEqual(ArrayType.ObjectValue);
+  });
+
+  it('should return ArrayType.ObjectValue for an array starting with null values followed by objects', () => {
+    const values: (null | TestObject)[] = [
+      null,
+      null,
+      { x: 3, y: 4 },
+      { x: 5, y: 6 },
+    ];
+    expect(getArrayType(values)).toEqual(ArrayType.ObjectValue);
   });
 
   //   it('should throw an error for invalid input (non-pair elements in pairs array)', () => {

@@ -63,6 +63,38 @@ export const monoDataValuesWithGaps = [
   -6.15,
 ];
 
+export interface DataObject {
+  xPos: number;
+  yPos: number | null;
+  someOtherProp: string;
+}
+export const monoObjectValuesWithGaps: DataObject[] = [
+  { xPos: -1, yPos: 7.64, someOtherProp: 'data' },
+  { xPos: -1, yPos: -5.42, someOtherProp: 'data' },
+  { xPos: -1, yPos: 11.89, someOtherProp: 'data' },
+  { xPos: -1, yPos: -1.33, someOtherProp: 'data' },
+  { xPos: -1, yPos: 3.52, someOtherProp: 'data' },
+  { xPos: -1, yPos: -10.7, someOtherProp: 'data' },
+  { xPos: -1, yPos: 8.25, someOtherProp: 'data' },
+  { xPos: -1, yPos: 14.03, someOtherProp: 'data' },
+  { xPos: -1, yPos: -4.97, someOtherProp: 'data' },
+  { xPos: -1, yPos: 6.84, someOtherProp: 'data' },
+  { xPos: -1, yPos: -9.16, someOtherProp: 'data' },
+  { xPos: -1, yPos: 12.23, someOtherProp: 'data' },
+  { xPos: -1, yPos: 2.64, someOtherProp: 'data' },
+  { xPos: -1, yPos: null, someOtherProp: 'empty' },
+  { xPos: -1, yPos: null, someOtherProp: 'empty' },
+  { xPos: -1, yPos: null, someOtherProp: 'empty' },
+  { xPos: -1, yPos: 10.61, someOtherProp: 'data' },
+  { xPos: -1, yPos: -13.5, someOtherProp: 'data' },
+  { xPos: -1, yPos: 9.36, someOtherProp: 'data' },
+  { xPos: -1, yPos: null, someOtherProp: 'empty' },
+  { xPos: -1, yPos: 1.78, someOtherProp: 'data' },
+  { xPos: -1, yPos: -8.32, someOtherProp: 'data' },
+  { xPos: -1, yPos: 13.56, someOtherProp: 'data' },
+  { xPos: -1, yPos: -6.15, someOtherProp: 'data' },
+];
+
 export const pairDataValues = [
   [0, 7.64],
   [10, -5.42],
@@ -121,6 +153,33 @@ export const pairSegmentValues = [
   [220, 13.56],
   [230, -6.15],
 ] as [number, number][];
+
+export const pairObjectSegmentValues: DataObject[] = [
+  { xPos: 0, yPos: 7.64, someOtherProp: 'data' },
+  { xPos: 10, yPos: -5.42, someOtherProp: 'data' },
+  { xPos: 20, yPos: 11.89, someOtherProp: 'data' },
+  { xPos: 30, yPos: -1.33, someOtherProp: 'data' },
+  { xPos: 40, yPos: 3.52, someOtherProp: 'data' },
+  { xPos: 50, yPos: -10.7, someOtherProp: 'data' },
+  { xPos: 60, yPos: 8.25, someOtherProp: 'data' },
+  { xPos: 70, yPos: 14.03, someOtherProp: 'data' },
+  { xPos: 80, yPos: -4.97, someOtherProp: 'data' },
+  { xPos: 90, yPos: null, someOtherProp: 'empty' },
+  { xPos: 100, yPos: null, someOtherProp: 'empty' },
+  { xPos: 110, yPos: 12.23, someOtherProp: 'data' },
+  { xPos: 120, yPos: 2.64, someOtherProp: 'data' },
+  { xPos: 130, yPos: -7.89, someOtherProp: 'data' },
+  { xPos: 140, yPos: 5.97, someOtherProp: 'data' },
+  { xPos: 150, yPos: null, someOtherProp: 'empty' },
+  { xPos: 160, yPos: 8.0, someOtherProp: 'data' },
+  { xPos: 170, yPos: null, someOtherProp: 'empty' },
+  { xPos: 180, yPos: 9.36, someOtherProp: 'data' },
+  { xPos: 190, yPos: -2.91, someOtherProp: 'data' },
+  { xPos: 200, yPos: 1.78, someOtherProp: 'data' },
+  { xPos: 210, yPos: -8.32, someOtherProp: 'data' },
+  { xPos: 220, yPos: 13.56, someOtherProp: 'data' },
+  { xPos: 230, yPos: -6.15, someOtherProp: 'data' },
+];
 
 export const stripe_x10_1_and_0 = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
 export const stripe_x10_0_and_1 = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1];

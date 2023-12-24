@@ -9,6 +9,8 @@ import {
   LineChartProperties,
   LinearGradient,
   Range,
+  LineValueType,
+  BasicLineValueType,
 } from './models';
 import { DatumLine } from './models/datum-line';
 import { LineProperties } from './models/line-properties';
@@ -29,9 +31,14 @@ type ChartScales = {
   yScale: d3Scale.ScaleLinear<number, number, never>;
 };
 
-export class LineChart extends BaseChart {
+export type XYAccessorFunction<T> = ((obj: T) => number | null) | undefined;
+
+export class LineChart<T = unknown> extends BaseChart {
   #props: Properties;
   #scales?: ChartScales;
+  #arrayType: ArrayType = ArrayType.Unknown;
+  #xAccessor: XYAccessorFunction<T> = undefined;
+  #yAccessor: XYAccessorFunction<T> = undefined;
 
   constructor(props?: Partial<LineChartProperties>) {
     super(props?.baseChartProps);
@@ -68,18 +75,49 @@ export class LineChart extends BaseChart {
     return [this.scales.xScale(domainX), this.scales.yScale(domainY)];
   }
 
+  #getValues(inputValues: LineValueType<T>[]): Array<BasicLineValueType> {
+    const arrayType = getArrayType(inputValues);
+
+    if (arrayType === ArrayType.ObjectValue) {
+      // Convert an Object array into a SingleValue or TupleValue array
+      // depending on what accessors are set.
+      if (this.#yAccessor === undefined) {
+        throw new Error('The yAccessor is not initialized.');
+      }
+
+      if (this.#xAccessor) {
+        // Both xAccessor and yAccessor are set
+        this.#arrayType = ArrayType.TupleValue;
+        return inputValues.map((v) => [
+          this.#xAccessor!(v as T),
+          this.#yAccessor!(v as T),
+        ]) as Array<[number, number | null]>;
+      } else {
+        // Only yAccessor is set, array index will be used for X values.
+        this.#arrayType = ArrayType.SingleValue;
+        return inputValues.map((v) => this.#yAccessor!(v as T)) as Array<
+          number | null
+        >;
+      }
+    }
+
+    this.#arrayType = arrayType;
+    return inputValues as Array<number | null | [number, number | null]>;
+  }
+
   render(
-    values: ((number | null) | [number, number | null])[],
+    inputValues: LineValueType<T>[],
     canvas?: HTMLCanvasElement,
   ): HTMLCanvasElement {
     const context = super.renderChartBase(canvas);
 
-    if (!values || values.length < 2) {
+    if (!inputValues || inputValues.length < 2) {
       // This is a line chart and it requires at least a pair of coordinates.
       // Instead of throwing an error just return the empty canvas.
       return context.canvas;
     }
 
+    const values = this.#getValues(inputValues);
     this.#setScales(values);
 
     const xDatumLinesWithZIndex: DatumLine[] = [];
@@ -177,6 +215,16 @@ export class LineChart extends BaseChart {
     return this;
   }
 
+  xAccessor(accessor: XYAccessorFunction<T>) {
+    this.#xAccessor = accessor;
+    return this;
+  }
+
+  yAccessor(accessor: XYAccessorFunction<T>) {
+    this.#yAccessor = accessor;
+    return this;
+  }
+
   // minX - maxX
   xDomain(xDomain: Range) {
     this.#props.xDomain = xDomain;
@@ -194,7 +242,7 @@ export class LineChart extends BaseChart {
     xPositionOrDatumLineBuilder: number | DatumLineBuilder,
     lineProps?: LineProperties,
     zIndex?: number,
-  ): LineChart {
+  ): LineChart<T> {
     if (typeof xPositionOrDatumLineBuilder === 'number') {
       this.#datum(
         this.#props.xDatumLines,
@@ -258,25 +306,19 @@ export class LineChart extends BaseChart {
     return this.#scales;
   }
 
-  #getXDomain(
-    values: ((number | null) | [number, number | null])[],
-    arrayType: ArrayType,
-  ): Range {
+  #getXDomain(values: BasicLineValueType[], arrayType: ArrayType): Range {
     return (
       this.#props.xDomain ??
-      ((arrayType === ArrayType.SingleNumbers
+      ((arrayType === ArrayType.SingleValue
         ? [0, values.length - 1] // index in array defines the x domain
         : d3Array.extent(values as [number, number][], (d) => d[0])) as Range)
     );
   }
 
-  #getYDomain(
-    values: ((number | null) | [number, number | null])[],
-    arrayType: ArrayType,
-  ): Range {
+  #getYDomain(values: BasicLineValueType[], arrayType: ArrayType): Range {
     return (
       this.#props.yDomain ??
-      ((arrayType === ArrayType.SingleNumbers
+      ((arrayType === ArrayType.SingleValue
         ? d3Array.extent(values as number[])
         : d3Array.extent(values as [number, number][], (d) => d[1])) as Range)
     );
@@ -302,17 +344,15 @@ export class LineChart extends BaseChart {
       ]);
   }
 
-  #setScales(values: ((number | null) | [number, number | null])[]) {
-    const arrayType = getArrayType(values);
-
-    const xDomain = this.#getXDomain(values, arrayType);
-    const yDomain = this.#getYDomain(values, arrayType);
+  #setScales(values: BasicLineValueType[]) {
+    const xDomain = this.#getXDomain(values, this.#arrayType);
+    const yDomain = this.#getYDomain(values, this.#arrayType);
 
     const xScale = this.#xScale(xDomain);
     const yScale = this.#yScale(yDomain);
 
     this.#scales = {
-      arrayType,
+      arrayType: this.#arrayType,
       xDomain,
       yDomain,
       xScale,
@@ -320,17 +360,17 @@ export class LineChart extends BaseChart {
     };
   }
 
-  #scaleCoordinates<T extends ((number | null) | [number, number | null])[]>(
-    values: T,
+  #scaleCoordinates(
+    values: BasicLineValueType[],
     scales: ChartScales,
   ): Coordinate[] {
     return values.map((value, index) => {
       const x =
-        scales.arrayType === ArrayType.SingleNumbers
+        scales.arrayType === ArrayType.SingleValue
           ? index
           : (value as [number, number])[0];
       const y =
-        scales.arrayType === ArrayType.SingleNumbers
+        scales.arrayType === ArrayType.SingleValue
           ? (value as number)
           : (value as [number, number])[1];
       return [scales.xScale(x as number), scales.yScale(y)];
@@ -430,5 +470,5 @@ export class LineChart extends BaseChart {
 }
 
 // factory function for the fluid API
-export const lineChart = (props?: Partial<LineChartProperties>) =>
-  new LineChart(props);
+export const lineChart = <T = unknown>(props?: Partial<LineChartProperties>) =>
+  new LineChart<T>(props);

@@ -25,11 +25,14 @@ import {
 } from 'ngx-sparklib';
 
 import {
+  DataObject,
   monoDataValues,
   monoDataValuesWithGaps,
+  monoObjectValuesWithGaps,
   monotonicIncreasing,
   pairDataValues,
   pairSegmentValues,
+  pairObjectSegmentValues,
   randomInRange,
   singleValues,
   stripe_x10_0_and_1,
@@ -39,7 +42,7 @@ import {
   stripe_x10_mostly_1,
 } from './data';
 import { CommonModule } from '@angular/common';
-import { LineChart, NO_MARGINS } from 'sparklib';
+import { LineChart, NO_MARGINS, XYAccessorFunction } from 'sparklib';
 
 @Component({
   standalone: true,
@@ -62,8 +65,10 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   monoDataValues = monoDataValues;
   monoDataValuesWithGaps = monoDataValuesWithGaps;
+  monoObjectValuesWithGaps = monoObjectValuesWithGaps;
   pairDataValues = pairDataValues;
   pairSegmentValues = pairSegmentValues;
+  pairObjectSegmentValues = pairObjectSegmentValues;
   stripe_x10_1_and_0 = stripe_x10_1_and_0;
   stripe_x10_0_and_1 = stripe_x10_0_and_1;
   stripe_x10_mostly_0 = stripe_x10_mostly_0;
@@ -168,6 +173,9 @@ export class AppComponent implements AfterViewInit, OnInit {
     .addColorStop(1, 'red');
 
   lineChart0: LineChart | null = null;
+
+  xAccessor = (data: DataObject): number | null => data.xPos;
+  yAccessor = (data: DataObject): number | null => data.yPos;
 
   ngOnInit(): void {
     this.weatherService.getWeatherRecords().subscribe({

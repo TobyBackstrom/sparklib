@@ -21,6 +21,8 @@ import {
   LinearGradientBuilder,
   MarginsBuilder,
   getIndicesForPixelX,
+  LineValueType,
+  XYAccessorFunction,
 } from 'sparklib';
 
 @Component({
@@ -30,12 +32,16 @@ import {
   template: '<canvas #canvasRef></canvas>',
   styles: [],
 })
-export class LineChartComponent implements AfterViewInit, OnDestroy {
+export class LineChartComponent<T = unknown>
+  implements AfterViewInit, OnDestroy
+{
   // mandatory properties
-  @Input({ required: true }) values!: (
-    | (number | null)
-    | [number, number | null]
-  )[];
+  @Input({ required: true }) values!: LineValueType<T>[];
+
+  // optional value properties
+  @Input() xAccessor: XYAccessorFunction<T>;
+  @Input() yAccessor: XYAccessorFunction<T>;
+
   // optional properties
   @Input() width?: number;
   @Input() height?: number;
@@ -68,14 +74,14 @@ export class LineChartComponent implements AfterViewInit, OnDestroy {
   constructor(private renderer: Renderer2) {}
 
   ngAfterViewInit(): void {
-    const chart = lineChart(this.properties);
+    const chart = lineChart<T>(this.properties);
     this.#setChartProperties(chart);
 
     chart.render(this.values, this.canvasRef.nativeElement);
 
     // remember length of values at the time of rendering
     // this is needed when mapping mouse coordinates to domain coordinates
-    this.#valueLength = this.values.length;
+    this.#valueLength = this.values?.length ?? 0;
 
     this.#addMouseMoveListener();
   }
@@ -129,7 +135,7 @@ export class LineChartComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  #setChartProperties(chart: LineChart) {
+  #setChartProperties(chart: LineChart<T>) {
     const inputMappings = this.#getInputToChartMappings(chart);
 
     Object.entries(inputMappings).forEach(([key, method]) => {
@@ -142,9 +148,9 @@ export class LineChartComponent implements AfterViewInit, OnDestroy {
   }
 
   #getInputToChartMappings(
-    chart: LineChart,
+    chart: LineChart<T>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): Record<string, (arg: any) => LineChart> {
+  ): Record<string, (arg: any) => LineChart<T>> {
     return {
       width: chart.width,
       height: chart.height,
@@ -159,6 +165,8 @@ export class LineChartComponent implements AfterViewInit, OnDestroy {
       yDomain: chart.yDomain,
       xDatumLines: chart.xDatumLines,
       yDatumLines: chart.yDatumLines,
+      xAccessor: chart.xAccessor,
+      yAccessor: chart.yAccessor,
     };
   }
 }
