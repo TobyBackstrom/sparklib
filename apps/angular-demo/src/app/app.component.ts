@@ -42,7 +42,7 @@ import {
   stripe_x10_mostly_1,
 } from './data';
 import { CommonModule } from '@angular/common';
-import { LineChart, NO_MARGINS, XYAccessorFunction } from 'sparklib';
+import { LineChart, NO_MARGINS } from 'sparklib';
 
 @Component({
   standalone: true,

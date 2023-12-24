@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
 import * as sparklib from 'sparklib';
 
-interface LineChartProps {
-  values: (number | [number, number])[];
+interface LineChartProps<T = unknown> {
+  values: sparklib.LineValueType<T>[];
+  xAccessor?: sparklib.XYAccessorFunction<T>;
+  yAccessor?: sparklib.XYAccessorFunction<T>;
   width?: number;
   height?: number;
   dpi?: number;
@@ -32,16 +34,16 @@ interface LineChartProps {
   }) => void;
 }
 
-export const LineChart = (props: LineChartProps) => {
+export const LineChart = <T = unknown,>(props: LineChartProps<T>) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const valueLength = useRef(props.values.length);
 
   useEffect(() => {
     if (canvasRef.current) {
-      const chart = sparklib.lineChart(props.properties);
+      const chart = sparklib.lineChart<T>(props.properties);
       const currentCanvas = canvasRef.current;
 
-      const setChartProperties = (chart: sparklib.LineChart) => {
+      const setChartProperties = (chart: sparklib.LineChart<T>) => {
         const inputMappings = getInputToChartMappings(chart);
 
         Object.entries(inputMappings).forEach(([key, method]) => {
@@ -100,9 +102,9 @@ export const LineChart = (props: LineChartProps) => {
   }, [props]);
 
   const getInputToChartMappings = (
-    chart: sparklib.LineChart,
+    chart: sparklib.LineChart<T>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): Record<string, (arg: any) => sparklib.LineChart> => {
+  ): Record<string, (arg: any) => sparklib.LineChart<T>> => {
     return {
       width: chart.width,
       height: chart.height,
@@ -117,6 +119,8 @@ export const LineChart = (props: LineChartProps) => {
       yDomain: chart.yDomain,
       xDatumLines: chart.xDatumLines,
       yDatumLines: chart.yDatumLines,
+      xAccessor: chart.xAccessor,
+      yAccessor: chart.yAccessor,
     };
   };
 

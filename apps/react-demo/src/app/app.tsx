@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.scss';
-import { Route, Routes, Link } from 'react-router-dom';
 import * as sparklib from 'react-sparklib';
 
 const data: [number, number][] = [
@@ -17,6 +14,39 @@ const data: [number, number][] = [
 ];
 
 const data2: number[] = [1, 50, 10, 70, 1, 0, 1, 20, 1, 0];
+
+export interface DataObject {
+  xPos: number;
+  yPos: number | null;
+  someOtherProp: string;
+}
+
+export const pairObjectSegmentValues: DataObject[] = [
+  { xPos: 0, yPos: 7.64, someOtherProp: 'data' },
+  { xPos: 10, yPos: -5.42, someOtherProp: 'data' },
+  { xPos: 20, yPos: 11.89, someOtherProp: 'data' },
+  { xPos: 30, yPos: -1.33, someOtherProp: 'data' },
+  { xPos: 40, yPos: 3.52, someOtherProp: 'data' },
+  { xPos: 50, yPos: -10.7, someOtherProp: 'data' },
+  { xPos: 60, yPos: 8.25, someOtherProp: 'data' },
+  { xPos: 70, yPos: 14.03, someOtherProp: 'data' },
+  { xPos: 80, yPos: -4.97, someOtherProp: 'data' },
+  { xPos: 90, yPos: null, someOtherProp: 'empty' },
+  { xPos: 100, yPos: null, someOtherProp: 'empty' },
+  { xPos: 110, yPos: 12.23, someOtherProp: 'data' },
+  { xPos: 120, yPos: 2.64, someOtherProp: 'data' },
+  { xPos: 130, yPos: -7.89, someOtherProp: 'data' },
+  { xPos: 140, yPos: 5.97, someOtherProp: 'data' },
+  { xPos: 150, yPos: null, someOtherProp: 'empty' },
+  { xPos: 160, yPos: 8.0, someOtherProp: 'data' },
+  { xPos: 170, yPos: null, someOtherProp: 'empty' },
+  { xPos: 180, yPos: 9.36, someOtherProp: 'data' },
+  { xPos: 190, yPos: -2.91, someOtherProp: 'data' },
+  { xPos: 200, yPos: 1.78, someOtherProp: 'data' },
+  { xPos: 210, yPos: -8.32, someOtherProp: 'data' },
+  { xPos: 220, yPos: 13.56, someOtherProp: 'data' },
+  { xPos: 230, yPos: -6.15, someOtherProp: 'data' },
+];
 
 const prideGradient = sparklib
   .linearGradient(0, 0, 250, 0)
@@ -56,6 +86,9 @@ const hGradient = sparklib
   .addColorStop(1, 'black');
 
 export function App() {
+  const xAccessor = (data: DataObject): number | null => data.xPos;
+  const yAccessor = (data: DataObject): number | null => data.yPos;
+
   return (
     <div className="App">
       <sparklib.LineChart
@@ -69,7 +102,21 @@ export function App() {
           console.log(event);
         }}
       />
-      <br></br>
+      <br />
+      <hr />
+      <sparklib.LineChart<DataObject>
+        values={pairObjectSegmentValues}
+        xAccessor={xAccessor}
+        yAccessor={yAccessor}
+        background={'lightgray'}
+        margins={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        strokeStyle={hGradient}
+        onMouseMove={(event) => {
+          console.log(event);
+        }}
+      />
+      <br />
+      <hr />
       <sparklib.StripeChart
         values={data2}
         width={150}

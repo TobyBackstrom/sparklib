@@ -68,6 +68,7 @@ export interface DataObject {
   yPos: number | null;
   someOtherProp: string;
 }
+
 export const monoObjectValuesWithGaps: DataObject[] = [
   { xPos: -1, yPos: 7.64, someOtherProp: 'data' },
   { xPos: -1, yPos: -5.42, someOtherProp: 'data' },
