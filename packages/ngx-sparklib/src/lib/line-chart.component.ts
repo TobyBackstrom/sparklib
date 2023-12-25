@@ -22,7 +22,7 @@ import {
   MarginsBuilder,
   getIndicesForPixelX,
   LineValueType,
-  XYAccessorFunction,
+  ValueAccessor,
 } from 'sparklib';
 
 @Component({
@@ -39,8 +39,8 @@ export class LineChartComponent<T = unknown>
   @Input({ required: true }) values!: LineValueType<T>[];
 
   // optional value properties
-  @Input() xAccessor: XYAccessorFunction<T>;
-  @Input() yAccessor: XYAccessorFunction<T>;
+  @Input() xAccessor: ValueAccessor<T>;
+  @Input() yAccessor: ValueAccessor<T>;
 
   // optional properties
   @Input() width?: number;

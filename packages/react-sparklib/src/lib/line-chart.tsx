@@ -3,8 +3,8 @@ import * as sparklib from 'sparklib';
 
 interface LineChartProps<T = unknown> {
   values: sparklib.LineValueType<T>[];
-  xAccessor?: sparklib.XYAccessorFunction<T>;
-  yAccessor?: sparklib.XYAccessorFunction<T>;
+  xAccessor?: sparklib.ValueAccessor<T>;
+  yAccessor?: sparklib.ValueAccessor<T>;
   width?: number;
   height?: number;
   dpi?: number;
@@ -34,7 +34,7 @@ interface LineChartProps<T = unknown> {
   }) => void;
 }
 
-export const LineChart = <T = unknown,>(props: LineChartProps<T>) => {
+export const LineChart = <T = unknown>(props: LineChartProps<T>) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const valueLength = useRef(props.values.length);
 

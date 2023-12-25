@@ -2,7 +2,7 @@ import * as d3Array from 'd3-array';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
-import { BaseChart } from './base-chart';
+import { BaseChart, ValueAccessor } from './base-chart';
 import { DatumLineBuilder, LinearGradientBuilder } from './builders';
 import {
   Coordinate,
@@ -31,14 +31,12 @@ type ChartScales = {
   yScale: d3Scale.ScaleLinear<number, number, never>;
 };
 
-export type XYAccessorFunction<T> = ((obj: T) => number | null) | undefined;
-
 export class LineChart<T = unknown> extends BaseChart {
   #props: Properties;
   #scales?: ChartScales;
   #arrayType: ArrayType = ArrayType.Unknown;
-  #xAccessor: XYAccessorFunction<T> = undefined;
-  #yAccessor: XYAccessorFunction<T> = undefined;
+  #xAccessor: ValueAccessor<T> = undefined;
+  #yAccessor: ValueAccessor<T> = undefined;
 
   constructor(props?: Partial<LineChartProperties>) {
     super(props?.baseChartProps);
@@ -215,12 +213,12 @@ export class LineChart<T = unknown> extends BaseChart {
     return this;
   }
 
-  xAccessor(accessor: XYAccessorFunction<T>) {
+  xAccessor(accessor: ValueAccessor<T>) {
     this.#xAccessor = accessor;
     return this;
   }
 
-  yAccessor(accessor: XYAccessorFunction<T>) {
+  yAccessor(accessor: ValueAccessor<T>) {
     this.#yAccessor = accessor;
     return this;
   }

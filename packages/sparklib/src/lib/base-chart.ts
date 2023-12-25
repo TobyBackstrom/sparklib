@@ -24,6 +24,8 @@ type PartialBaseChartProperties = Partial<
   margins?: Margins | MarginsBuilder;
 };
 
+export type ValueAccessor<T> = ((obj: T) => number | null) | undefined;
+
 export abstract class BaseChart {
   protected chartProps: BaseChartPropertiesWithMargins = {
     width: 250,
