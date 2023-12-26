@@ -4,3 +4,5 @@ export type LineValueType<T = unknown> =
   | (number | null)
   | [number, number | null]
   | T;
+
+export type StripeValueType<T = unknown> = number | T;

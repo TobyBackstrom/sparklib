@@ -1,7 +1,12 @@
 import * as d3Array from 'd3-array';
 
-import { BaseChart } from './base-chart';
-import { BaseChartProperties, NO_MARGINS, Range } from './models';
+import { BaseChart, ValueAccessor } from './base-chart';
+import {
+  BaseChartProperties,
+  NO_MARGINS,
+  Range,
+  StripeValueType,
+} from './models';
 import { ArrayType, createGradientColorScale, getArrayType } from './utils';
 
 export type StripeChartProperties = {
@@ -13,8 +18,10 @@ export type StripeChartProperties = {
 
 type Properties = Omit<StripeChartProperties, 'baseChartProps'>;
 
-export class StripeChart extends BaseChart {
+export class StripeChart<T = unknown> extends BaseChart {
   #props: Properties;
+  #valueAccessor: ValueAccessor<T> = undefined;
+
   defaultColorScale: string[] = [
     '#ffffff',
     '#f0f0f0',
@@ -44,16 +51,17 @@ export class StripeChart extends BaseChart {
     this.#props = { ...defaultProperties, ...props };
   }
 
-  render(values: number[], canvas?: HTMLCanvasElement): HTMLCanvasElement {
+  render(
+    inputValues: StripeValueType<T>[],
+    canvas?: HTMLCanvasElement,
+  ): HTMLCanvasElement {
     const context = super.renderChartBase(canvas);
 
-    if (!values || values.length == 0) {
+    if (!inputValues || inputValues.length == 0) {
       return context.canvas;
     }
 
-    if (getArrayType(values) !== ArrayType.SingleValue) {
-      throw new Error('Invalid input format. Expected an array of numbers.');
-    }
+    const values = this.#getValues(inputValues);
 
     const stripeWidth =
       (this.chartProps.width -
@@ -105,6 +113,32 @@ export class StripeChart extends BaseChart {
     return this;
   }
 
+  valueAccessor(accessor: ValueAccessor<T>) {
+    this.#valueAccessor = accessor;
+    return this;
+  }
+
+  #getValues(inputValues: StripeValueType<T>[]): number[] {
+    const arrayType = getArrayType(inputValues);
+
+    if (arrayType === ArrayType.ObjectValue) {
+      // Convert an Object array into a SingleValue array.
+      if (this.#valueAccessor === undefined) {
+        throw new Error('The valueAccessor is not initialized.');
+      }
+
+      return inputValues.map((v) => this.#valueAccessor?.(v as T)) as number[];
+    }
+
+    if (arrayType !== ArrayType.SingleValue) {
+      throw new Error(
+        'Invalid input format. Expected an array of numbers or objects with an accessor.',
+      );
+    }
+
+    return inputValues as number[];
+  }
+
   #getDomain(values: number[]): Range {
     if (this.#props.domain === undefined) {
       if (values.length === 1) {
@@ -118,5 +152,6 @@ export class StripeChart extends BaseChart {
 }
 
 // factory function for the fluid API
-export const stripeChart = (props?: Partial<StripeChartProperties>) =>
-  new StripeChart(props);
+export const stripeChart = <T = unknown>(
+  props?: Partial<StripeChartProperties>,
+) => new StripeChart<T>(props);

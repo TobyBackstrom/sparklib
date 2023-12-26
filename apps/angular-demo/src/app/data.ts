@@ -1,3 +1,14 @@
+export interface DataObject {
+  xPos: number;
+  yPos: number | null;
+  someOtherProp: string;
+}
+
+export interface StripeDataObject {
+  value: number;
+  someOtherProp: string;
+}
+
 export const singleValues = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 7, 5, 3, 2, 1, -1, -2, -5, -7, -2, 3, 4, 5, 6, 7,
   8, 6, 5, 4, 2, 1, 1, 1, 6, 7, 7, 8, 9, 0,
@@ -62,12 +73,6 @@ export const monoDataValuesWithGaps = [
   13.56,
   -6.15,
 ];
-
-export interface DataObject {
-  xPos: number;
-  yPos: number | null;
-  someOtherProp: string;
-}
 
 export const monoObjectValuesWithGaps: DataObject[] = [
   { xPos: -1, yPos: 7.64, someOtherProp: 'data' },
@@ -217,6 +222,30 @@ export const randomInRange = (
       result.push(0);
     } else {
       result.push(randomNum * (maxV - minV) + minV);
+    }
+  }
+
+  return result;
+};
+
+export const randomObjectsInRange = (
+  minV: number,
+  maxV: number,
+  length: number,
+  zeroProbability: number,
+): StripeDataObject[] => {
+  const result: StripeDataObject[] = [];
+
+  for (let i = 0; i < length; ++i) {
+    const randomNum = parseFloat(Math.random().toFixed(1));
+
+    if (randomNum < zeroProbability) {
+      result.push({ value: 0, someOtherProp: 'zero' });
+    } else {
+      result.push({
+        value: randomNum * (maxV - minV) + minV,
+        someOtherProp: `random-${i}`,
+      });
     }
   }
 

@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import * as sparklib from 'sparklib';
 
-export interface StripeChartProps {
-  values: number[];
+export interface StripeChartProps<T = unknown> {
+  values: sparklib.StripeValueType<T>[];
+  valueAccessor?: sparklib.ValueAccessor<T>;
   width?: number;
   height?: number;
   dpi?: number;
@@ -18,13 +19,13 @@ export interface StripeChartProps {
   properties?: sparklib.StripeChartProperties;
 }
 
-export const StripeChart = (props: StripeChartProps) => {
+export const StripeChart = <T = unknown,>(props: StripeChartProps<T>) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const chart = sparklib.stripeChart(props.properties);
+    const chart = sparklib.stripeChart<T>(props.properties);
 
-    const setChartProperties = (chart: sparklib.StripeChart) => {
+    const setChartProperties = (chart: sparklib.StripeChart<T>) => {
       const inputMappings = getInputToChartMappings(chart);
 
       Object.entries(inputMappings).forEach(([key, method]) => {
@@ -43,9 +44,9 @@ export const StripeChart = (props: StripeChartProps) => {
   }, [props]);
 
   const getInputToChartMappings = (
-    chart: sparklib.StripeChart,
+    chart: sparklib.StripeChart<T>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): Record<string, (arg: any) => sparklib.StripeChart> => {
+  ): Record<string, (arg: any) => sparklib.StripeChart<T>> => {
     return {
       width: chart.width,
       height: chart.height,
@@ -55,6 +56,7 @@ export const StripeChart = (props: StripeChartProps) => {
       gradientColors: chart.gradientColors,
       nGradientColorLevels: chart.nGradientColorLevels,
       domain: chart.domain,
+      valueAccessor: chart.valueAccessor,
     };
   };
 

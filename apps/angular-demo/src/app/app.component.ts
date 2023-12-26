@@ -40,6 +40,8 @@ import {
   stripe_x10_1_and_0,
   stripe_x10_mostly_0,
   stripe_x10_mostly_1,
+  randomObjectsInRange,
+  StripeDataObject,
 } from './data';
 import { CommonModule } from '@angular/common';
 import { LineChart, NO_MARGINS } from 'sparklib';
@@ -334,6 +336,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     const monotonicDay = monotonicIncreasing(0, 24 * 60);
     const randomDay1 = randomInRange(0, 5, 24 * 60, 0);
     const randomDay2 = randomInRange(0, 5, 24 * 60, 0.8);
+    const randomObjectsDay2 = randomObjectsInRange(0, 5, 24 * 60, 0.8);
 
     const stripeChart4 = stripeChart()
       .width(monotonic100.length * 2)
@@ -384,6 +387,20 @@ export class AppComponent implements AfterViewInit, OnInit {
       .gradientColors(this.redColors, this.redColors.length)
       .render(randomDay2);
 
+    const stripeChart9c = stripeChart<StripeDataObject>()
+      .width(randomObjectsDay2.length)
+      .height(25)
+      .gradientColors(this.redColors, this.redColors.length)
+      .valueAccessor((data: StripeDataObject): number => data.value)
+      .render(randomObjectsDay2);
+
+    const stripeChart9d = stripeChart<StripeDataObject>()
+      .width(randomObjectsDay2.length / 4)
+      .height(25)
+      .gradientColors(this.redColors, this.redColors.length)
+      .valueAccessor((data: StripeDataObject): number => data.value)
+      .render(randomObjectsDay2);
+
     this.#append(stripeChart0, 'stripeChart0', true);
     this.#append(stripeChart1, 'stripeChart1', true);
     this.#append(stripeChart2, 'stripeChart2', true);
@@ -397,6 +414,8 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.#append(stripeChart8b, 'stripeChart8b');
     this.#append(stripeChart9a, 'stripeChart9a');
     this.#append(stripeChart9b, 'stripeChart9b');
+    this.#append(stripeChart9c, 'stripeChart9c objects');
+    this.#append(stripeChart9d, 'stripeChart9d objects');
 
     this.#append(chart0, 'chart0');
     this.#append(chart1, 'chart1');

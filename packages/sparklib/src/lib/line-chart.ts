@@ -73,36 +73,6 @@ export class LineChart<T = unknown> extends BaseChart {
     return [this.scales.xScale(domainX), this.scales.yScale(domainY)];
   }
 
-  #getValues(inputValues: LineValueType<T>[]): Array<BasicLineValueType> {
-    const arrayType = getArrayType(inputValues);
-
-    if (arrayType === ArrayType.ObjectValue) {
-      // Convert an Object array into a SingleValue or TupleValue array
-      // depending on what accessors are set.
-      if (this.#yAccessor === undefined) {
-        throw new Error('The yAccessor is not initialized.');
-      }
-
-      if (this.#xAccessor) {
-        // Both xAccessor and yAccessor are set
-        this.#arrayType = ArrayType.TupleValue;
-        return inputValues.map((v) => [
-          this.#xAccessor!(v as T),
-          this.#yAccessor!(v as T),
-        ]) as Array<[number, number | null]>;
-      } else {
-        // Only yAccessor is set, array index will be used for X values.
-        this.#arrayType = ArrayType.SingleValue;
-        return inputValues.map((v) => this.#yAccessor!(v as T)) as Array<
-          number | null
-        >;
-      }
-    }
-
-    this.#arrayType = arrayType;
-    return inputValues as Array<number | null | [number, number | null]>;
-  }
-
   render(
     inputValues: LineValueType<T>[],
     canvas?: HTMLCanvasElement,
@@ -302,6 +272,36 @@ export class LineChart<T = unknown> extends BaseChart {
       throw new Error('ChartScales are not initialized.');
     }
     return this.#scales;
+  }
+
+  #getValues(inputValues: LineValueType<T>[]): Array<BasicLineValueType> {
+    const arrayType = getArrayType(inputValues);
+
+    if (arrayType === ArrayType.ObjectValue) {
+      // Convert an Object array into a SingleValue or TupleValue array
+      // depending on what accessors are set.
+      if (this.#yAccessor === undefined) {
+        throw new Error('The yAccessor is not initialized.');
+      }
+
+      if (this.#xAccessor) {
+        // Both xAccessor and yAccessor are set
+        this.#arrayType = ArrayType.TupleValue;
+        return inputValues.map((v) => [
+          this.#xAccessor?.(v as T),
+          this.#yAccessor?.(v as T),
+        ]) as Array<[number, number | null]>;
+      } else {
+        // Only yAccessor is set, array index will be used for X values.
+        this.#arrayType = ArrayType.SingleValue;
+        return inputValues.map((v) => this.#yAccessor?.(v as T)) as Array<
+          number | null
+        >;
+      }
+    }
+
+    this.#arrayType = arrayType;
+    return inputValues as Array<number | null | [number, number | null]>;
   }
 
   #getXDomain(values: BasicLineValueType[], arrayType: ArrayType): Range {

@@ -21,6 +21,11 @@ export interface DataObject {
   someOtherProp: string;
 }
 
+export interface StripeDataObject {
+  value: number;
+  someOtherProp: string;
+}
+
 export const pairObjectSegmentValues: DataObject[] = [
   { xPos: 0, yPos: 7.64, someOtherProp: 'data' },
   { xPos: 10, yPos: -5.42, someOtherProp: 'data' },
@@ -47,6 +52,30 @@ export const pairObjectSegmentValues: DataObject[] = [
   { xPos: 220, yPos: 13.56, someOtherProp: 'data' },
   { xPos: 230, yPos: -6.15, someOtherProp: 'data' },
 ];
+
+export const randomObjectsInRange = (
+  minV: number,
+  maxV: number,
+  length: number,
+  zeroProbability: number,
+): StripeDataObject[] => {
+  const result: StripeDataObject[] = [];
+
+  for (let i = 0; i < length; ++i) {
+    const randomNum = parseFloat(Math.random().toFixed(1));
+
+    if (randomNum < zeroProbability) {
+      result.push({ value: 0, someOtherProp: 'zero' });
+    } else {
+      result.push({
+        value: randomNum * (maxV - minV) + minV,
+        someOtherProp: `random-${i}`,
+      });
+    }
+  }
+
+  return result;
+};
 
 const prideGradient = sparklib
   .linearGradient(0, 0, 250, 0)
@@ -80,10 +109,25 @@ const gradientColors = [
   '#93288e',
 ];
 
+const redColors = [
+  '#ffffff',
+  '#fff5f0',
+  '#fee0d2',
+  '#fcbba1',
+  '#fc9272',
+  '#fb6a4a',
+  '#ef3b2c',
+  '#cb181d',
+  // '#a50f15',
+  // '#67000d',
+];
+
 const hGradient = sparklib
   .linearGradient(0, 0, 250, 0)
   .addColorStop(0, 'lightgreen')
   .addColorStop(1, 'black');
+
+const randomObjectsDay2 = randomObjectsInRange(0, 5, 24 * 60, 0.8);
 
 export function App() {
   const xAccessor = (data: DataObject): number | null => data.xPos;
@@ -121,6 +165,16 @@ export function App() {
         values={data2}
         width={150}
         gradientColors={gradientColors}
+        nGradientColorLevels={2}
+      />
+      <br />
+      <hr />
+      <sparklib.StripeChart<StripeDataObject>
+        values={randomObjectsDay2}
+        valueAccessor={(data: StripeDataObject): number => data.value}
+        height={25}
+        width={randomObjectsDay2.length}
+        gradientColors={redColors}
         nGradientColorLevels={2}
       />
     </div>
