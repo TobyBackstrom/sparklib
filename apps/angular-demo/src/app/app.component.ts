@@ -44,7 +44,7 @@ import {
   StripeDataObject,
 } from './data';
 import { CommonModule } from '@angular/common';
-import { LineChart, NO_MARGINS } from 'sparklib';
+import { LineChart } from 'sparklib';
 
 @Component({
   standalone: true,
@@ -483,7 +483,6 @@ export class AppComponent implements AfterViewInit, OnInit {
           .addColorStop(1, 'black'),
       )
       .yDomain([0, 45])
-      .margins(NO_MARGINS)
       .render(data);
 
     this.#append(chart, 'exampleChart0');
@@ -494,7 +493,6 @@ export class AppComponent implements AfterViewInit, OnInit {
       .width(record.maxT.length / 2)
       .height(40)
       .background('lightyellow')
-      .margins(NO_MARGINS)
       .yDomain([-15, 45])
       .render(record.maxT);
     mouseOverChart0.addEventListener('mousemove', (event) => {
@@ -518,7 +516,6 @@ export class AppComponent implements AfterViewInit, OnInit {
       .width(record.maxT.length)
       .height(40)
       .background('lightyellow')
-      .margins(NO_MARGINS)
       .yDomain([-15, 45])
       .render(record.maxT);
     mouseOverChart1.addEventListener('mousemove', (event) => {
@@ -542,7 +539,6 @@ export class AppComponent implements AfterViewInit, OnInit {
       .width(record.maxT.length * 2)
       .height(40)
       .background('lightyellow')
-      .margins(NO_MARGINS)
       .yDomain([-15, 45])
       .render(record.maxT);
     mouseOverChart2.addEventListener('mousemove', (event) => {

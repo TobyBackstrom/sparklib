@@ -6,6 +6,5 @@ export * from './line-chart-properties';
 export * from './line-properties';
 export * from './linear-gradient';
 export * from './margins';
-export * from './no-margins';
 export * from './range';
 export * from './value-types';

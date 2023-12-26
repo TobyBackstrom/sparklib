@@ -1,4 +1,4 @@
-import { Margins, NO_MARGINS } from '../models';
+import { Margins } from '../models';
 
 /**
  * A builder class for creating `Margins` objects.
@@ -16,7 +16,7 @@ import { Margins, NO_MARGINS } from '../models';
  * ```
  */
 export class MarginsBuilder {
-  private margins: Margins = { ...NO_MARGINS };
+  private margins: Margins = { left: 0, top: 0, right: 0, bottom: 0 };
 
   /**
    * Sets the left margin.

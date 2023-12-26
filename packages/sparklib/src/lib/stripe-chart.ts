@@ -1,12 +1,7 @@
 import * as d3Array from 'd3-array';
 
 import { BaseChart, ValueAccessor } from './base-chart';
-import {
-  BaseChartProperties,
-  NO_MARGINS,
-  Range,
-  StripeValueType,
-} from './models';
+import { BaseChartProperties, Range, StripeValueType } from './models';
 import { ArrayType, createGradientColorScale, getArrayType } from './utils';
 
 export type StripeChartProperties = {
@@ -42,11 +37,6 @@ export class StripeChart<T = unknown> extends BaseChart {
       nGradientColorLevels: this.defaultColorScale.length,
       domain: undefined,
     };
-
-    if (props?.baseChartProps?.margins === undefined) {
-      // default to no margins for the stripe chart
-      this.margins(NO_MARGINS);
-    }
 
     this.#props = { ...defaultProperties, ...props };
   }

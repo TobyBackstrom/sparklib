@@ -1,17 +1,12 @@
 import { LinearGradientBuilder, MarginsBuilder } from './builders';
 import * as dom from './dom';
-import {
-  BaseChartProperties,
-  LinearGradient,
-  Margins,
-  NO_MARGINS,
-} from './models';
+import { BaseChartProperties, LinearGradient, Margins } from './models';
 
 const DEFAULT_MARGINS: Margins = {
-  bottom: 2,
-  left: 2,
-  right: 2,
-  top: 2,
+  bottom: 0,
+  left: 0,
+  right: 0,
+  top: 0,
 };
 
 type BaseChartPropertiesWithMargins = Omit<BaseChartProperties, 'margins'> & {
@@ -100,7 +95,9 @@ export abstract class BaseChart {
     if (margins instanceof MarginsBuilder) {
       return margins.build();
     } else {
-      return margins ? { ...DEFAULT_MARGINS, ...margins } : { ...NO_MARGINS };
+      return margins
+        ? { ...DEFAULT_MARGINS, ...margins }
+        : { left: 0, top: 0, right: 0, bottom: 0 };
     }
   }
 
