@@ -1,0 +1,16 @@
+export enum MouseEventType {
+  Click = 'click',
+  DoubleClick = 'dblclick',
+  MouseDown = 'mousedown',
+  MouseUp = 'mouseup',
+  MouseMove = 'mousemove',
+  MouseOver = 'mouseover',
+  MouseOut = 'mouseout',
+  MouseEnter = 'mouseenter',
+  MouseLeave = 'mouseleave',
+  ContextMenu = 'contextmenu',
+  Wheel = 'wheel',
+  Drag = 'drag',
+  DragStart = 'dragstart',
+  DragEnd = 'dragend',
+}
