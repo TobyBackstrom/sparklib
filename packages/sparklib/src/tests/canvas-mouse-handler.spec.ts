@@ -34,7 +34,8 @@ describe('CanvasMouseHandler', () => {
       },
     }));
 
-    mouseHandler = new CanvasMouseHandler(canvas, 100);
+    mouseHandler = new CanvasMouseHandler();
+    mouseHandler.setCanvas(canvas).setValueLength(100);
   });
 
   it('should initialize correctly', () => {

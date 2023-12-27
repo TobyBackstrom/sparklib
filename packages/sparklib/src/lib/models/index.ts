@@ -2,6 +2,7 @@ import exp = require('constants');
 
 export * from './base-chart-properties';
 export * from './chart-mouse-event';
+export * from './chart-mouse-event-listener';
 export * from './color-stop';
 export * from './coordinate';
 export * from './datum-line';

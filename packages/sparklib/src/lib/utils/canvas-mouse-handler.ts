@@ -1,21 +1,34 @@
-import { MouseEventType } from '../models';
-import { ChartMouseEvent } from '../models/chart-mouse-event';
+import {
+  ChartMouseEvent,
+  ChartMouseEventListener,
+  MouseEventType,
+} from '../models';
 import { getIndicesForPixelX } from './get-indices-for-pixel-x';
 
-export type ChartMouseEventListener = (
-  event: MouseEvent,
-  chartMouseEvent?: ChartMouseEvent,
-) => void;
-
 export class CanvasMouseHandler {
-  #canvas: HTMLCanvasElement;
+  #canvas?: HTMLCanvasElement;
   #eventListeners: Map<MouseEventType, (event: MouseEvent) => void>;
   #valueLength = 0;
 
-  constructor(canvas: HTMLCanvasElement, valueLength: number) {
-    this.#canvas = canvas;
+  constructor() {
     this.#eventListeners = new Map();
+  }
+
+  setCanvas(canvas: HTMLCanvasElement): CanvasMouseHandler {
+    this.#canvas = canvas;
+    return this;
+  }
+
+  private get canvas(): HTMLCanvasElement {
+    if (!this.#canvas) {
+      throw new Error('CanvasMouseHandler is not initialized with a canvas.');
+    }
+    return this.#canvas;
+  }
+
+  setValueLength(valueLength: number): CanvasMouseHandler {
     this.#valueLength = valueLength;
+    return this;
   }
 
   public addEventListener(
@@ -33,21 +46,21 @@ export class CanvasMouseHandler {
       this.removeEventListener(eventType);
     }
 
-    this.#canvas.addEventListener(eventType, wrappedListener);
+    this.canvas.addEventListener(eventType, wrappedListener);
     this.#eventListeners.set(eventType, wrappedListener);
   }
 
   public removeEventListener(eventType: MouseEventType): void {
     const handler = this.#eventListeners.get(eventType);
     if (handler) {
-      this.#canvas.removeEventListener(eventType, handler);
+      this.canvas.removeEventListener(eventType, handler);
       this.#eventListeners.delete(eventType);
     }
   }
 
   public dispose() {
     this.#eventListeners.forEach((handler, eventType) => {
-      this.#canvas.removeEventListener(eventType, handler);
+      this.canvas.removeEventListener(eventType, handler);
     });
     this.#eventListeners.clear();
   }
@@ -56,18 +69,18 @@ export class CanvasMouseHandler {
     // TODO: investigate why sometimes event.offsetX == -1 and x < 0.
     // TODO: automatically handle when the app is reloaded and the user has zoomed the browser viewport which means the dpi has changed
     // TODO: automatically handle when the canvas is moved to a display with a different dpi
-    const rect = this.#canvas.getBoundingClientRect();
+    const rect = this.canvas.getBoundingClientRect();
 
     let x = event.clientX - rect.left;
     let y = event.clientY - rect.top;
 
     // Adjust if out of bounds
-    x = Math.max(0, Math.min(x, this.#canvas.width - 1));
-    y = Math.max(0, Math.min(y, this.#canvas.height - 1));
+    x = Math.max(0, Math.min(x, this.canvas.width - 1));
+    y = Math.max(0, Math.min(y, this.canvas.height - 1));
 
     const indices = getIndicesForPixelX(
       x,
-      this.#canvas.width,
+      this.canvas.width,
       this.#valueLength,
     );
 
