@@ -1,5 +1,3 @@
-import exp = require('constants');
-
 export * from './base-chart-properties';
 export * from './chart-mouse-event';
 export * from './chart-mouse-event-listener';
