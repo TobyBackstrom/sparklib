@@ -91,11 +91,7 @@ export class StripeChart<T = unknown> extends BaseChart {
       context.closePath();
     });
 
-    if (this.#mouseHandler) {
-      this.#mouseHandler
-        .setCanvas(context.canvas)
-        .setValueLength(values.length);
-    }
+    this.#mouseHandler?.setCanvas(context.canvas).setValueLength(values.length);
 
     return context.canvas;
   }
@@ -140,10 +136,7 @@ export class StripeChart<T = unknown> extends BaseChart {
   }
 
   dispose() {
-    if (this.#mouseHandler) {
-      this.#mouseHandler.dispose();
-      this.#mouseHandler = undefined;
-    }
+    this.#mouseHandler?.dispose();
   }
 
   #getValues(inputValues: StripeValueType<T>[]): number[] {

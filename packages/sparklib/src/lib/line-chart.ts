@@ -162,11 +162,7 @@ export class LineChart<T = unknown> extends BaseChart {
       ),
     );
 
-    if (this.#mouseHandler) {
-      this.#mouseHandler
-        .setCanvas(context.canvas)
-        .setValueLength(values.length);
-    }
+    this.#mouseHandler?.setCanvas(context.canvas).setValueLength(values.length);
 
     return context.canvas;
   }
@@ -295,10 +291,7 @@ export class LineChart<T = unknown> extends BaseChart {
   }
 
   dispose() {
-    if (this.#mouseHandler) {
-      this.#mouseHandler.dispose();
-      this.#mouseHandler = undefined;
-    }
+    this.#mouseHandler?.dispose();
   }
 
   private get scales(): ChartScales {
