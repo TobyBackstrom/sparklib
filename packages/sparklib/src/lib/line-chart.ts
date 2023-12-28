@@ -274,7 +274,7 @@ export class LineChart<T = unknown> extends BaseChart {
   }
 
   mouseEventListener(
-    eventType: MouseEventType,
+    eventType: MouseEventType | MouseEventType[],
     eventListener: ChartMouseEventListener | null,
   ) {
     if (!this.#mouseHandler) {
@@ -292,6 +292,7 @@ export class LineChart<T = unknown> extends BaseChart {
 
   dispose() {
     this.#mouseHandler?.dispose();
+    this.#mouseHandler = undefined;
   }
 
   private get scales(): ChartScales {

@@ -26,34 +26,48 @@ export class CanvasMouseHandler {
   }
 
   public addEventListener(
-    eventType: MouseEventType,
+    eventType: MouseEventType | MouseEventType[],
     userListener: ChartMouseEventListener,
   ): void {
-    const wrappedListener = (event: MouseEvent) => {
-      userListener(event, this.#getChartMouseEvent(event));
-    };
+    const types: MouseEventType[] = Array.isArray(eventType)
+      ? eventType
+      : [eventType];
 
-    if (this.#eventListeners.has(eventType)) {
-      console.warn(
-        `Event listener for ${eventType} already exists. Replacing it.`,
-      );
-      this.removeEventListener(eventType);
-    }
+    types.forEach((type) => {
+      const wrappedListener = (event: MouseEvent) => {
+        userListener(type, event, this.#getChartMouseEvent(event));
+      };
 
-    if (this.#canvas) {
-      this.#canvas.addEventListener(eventType, wrappedListener);
-    }
-    this.#eventListeners.set(eventType, wrappedListener);
+      if (this.#eventListeners.has(type)) {
+        console.warn(
+          `Event listener for ${eventType} already exists. Replacing it.`,
+        );
+        this.removeEventListener(type);
+      }
+
+      if (this.#canvas) {
+        this.#canvas.addEventListener(type, wrappedListener);
+      }
+      this.#eventListeners.set(type, wrappedListener);
+    });
   }
 
-  public removeEventListener(eventType: MouseEventType): void {
-    const handler = this.#eventListeners.get(eventType);
-    if (handler) {
-      if (this.#canvas) {
-        this.#canvas.removeEventListener(eventType, handler);
+  public removeEventListener(
+    eventType: MouseEventType | MouseEventType[],
+  ): void {
+    const types: MouseEventType[] = Array.isArray(eventType)
+      ? eventType
+      : [eventType];
+
+    types.forEach((type) => {
+      const handler = this.#eventListeners.get(type);
+      if (handler) {
+        if (this.#canvas) {
+          this.#canvas.removeEventListener(type, handler);
+        }
+        this.#eventListeners.delete(type);
       }
-      this.#eventListeners.delete(eventType);
-    }
+    });
   }
 
   public dispose() {

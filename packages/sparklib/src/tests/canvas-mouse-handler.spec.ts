@@ -67,12 +67,20 @@ describe('CanvasMouseHandler', () => {
 
     // Check if the handler was called
     expect(mockClickHandler).toHaveBeenCalled();
-    expect(mockClickHandler).toHaveBeenCalledWith(
+
+    const callArgs = mockClickHandler.mock.calls[0]; // Assuming it's the first call
+    const eventTypeArg = callArgs[0]; // eventType argument
+
+    // Check if eventTypeArg is a valid value of MouseEventType
+    expect(Object.values(MouseEventType)).toContain(eventTypeArg);
+
+    expect(callArgs).toEqual([
+      expect.anything(), // This will pass as long as eventTypeArg is valid
       expect.any(MouseEvent),
       expect.any(ChartMouseEvent),
-    );
-    expect(mockClickHandler.mock.calls[0][0].clientX).toBe(20);
-    expect(mockClickHandler.mock.calls[0][0].clientY).toBe(10);
+    ]);
+    expect(mockClickHandler.mock.calls[0][1].clientX).toBe(20);
+    expect(mockClickHandler.mock.calls[0][1].clientY).toBe(10);
   });
 
   it('should remove event listeners', () => {

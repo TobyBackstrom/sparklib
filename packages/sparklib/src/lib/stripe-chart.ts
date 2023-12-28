@@ -119,7 +119,7 @@ export class StripeChart<T = unknown> extends BaseChart {
   }
 
   mouseEventListener(
-    eventType: MouseEventType,
+    eventType: MouseEventType | MouseEventType[],
     eventListener: ChartMouseEventListener | null,
   ) {
     if (!this.#mouseHandler) {
@@ -137,6 +137,7 @@ export class StripeChart<T = unknown> extends BaseChart {
 
   dispose() {
     this.#mouseHandler?.dispose();
+    this.#mouseHandler = undefined;
   }
 
   #getValues(inputValues: StripeValueType<T>[]): number[] {
