@@ -449,6 +449,13 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
   }
 
+  handleStripeChartMouseEvent(event: ChartMouseEvent) {
+    console.log(
+      `${event.eventType} [${event.startIndex}/${event.endIndex}]: (${event.x},${event.y})`,
+      event,
+    );
+  }
+
   // used for the docs
   #addMoreExamples() {
     const data: number[] = [16, 15.1, 10, 14.2 /* and so on...*/];

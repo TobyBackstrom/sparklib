@@ -57,8 +57,8 @@ export class LineChartComponent<T = unknown>
   @Input() xDatumLines?: DatumLine[];
   @Input() yDatumLines?: DatumLine[];
   @Input() properties?: LineChartProperties;
-  @Input() mouseEventTypes?: MouseEventType[];
 
+  @Input() mouseEventTypes?: MouseEventType[];
   @Output() mouseEvent = new EventEmitter<ChartMouseEvent>();
 
   @ViewChild('canvasRef') canvasRef!: ElementRef<HTMLCanvasElement>;
@@ -68,6 +68,7 @@ export class LineChartComponent<T = unknown>
   ngAfterViewInit(): void {
     this.lineChart = lineChart<T>(this.properties);
     this.#setChartProperties(this.lineChart);
+    this.#setupMouseListener(this.lineChart);
     this.lineChart.render(this.values, this.canvasRef.nativeElement);
   }
 
@@ -89,7 +90,9 @@ export class LineChartComponent<T = unknown>
         method.call(chart, value);
       }
     });
+  }
 
+  #setupMouseListener(chart: LineChart<T>) {
     if (
       this.mouseEvent.observed &&
       this.mouseEventTypes &&

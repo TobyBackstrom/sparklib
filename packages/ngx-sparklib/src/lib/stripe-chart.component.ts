@@ -2,17 +2,24 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
+  OnDestroy,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  ChartMouseEvent,
   LinearGradient,
   LinearGradientBuilder,
   Margins,
   MarginsBuilder,
+  MouseEventType,
   StripeChart,
   StripeChartProperties,
+  StripeValueType,
+  ValueAccessor,
   stripeChart,
 } from 'sparklib';
 
@@ -23,9 +30,15 @@ import {
   template: '<canvas #canvasRef></canvas>',
   styles: [],
 })
-export class StripeChartComponent implements AfterViewInit {
+export class StripeChartComponent<T = unknown>
+  implements AfterViewInit, OnDestroy
+{
   // mandatory properties
-  @Input({ required: true }) values!: number[];
+  @Input({ required: true }) values!: StripeValueType<T>[];
+
+  // optional value accssor
+  @Input() valueAccessor: ValueAccessor<T>;
+
   // optional properties
   @Input() width?: number;
   @Input() height?: number;
@@ -34,15 +47,29 @@ export class StripeChartComponent implements AfterViewInit {
   @Input() margins?: Partial<Margins> | MarginsBuilder;
   @Input() properties?: StripeChartProperties;
 
+  @Input() mouseEventTypes?: MouseEventType[];
+  @Output() mouseEvent = new EventEmitter<ChartMouseEvent>();
+
   @ViewChild('canvasRef') canvasRef!: ElementRef<HTMLCanvasElement>;
 
+  stripeChart?: StripeChart<T>;
+
   ngAfterViewInit(): void {
-    const chart = stripeChart(this.properties);
-    this.#setChartProperties(chart);
-    chart.render(this.values, this.canvasRef.nativeElement);
+    this.stripeChart = stripeChart<T>(this.properties);
+    this.#setChartProperties(this.stripeChart);
+    this.#setupMouseListener(this.stripeChart);
+    this.stripeChart.render(this.values, this.canvasRef.nativeElement);
   }
 
-  #setChartProperties(chart: StripeChart) {
+  ngOnDestroy() {
+    this.stripeChart?.dispose();
+  }
+
+  onMouseEvent(chartMouseEvent: ChartMouseEvent) {
+    this.mouseEvent.emit(chartMouseEvent);
+  }
+
+  #setChartProperties(chart: StripeChart<T>) {
     const inputMappings = this.#getInputToChartMappings(chart);
 
     Object.entries(inputMappings).forEach(([key, method]) => {
@@ -54,16 +81,30 @@ export class StripeChartComponent implements AfterViewInit {
     });
   }
 
+  #setupMouseListener(chart: StripeChart<T>) {
+    if (
+      this.mouseEvent.observed &&
+      this.mouseEventTypes &&
+      this.mouseEventTypes.length > 0
+    ) {
+      chart.mouseEventListener(
+        this.mouseEventTypes,
+        this.onMouseEvent.bind(this),
+      );
+    }
+  }
+
   #getInputToChartMappings(
-    chart: StripeChart,
+    chart: StripeChart<T>,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): Record<string, (arg: any) => StripeChart> {
+  ): Record<string, (arg: any) => StripeChart<T>> {
     return {
       width: chart.width,
       height: chart.height,
       dpi: chart.dpi,
       margins: chart.margins,
       background: chart.background,
+      valueAccessor: chart.valueAccessor,
     };
   }
 }

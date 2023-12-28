@@ -206,6 +206,8 @@ Object arrays
   [width]="stripe_x10_1_and_0.length * 4"
   [height]="25"
   [values]="stripe_x10_1_and_0"
+  [mouseEventTypes]="[MouseEventType.Click, MouseEventType.MouseOver]"
+  (mouseEvent)="handleStripeChartMouseEvent($event)"
 ></sparklib-stripe-chart>
 <br />
 <span>stripe1</span><br />
