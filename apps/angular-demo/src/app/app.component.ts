@@ -582,6 +582,16 @@ export class AppComponent implements AfterViewInit, OnInit {
       .width(random250_2.length)
       .height(25)
       .gradientColors(gradient, gradient.length)
+      .mouseEventListener(
+        MouseEventType.MouseMove,
+        (mouseEvent, chartMouseEvent) => {
+          console.log(
+            `random250_2: ${mouseEvent.timeStamp} ${JSON.stringify(
+              chartMouseEvent,
+            )}`,
+          );
+        },
+      )
       .render(random250_2);
 
     this.#append(scPride1_a, 'monotonic250');

@@ -1,8 +1,15 @@
 import * as d3Array from 'd3-array';
 
 import { BaseChart, ValueAccessor } from './base-chart';
-import { BaseChartProperties, Range, StripeValueType } from './models';
+import {
+  BaseChartProperties,
+  ChartMouseEventListener,
+  MouseEventType,
+  Range,
+  StripeValueType,
+} from './models';
 import { ArrayType, createGradientColorScale, getArrayType } from './utils';
+import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
 
 export type StripeChartProperties = {
   baseChartProps: BaseChartProperties;
@@ -16,6 +23,7 @@ type Properties = Omit<StripeChartProperties, 'baseChartProps'>;
 export class StripeChart<T = unknown> extends BaseChart {
   #props: Properties;
   #valueAccessor: ValueAccessor<T> = undefined;
+  #mouseHandler?: CanvasMouseHandler;
 
   defaultColorScale: string[] = [
     '#ffffff',
@@ -83,6 +91,12 @@ export class StripeChart<T = unknown> extends BaseChart {
       context.closePath();
     });
 
+    if (this.#mouseHandler) {
+      this.#mouseHandler
+        .setCanvas(context.canvas)
+        .setValueLength(values.length);
+    }
+
     return context.canvas;
   }
 
@@ -106,6 +120,30 @@ export class StripeChart<T = unknown> extends BaseChart {
   valueAccessor(accessor: ValueAccessor<T>) {
     this.#valueAccessor = accessor;
     return this;
+  }
+
+  mouseEventListener(
+    eventType: MouseEventType,
+    eventListener: ChartMouseEventListener | null,
+  ) {
+    if (!this.#mouseHandler) {
+      this.#mouseHandler = new CanvasMouseHandler();
+    }
+
+    if (eventListener) {
+      this.#mouseHandler.addEventListener(eventType, eventListener);
+    } else {
+      this.#mouseHandler.removeEventListener(eventType);
+    }
+
+    return this;
+  }
+
+  dispose() {
+    if (this.#mouseHandler) {
+      this.#mouseHandler.dispose();
+      this.#mouseHandler = undefined;
+    }
   }
 
   #getValues(inputValues: StripeValueType<T>[]): number[] {
