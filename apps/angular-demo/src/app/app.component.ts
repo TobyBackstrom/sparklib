@@ -44,7 +44,7 @@ import {
   StripeDataObject,
 } from './data';
 import { CommonModule } from '@angular/common';
-import { LineChart, MouseEventType } from 'sparklib';
+import { ChartMouseEvent, LineChart, MouseEventType } from 'sparklib';
 
 @Component({
   standalone: true,
@@ -178,6 +178,8 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   xAccessor = (data: DataObject): number | null => data.xPos;
   yAccessor = (data: DataObject): number | null => data.yPos;
+
+  MouseEventType = MouseEventType; // Expose the enum to the template
 
   ngOnInit(): void {
     this.weatherService.getWeatherRecords().subscribe({
@@ -435,38 +437,16 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   constructor(private weatherService: WeatherService) {}
 
-  handleMouseMove(
-    event: {
-      x: number;
-      y: number;
-      startIndex: number;
-      endIndex: number;
-      mouseEvent: MouseEvent;
-    },
-    rowIndex: number,
-  ) {
+  handleMouseEvent(event: ChartMouseEvent, rowIndex: number) {
     const record = this.weatherRecords[rowIndex];
 
     if (event.x >= 0) {
       const value = record.maxT[event.startIndex];
       console.log(
-        `handleMouseMove [${rowIndex}:${event.startIndex}/${event.endIndex}]: (${event.x},${event.y}) = ${value}`,
+        `${event.eventType} [${rowIndex}:${event.startIndex}/${event.endIndex}]: (${event.x},${event.y}) = ${value}`,
         event,
       );
     }
-  }
-
-  #mouseOverChart(chart: LineChart, canvas: HTMLCanvasElement) {
-    canvas.addEventListener('mousemove', (event) => {
-      const rect = canvas.getBoundingClientRect();
-
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-
-      const domain = chart.getDomainCoordinate(x, y);
-
-      console.log(`${x},${y} [${domain}] (${event.clientX},${event.clientY})`);
-    });
   }
 
   // used for the docs
@@ -540,14 +520,13 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(40)
       .background('lightyellow')
       .yDomain([-15, 45])
-      .mouseEventListener(
-        MouseEventType.MouseMove,
-        (mouseEvent, chartMouseEvent) => {
-          console.log(
-            `${mouseEvent.timeStamp} ${JSON.stringify(chartMouseEvent)}`,
-          );
-        },
-      )
+      .mouseEventListener(MouseEventType.MouseMove, (chartMouseEvent) => {
+        console.log(
+          `${chartMouseEvent.mouseEvent.timeStamp} ${JSON.stringify(
+            chartMouseEvent,
+          )}`,
+        );
+      })
       .render(record.maxT);
 
     this.#append(mouseOverChart2, 'mouseOverChart2');
@@ -582,16 +561,13 @@ export class AppComponent implements AfterViewInit, OnInit {
       .width(random250_2.length)
       .height(25)
       .gradientColors(gradient, gradient.length)
-      .mouseEventListener(
-        MouseEventType.MouseMove,
-        (mouseEvent, chartMouseEvent) => {
-          console.log(
-            `random250_2: ${mouseEvent.timeStamp} ${JSON.stringify(
-              chartMouseEvent,
-            )}`,
-          );
-        },
-      )
+      .mouseEventListener(MouseEventType.MouseMove, (chartMouseEvent) => {
+        console.log(
+          `random250_2: ${
+            chartMouseEvent.mouseEvent.timeStamp
+          } ${JSON.stringify(chartMouseEvent)}`,
+        );
+      })
       .render(random250_2);
 
     this.#append(scPride1_a, 'monotonic250');

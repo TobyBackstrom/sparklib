@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -6,23 +7,22 @@ import {
   Input,
   OnDestroy,
   Output,
-  Renderer2,
   ViewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {
-  Margins,
+  ChartMouseEvent,
   DatumLine,
-  LinearGradient,
   LineChart,
-  lineChart,
   LineChartProperties,
-  Range,
-  LinearGradientBuilder,
-  MarginsBuilder,
-  getIndicesForPixelX,
   LineValueType,
+  LinearGradient,
+  LinearGradientBuilder,
+  Margins,
+  MarginsBuilder,
+  MouseEventType,
+  Range,
   ValueAccessor,
+  lineChart,
 } from 'sparklib';
 
 @Component({
@@ -57,82 +57,26 @@ export class LineChartComponent<T = unknown>
   @Input() xDatumLines?: DatumLine[];
   @Input() yDatumLines?: DatumLine[];
   @Input() properties?: LineChartProperties;
+  @Input() mouseEventTypes?: MouseEventType[];
 
-  @Output() mouseMove = new EventEmitter<{
-    x: number;
-    y: number;
-    startIndex: number;
-    endIndex: number;
-    mouseEvent: MouseEvent;
-  }>();
+  @Output() mouseEvent = new EventEmitter<ChartMouseEvent>();
 
   @ViewChild('canvasRef') canvasRef!: ElementRef<HTMLCanvasElement>;
 
-  #unlisten?: () => void;
-  #valueLength = 0;
-
-  constructor(private renderer: Renderer2) {}
+  lineChart?: LineChart<T>;
 
   ngAfterViewInit(): void {
-    const chart = lineChart<T>(this.properties);
-    this.#setChartProperties(chart);
-
-    chart.render(this.values, this.canvasRef.nativeElement);
-
-    // remember length of values at the time of rendering
-    // this is needed when mapping mouse coordinates to domain coordinates
-    this.#valueLength = this.values?.length ?? 0;
-
-    this.#addMouseMoveListener();
+    this.lineChart = lineChart<T>(this.properties);
+    this.#setChartProperties(this.lineChart);
+    this.lineChart.render(this.values, this.canvasRef.nativeElement);
   }
 
   ngOnDestroy() {
-    this.#removeMouseMoveListener();
+    this.lineChart?.dispose();
   }
 
-  onMouseMove(event: MouseEvent) {
-    // TODO: investigate why sometimes event.offsetX == -1 and x < 0.
-    // TODO: automatically handle when the app is reloaded and the user has zoomed the browser viewport which means the dpi has changed
-    // TODO: automatically handle when the canvas is moved to a display with a different dpi
-    const element = this.canvasRef.nativeElement;
-
-    const rect = element.getBoundingClientRect();
-
-    let x = Math.round(event.clientX - rect.left);
-    const y = Math.round(rect.bottom - event.clientY);
-
-    // emit only if values are within bounds to avoid errors from rounding
-    x = x < 0 ? 0 : x >= element.width ? element.width - 1 : x;
-
-    const indices = getIndicesForPixelX(x, element.width, this.#valueLength);
-
-    indices.endIndex =
-      indices.endIndex < this.#valueLength
-        ? indices.endIndex
-        : this.#valueLength - 1;
-
-    this.mouseMove.emit({
-      x,
-      y,
-      startIndex: indices.startIndex,
-      endIndex: indices.endIndex,
-      mouseEvent: event,
-    });
-  }
-
-  #addMouseMoveListener() {
-    if (this.mouseMove.observed && !this.#unlisten) {
-      this.#unlisten = this.renderer.listen(
-        this.canvasRef.nativeElement,
-        'mousemove',
-        this.onMouseMove.bind(this),
-      );
-    }
-  }
-  #removeMouseMoveListener() {
-    if (this.#unlisten) {
-      this.#unlisten();
-    }
+  onMouseEvent(chartMouseEvent: ChartMouseEvent) {
+    this.mouseEvent.emit(chartMouseEvent);
   }
 
   #setChartProperties(chart: LineChart<T>) {
@@ -145,6 +89,17 @@ export class LineChartComponent<T = unknown>
         method.call(chart, value);
       }
     });
+
+    if (
+      this.mouseEvent.observed &&
+      this.mouseEventTypes &&
+      this.mouseEventTypes.length > 0
+    ) {
+      chart.mouseEventListener(
+        this.mouseEventTypes,
+        this.onMouseEvent.bind(this),
+      );
+    }
   }
 
   #getInputToChartMappings(

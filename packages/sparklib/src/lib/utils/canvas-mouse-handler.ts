@@ -35,7 +35,7 @@ export class CanvasMouseHandler {
 
     types.forEach((type) => {
       const wrappedListener = (event: MouseEvent) => {
-        userListener(type, event, this.#getChartMouseEvent(event));
+        userListener(this.#getChartMouseEvent(type, event));
       };
 
       if (this.#eventListeners.has(type)) {
@@ -91,34 +91,44 @@ export class CanvasMouseHandler {
     this.#canvas = toCanvas;
   }
 
-  #getChartMouseEvent(event: MouseEvent): ChartMouseEvent | undefined {
+  #getChartMouseEvent(
+    eventType: MouseEventType,
+    event: MouseEvent,
+  ): ChartMouseEvent {
     // TODO: investigate why sometimes event.offsetX == -1 and x < 0.
     // TODO: automatically handle when the app is reloaded and the user has zoomed the browser viewport which means the dpi has changed
     // TODO: automatically handle when the canvas is moved to a display with a different dpi
-    if (this.#canvas) {
-      const rect = this.#canvas.getBoundingClientRect();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const rect = this.#canvas!.getBoundingClientRect();
 
-      let x = event.clientX - rect.left;
-      let y = event.clientY - rect.top;
+    let x = event.clientX - rect.left;
+    let y = event.clientY - rect.top;
 
-      // Adjust if out of bounds
-      x = Math.max(0, Math.min(x, this.#canvas.width - 1));
-      y = Math.max(0, Math.min(y, this.#canvas.height - 1));
+    // Adjust if out of bounds
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    x = Math.max(0, Math.min(x, this.#canvas!.width - 1));
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    y = Math.max(0, Math.min(y, this.#canvas!.height - 1));
 
-      const indices = getIndicesForPixelX(
-        x,
-        this.#canvas.width,
-        this.#valueLength,
-      );
+    const indices = getIndicesForPixelX(
+      x,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.#canvas!.width,
+      this.#valueLength,
+    );
 
-      indices.endIndex =
-        indices.endIndex < this.#valueLength
-          ? indices.endIndex
-          : this.#valueLength - 1;
+    indices.endIndex =
+      indices.endIndex < this.#valueLength
+        ? indices.endIndex
+        : this.#valueLength - 1;
 
-      return new ChartMouseEvent(x, y, indices.startIndex, indices.endIndex);
-    }
-
-    return undefined;
+    return new ChartMouseEvent(
+      eventType,
+      event,
+      x,
+      y,
+      indices.startIndex,
+      indices.endIndex,
+    );
   }
 }

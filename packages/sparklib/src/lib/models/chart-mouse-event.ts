@@ -2,7 +2,14 @@
  * Represents the coordinate on the chart canvas and the corresponding indices in the rendered data array.
  */
 
+import { MouseEventType } from './mouse-event-type';
+
 export class ChartMouseEvent {
+  /**
+   * The type of event.
+   */
+  public readonly eventType: MouseEventType;
+
   /**
    * The X coordinate on the chart canvas.
    */
@@ -23,7 +30,21 @@ export class ChartMouseEvent {
    */
   public readonly endIndex: number;
 
-  constructor(x: number, y: number, startIndex: number, endIndex: number) {
+  /**
+   * The original mouse event.
+   */
+  public readonly mouseEvent: MouseEvent;
+
+  constructor(
+    eventType: MouseEventType,
+    mouseEvent: MouseEvent,
+    x: number,
+    y: number,
+    startIndex: number,
+    endIndex: number,
+  ) {
+    this.eventType = eventType;
+    this.mouseEvent = mouseEvent;
     this.x = x;
     this.y = y;
     this.startIndex = startIndex;

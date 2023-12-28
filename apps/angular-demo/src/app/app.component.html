@@ -38,7 +38,8 @@
           [background]="'lightyellow'"
           [yDatumLines]="yDatumLines"
           [values]="record.maxT"
-          (mouseMove)="handleMouseMove($event, i)"
+          [mouseEventTypes]="[MouseEventType.Click, MouseEventType.MouseOver]"
+          (mouseEvent)="handleMouseEvent($event, i)"
         ></sparklib-line-chart>
       </td>
       <td>
