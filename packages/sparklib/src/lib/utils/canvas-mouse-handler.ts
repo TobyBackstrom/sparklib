@@ -15,15 +15,9 @@ export class CanvasMouseHandler {
   }
 
   setCanvas(canvas: HTMLCanvasElement): CanvasMouseHandler {
-    this.#canvas = canvas;
-    return this;
-  }
+    this.#switchCanvas(this.#canvas, canvas);
 
-  private get canvas(): HTMLCanvasElement {
-    if (!this.#canvas) {
-      throw new Error('CanvasMouseHandler is not initialized with a canvas.');
-    }
-    return this.#canvas;
+    return this;
   }
 
   setValueLength(valueLength: number): CanvasMouseHandler {
@@ -46,49 +40,71 @@ export class CanvasMouseHandler {
       this.removeEventListener(eventType);
     }
 
-    this.canvas.addEventListener(eventType, wrappedListener);
+    if (this.#canvas) {
+      this.#canvas.addEventListener(eventType, wrappedListener);
+    }
     this.#eventListeners.set(eventType, wrappedListener);
   }
 
   public removeEventListener(eventType: MouseEventType): void {
     const handler = this.#eventListeners.get(eventType);
     if (handler) {
-      this.canvas.removeEventListener(eventType, handler);
+      if (this.#canvas) {
+        this.#canvas.removeEventListener(eventType, handler);
+      }
       this.#eventListeners.delete(eventType);
     }
   }
 
   public dispose() {
-    this.#eventListeners.forEach((handler, eventType) => {
-      this.canvas.removeEventListener(eventType, handler);
-    });
+    if (this.#canvas) {
+      this.#eventListeners.forEach((handler, eventType) => {
+        this.#canvas?.removeEventListener(eventType, handler);
+      });
+    }
     this.#eventListeners.clear();
+  }
+
+  #switchCanvas(
+    fromCanvas: HTMLCanvasElement | undefined,
+    toCanvas: HTMLCanvasElement,
+  ) {
+    for (const [eventType, wrappedListener] of this.#eventListeners) {
+      fromCanvas?.removeEventListener(eventType, wrappedListener);
+      toCanvas.addEventListener(eventType, wrappedListener);
+    }
+
+    this.#canvas = toCanvas;
   }
 
   #getChartMouseEvent(event: MouseEvent): ChartMouseEvent | undefined {
     // TODO: investigate why sometimes event.offsetX == -1 and x < 0.
     // TODO: automatically handle when the app is reloaded and the user has zoomed the browser viewport which means the dpi has changed
     // TODO: automatically handle when the canvas is moved to a display with a different dpi
-    const rect = this.canvas.getBoundingClientRect();
+    if (this.#canvas) {
+      const rect = this.#canvas.getBoundingClientRect();
 
-    let x = event.clientX - rect.left;
-    let y = event.clientY - rect.top;
+      let x = event.clientX - rect.left;
+      let y = event.clientY - rect.top;
 
-    // Adjust if out of bounds
-    x = Math.max(0, Math.min(x, this.canvas.width - 1));
-    y = Math.max(0, Math.min(y, this.canvas.height - 1));
+      // Adjust if out of bounds
+      x = Math.max(0, Math.min(x, this.#canvas.width - 1));
+      y = Math.max(0, Math.min(y, this.#canvas.height - 1));
 
-    const indices = getIndicesForPixelX(
-      x,
-      this.canvas.width,
-      this.#valueLength,
-    );
+      const indices = getIndicesForPixelX(
+        x,
+        this.#canvas.width,
+        this.#valueLength,
+      );
 
-    indices.endIndex =
-      indices.endIndex < this.#valueLength
-        ? indices.endIndex
-        : this.#valueLength - 1;
+      indices.endIndex =
+        indices.endIndex < this.#valueLength
+          ? indices.endIndex
+          : this.#valueLength - 1;
 
-    return new ChartMouseEvent(x, y, indices.startIndex, indices.endIndex);
+      return new ChartMouseEvent(x, y, indices.startIndex, indices.endIndex);
+    }
+
+    return undefined;
   }
 }

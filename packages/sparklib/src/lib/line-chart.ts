@@ -11,10 +11,13 @@ import {
   Range,
   LineValueType,
   BasicLineValueType,
+  ChartMouseEventListener,
+  MouseEventType,
 } from './models';
 import { DatumLine } from './models/datum-line';
 import { LineProperties } from './models/line-properties';
 import { ArrayType, getArrayType } from './utils';
+import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
 
 // LineChart props only (BaseChart excluded), with required lineProps.
 type Properties = {
@@ -37,6 +40,7 @@ export class LineChart<T = unknown> extends BaseChart {
   #arrayType: ArrayType = ArrayType.Unknown;
   #xAccessor: ValueAccessor<T> = undefined;
   #yAccessor: ValueAccessor<T> = undefined;
+  #mouseHandler?: CanvasMouseHandler;
 
   constructor(props?: Partial<LineChartProperties>) {
     super(props?.baseChartProps);
@@ -83,6 +87,12 @@ export class LineChart<T = unknown> extends BaseChart {
       // This is a line chart and it requires at least a pair of coordinates.
       // Instead of throwing an error just return the empty canvas.
       return context.canvas;
+    }
+
+    if (this.#mouseHandler) {
+      this.#mouseHandler
+        .setCanvas(context.canvas)
+        .setValueLength(inputValues.length);
     }
 
     const values = this.#getValues(inputValues);
@@ -265,6 +275,29 @@ export class LineChart<T = unknown> extends BaseChart {
   yDatumLines(datumLines: DatumLine[]) {
     this.#props.yDatumLines.push(...datumLines);
     return this;
+  }
+
+  mouseEventListener(
+    eventType: MouseEventType,
+    eventListener: ChartMouseEventListener | null,
+  ) {
+    if (!this.#mouseHandler) {
+      this.#mouseHandler = new CanvasMouseHandler();
+    }
+
+    if (eventListener) {
+      this.#mouseHandler.addEventListener(eventType, eventListener);
+    } else {
+      this.#mouseHandler.removeEventListener(eventType);
+    }
+
+    return this;
+  }
+
+  dispose() {
+    if (this.#mouseHandler) {
+      this.#mouseHandler.dispose();
+    }
   }
 
   private get scales(): ChartScales {

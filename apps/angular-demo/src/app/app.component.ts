@@ -44,7 +44,7 @@ import {
   StripeDataObject,
 } from './data';
 import { CommonModule } from '@angular/common';
-import { LineChart } from 'sparklib';
+import { LineChart, MouseEventType } from 'sparklib';
 
 @Component({
   standalone: true,
@@ -540,22 +540,16 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(40)
       .background('lightyellow')
       .yDomain([-15, 45])
+      .mouseEventListener(
+        MouseEventType.MouseMove,
+        (mouseEvent, chartMouseEvent) => {
+          console.log(
+            `${mouseEvent.timeStamp} ${JSON.stringify(chartMouseEvent)}`,
+          );
+        },
+      )
       .render(record.maxT);
-    mouseOverChart2.addEventListener('mousemove', (event) => {
-      const rect = mouseOverChart2.getBoundingClientRect();
-      const x = Math.floor(event.clientX - rect.left);
-      if (x >= 0 && x < mouseOverChart2.width) {
-        const idx = getIndicesForPixelX(
-          x,
-          record.maxT.length * 2,
-          record.maxT.length,
-        );
-        const value = record.maxT[idx.startIndex];
-        console.log(
-          `${value}: ${x}/${mouseOverChart2.width} [${idx.startIndex}->${idx.endIndex}=${idx.startIndex}] (${event.clientX},${event.clientY})`,
-        );
-      }
-    });
+
     this.#append(mouseOverChart2, 'mouseOverChart2');
   }
 
