@@ -1,4 +1,5 @@
 import * as sparklib from 'react-sparklib';
+import { ChartMouseEvent } from 'sparklib';
 
 const data: [number, number][] = [
   [1, 2],
@@ -132,6 +133,11 @@ const randomObjectsDay2 = randomObjectsInRange(0, 5, 24 * 60, 0.8);
 export function App() {
   const xAccessor = (data: DataObject): number | null => data.xPos;
   const yAccessor = (data: DataObject): number | null => data.yPos;
+  const handleMouseEvent = (event: ChartMouseEvent) =>
+    console.log(
+      `${event.eventType} [${event.startIndex}/${event.endIndex}]: (${event.x},${event.y})`,
+      event,
+    );
 
   return (
     <div className="App">
@@ -176,6 +182,11 @@ export function App() {
         width={randomObjectsDay2.length}
         gradientColors={redColors}
         nGradientColorLevels={2}
+        mouseEventTypes={[
+          sparklib.MouseEventType.Click,
+          sparklib.MouseEventType.MouseOver,
+        ]}
+        onMouseEvent={handleMouseEvent}
       />
     </div>
   );

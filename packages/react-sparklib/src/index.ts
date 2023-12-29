@@ -14,5 +14,6 @@ export {
   LinearGradientBuilder,
   Margins,
   MarginsBuilder,
+  MouseEventType,
   Range,
 } from 'sparklib';
