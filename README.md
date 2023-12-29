@@ -27,7 +27,6 @@ Sparklines are not suited for detailed data analysis requiring full support for 
 ```ts
 const data: number[] = [16, 15.1, 10, 14.2 /* ... */];
 
-// prettier-ignore
 const chart = lineChart()
     .width(data.length)
     .height(40)
@@ -46,7 +45,6 @@ const chart = lineChart()
 ```ts
 const data: number[] = [16, 15.1, 10, 14.2 /* ... */];
 
-// prettier-ignore
 const chart = lineChart()
   .width(data.length)
   .height(40)
@@ -73,7 +71,6 @@ const chart = lineChart()
 const data: number[] = [16, 15.1, 10, 14.2 /* ... */];
 const height = 40;
 
-// prettier-ignore
 const chart = lineChart()
   .width(data.length)
   .height(height)
@@ -116,7 +113,6 @@ const data = [0, 4.5, 0, 0, 0, 0 /* ... */];
 
 const gradient = ['white', 'red'];
 
-// prettier-ignore
 const chart = stripeChart()
         .width(data.length)
         .height(25)
