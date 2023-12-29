@@ -1,6 +1,11 @@
 import { useEffect, useRef } from 'react';
 import * as sparklib from 'sparklib';
 
+/**
+ * Interface representing the properties for the LineChart component.
+ *
+ * @template T - The type of the data for the chart.
+ */
 interface LineChartProps<T = unknown> {
   values: sparklib.LineValueType<T>[];
   xAccessor?: sparklib.ValueAccessor<T>;
@@ -25,104 +30,89 @@ interface LineChartProps<T = unknown> {
   xDatumLines?: sparklib.DatumLine[];
   yDatumLines?: sparklib.DatumLine[];
   properties?: sparklib.LineChartProperties;
-  onMouseMove?: (event: {
-    x: number;
-    y: number;
-    startIndex: number;
-    endIndex: number;
-    mouseEvent: MouseEvent;
-  }) => void;
+
+  /** Optional array of mouse event types to listen for. */
+  mouseEventTypes?: sparklib.MouseEventType[];
+
+  /** Optional callback for mouse events. */
+  onMouseEvent?: (event: sparklib.ChartMouseEvent) => void;
 }
 
+/**
+ * LineChart component renders a canvas-based line chart using the sparklib library.
+ * This component sets up a LineChart instance and attaches necessary event listeners.
+ * It also handles the cleanup by disposing of the LineChart instance to prevent memory leaks.
+ *
+ * @template T - The type of the data for the chart.
+ * @param {LineChartProps<T>} props - The properties of the LineChart component.
+ * @returns A canvas element configured to display the line chart.
+ */
+// prettier-ignore
 export const LineChart = <T = unknown>(props: LineChartProps<T>) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const valueLength = useRef(props.values.length);
 
   useEffect(() => {
-    if (canvasRef.current) {
-      const chart = sparklib.lineChart<T>(props.properties);
-      const currentCanvas = canvasRef.current;
+    const lineChart = sparklib.lineChart<T>(props.properties);
 
-      const setChartProperties = (chart: sparklib.LineChart<T>) => {
-        const inputMappings = getInputToChartMappings(chart);
-
-        Object.entries(inputMappings).forEach(([key, method]) => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const value = (props as any)[key];
-          if (value !== undefined && method) {
-            method.call(chart, value);
-          }
-        });
-      };
-
-      setChartProperties(chart);
-      chart.render(props.values, canvasRef.current);
-
-      const handleMouseMove = (event: MouseEvent) => {
-        if (!currentCanvas) {
-          return;
-        }
-
-        const rect = currentCanvas.getBoundingClientRect();
-
-        let x = Math.round(event.clientX - rect.left);
-        const y = Math.round(rect.bottom - event.clientY);
-
-        x = x < 0 ? 0 : x >= currentCanvas.width ? currentCanvas.width - 1 : x;
-
-        const indices = sparklib.getIndicesForPixelX(
-          x,
-          currentCanvas.width,
-          valueLength.current,
-        );
-
-        indices.endIndex =
-          indices.endIndex < valueLength.current
-            ? indices.endIndex
-            : valueLength.current - 1;
-
-        props.onMouseMove?.({
-          x,
-          y,
-          startIndex: indices.startIndex,
-          endIndex: indices.endIndex,
-          mouseEvent: event,
-        });
-      };
-
-      canvasRef.current.addEventListener('mousemove', handleMouseMove);
-
-      // Cleanup the event listener when the component is unmounted or properties change
-      return () => {
-        if (currentCanvas) {
-          currentCanvas.removeEventListener('mousemove', handleMouseMove);
-        }
-      };
-    }
-  }, [props]);
-
-  const getInputToChartMappings = (
-    chart: sparklib.LineChart<T>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): Record<string, (arg: any) => sparklib.LineChart<T>> => {
-    return {
-      width: chart.width,
-      height: chart.height,
-      dpi: chart.dpi,
-      margins: chart.margins,
-      background: chart.background,
-      strokeStyle: chart.strokeStyle,
-      fillStyle: chart.fillStyle,
-      lineDash: chart.lineDash,
-      lineWidth: chart.lineWidth,
-      xDomain: chart.xDomain,
-      yDomain: chart.yDomain,
-      xDatumLines: chart.xDatumLines,
-      yDatumLines: chart.yDatumLines,
-      xAccessor: chart.xAccessor,
-      yAccessor: chart.yAccessor,
+    const handleMouseEvent = (event: sparklib.ChartMouseEvent) => {
+      props.onMouseEvent?.(event);
     };
-  };
+
+    const setupMouseListener = (stripeChart: sparklib.LineChart<T>) => {
+      if (
+        canvasRef.current &&
+        props.mouseEventTypes &&
+        props.mouseEventTypes.length > 0
+      ) {
+        stripeChart.mouseEventListener(props.mouseEventTypes, handleMouseEvent);
+      }
+    };
+
+    const setChartProperties = (chart: sparklib.LineChart<T>) => {
+      const inputMappings = getInputToChartMappings(chart);
+
+      Object.entries(inputMappings).forEach(([key, method]) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const value = (props as any)[key];
+        if (value !== undefined && method) {
+          method.call(chart, value);
+        }
+      });
+    };
+
+    const getInputToChartMappings = (
+      chart: sparklib.LineChart<T>,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ): Record<string, (arg: any) => sparklib.LineChart<T>> => {
+      return {
+        width: chart.width,
+        height: chart.height,
+        dpi: chart.dpi,
+        margins: chart.margins,
+        background: chart.background,
+        strokeStyle: chart.strokeStyle,
+        fillStyle: chart.fillStyle,
+        lineDash: chart.lineDash,
+        lineWidth: chart.lineWidth,
+        xDomain: chart.xDomain,
+        yDomain: chart.yDomain,
+        xDatumLines: chart.xDatumLines,
+        yDatumLines: chart.yDatumLines,
+        xAccessor: chart.xAccessor,
+        yAccessor: chart.yAccessor,
+      };
+    };
+
+    if (canvasRef.current) {
+      setChartProperties(lineChart);
+      setupMouseListener(lineChart);
+      lineChart.render(props.values, canvasRef.current);
+    }
+
+    return () => {
+      lineChart.dispose();
+    };
+  }, [props]);
 
   return <canvas ref={canvasRef}></canvas>;
 };

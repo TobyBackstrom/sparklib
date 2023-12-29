@@ -148,9 +148,6 @@ export function App() {
         lineDash={[2, 2, 10]}
         strokeStyle={hGradient}
         yDomain={[2, 6]}
-        onMouseMove={(event) => {
-          console.log(event);
-        }}
       />
       <br />
       <hr />
@@ -161,9 +158,11 @@ export function App() {
         background={'lightgray'}
         margins={{ top: 10, bottom: 10, left: 10, right: 10 }}
         strokeStyle={hGradient}
-        onMouseMove={(event) => {
-          console.log(event);
-        }}
+        mouseEventTypes={[
+          sparklib.MouseEventType.Click,
+          sparklib.MouseEventType.MouseOver,
+        ]}
+        onMouseEvent={handleMouseEvent}
       />
       <br />
       <hr />
