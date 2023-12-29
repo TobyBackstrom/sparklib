@@ -2,40 +2,52 @@ import { useEffect, useRef } from 'react';
 import * as sparklib from 'sparklib';
 
 /**
- * Props for StripeChart component.
+ * Interface representing the properties for the StripeChart component.
  *
- * @template T The type of the data for the chart.
- * @prop {sparklib.StripeValueType<T>[]} values - Array of values to be rendered in the chart.
- * @prop {sparklib.ValueAccessor<T>} [valueAccessor] - Optional accessor function to extract values.
- * @prop {number} [width] - Optional width of the chart.
- * @prop {number} [height] - Optional height of the chart.
- * @prop {number} [dpi] - Optional DPI for the chart rendering.
- * @prop {string | sparklib.LinearGradient | sparklib.LinearGradientBuilder} [background] - Optional background styling for the chart.
- * @prop {sparklib.Margins | sparklib.MarginsBuilder} [margins] - Optional margins for the chart.
- * @prop {string[]} [gradientColors] - Optional gradient colors for the chart.
- * @prop {number} [nGradientColorLevels] - Optional number of gradient color levels.
- * @prop {sparklib.Range} [domain] - Optional domain range for the chart.
- * @prop {sparklib.StripeChartProperties} [properties] - Optional properties for the stripe chart.
- * @prop {sparklib.MouseEventType[]} [mouseEventTypes] - Optional array of mouse event types to listen for.
- * @prop {(event: sparklib.ChartMouseEvent) => void} [onMouseEvent] - Optional callback for mouse events.
+ * @template T - The type of the data for the chart.
  */
 export interface StripeChartProps<T = unknown> {
+  /** Array of values to be rendered in the chart. */
   values: sparklib.StripeValueType<T>[];
+
+  /** Optional accessor function to extract values. */
   valueAccessor?: sparklib.ValueAccessor<T>;
+
+  /** Optional width of the chart. */
   width?: number;
+
+  /** Optional height of the chart. */
   height?: number;
+
+  /** Optional DPI for the chart rendering. */
   dpi?: number;
+
+  /** Optional background styling for the chart. */
   background?:
     | string
     | sparklib.LinearGradient
     | sparklib.LinearGradientBuilder
     | undefined;
+
+  /** Optional margins for the chart. */
   margins?: sparklib.Margins | sparklib.MarginsBuilder;
+
+  /** Optional gradient colors for the chart. */
   gradientColors?: string[];
+
+  /** Optional number of gradient color levels. */
   nGradientColorLevels?: number;
+
+  /** Optional domain range for the chart. */
   domain?: sparklib.Range | undefined;
+
+  /** Optional properties for the stripe chart. */
   properties?: sparklib.StripeChartProperties;
+
+  /** Optional array of mouse event types to listen for. */
   mouseEventTypes?: sparklib.MouseEventType[];
+
+  /** Optional callback for mouse events. */
   onMouseEvent?: (event: sparklib.ChartMouseEvent) => void;
 }
 
@@ -46,8 +58,8 @@ export interface StripeChartProps<T = unknown> {
  * It cleans up by disposing of the StripeChart instance when the component unmounts or when
  * certain props change, to prevent memory leaks.
  *
- * @template T The type of the data for the chart.
- * @param {StripeChartProps<T>} props - The properties of the StripeChart component.
+ * @template T - The type of the data for the chart.
+ * @param props - The properties of the StripeChart component.
  * @returns A canvas element configured to display the stripe chart.
  */
 // prettier-ignore
