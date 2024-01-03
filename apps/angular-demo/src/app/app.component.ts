@@ -44,7 +44,15 @@ import {
   StripeDataObject,
 } from './data';
 import { CommonModule } from '@angular/common';
-import { ChartMouseEvent, LineChart, MouseEventType } from 'sparklib';
+import {
+  ChartMouseEvent,
+  LineChart,
+  MouseEventType,
+  axisBottom,
+  axisLeft,
+  axisRight,
+  axisTop,
+} from 'sparklib';
 
 @Component({
   standalone: true,
@@ -188,6 +196,7 @@ export class AppComponent implements AfterViewInit, OnInit {
         this.credits = data.credits;
         this.#addMoreExamples();
         this.#addMoreStripeCharts();
+        this.#addAxis();
       },
       error: (e) => console.error('Error fetching weather records:', e),
     });
@@ -581,6 +590,40 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.#append(scPride1_b, 'monotonic250 bin');
     this.#append(scPride2, 'random250_1');
     this.#append(sc2, 'random250_2');
+  }
+
+  #addAxis() {
+    const a0 = axisTop()
+      .width(250)
+      .height(10)
+      .background('pink')
+      .lineWidth(1)
+      .render([]);
+    this.#append(a0, 'axisTop');
+
+    const a1 = axisBottom()
+      .width(250)
+      .height(10)
+      .background('pink')
+      .lineWidth(1)
+      .render([]);
+    this.#append(a1, 'axisBottom');
+
+    const a2 = axisLeft()
+      .width(10)
+      .height(250)
+      .background('pink')
+      .lineWidth(2)
+      .render([]);
+    this.#append(a2, 'axisLeft');
+
+    const a3 = axisRight()
+      .width(10)
+      .height(250)
+      .background('pink')
+      .lineWidth(2)
+      .render([]);
+    this.#append(a3, 'axisRight');
   }
 
   #append(chart: HTMLCanvasElement, label: string, border = true) {

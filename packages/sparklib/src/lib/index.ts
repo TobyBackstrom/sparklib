@@ -1,3 +1,4 @@
+export * from './axis';
 export { ValueAccessor } from './base-chart';
 export * from './builders';
 export * from './line-chart';

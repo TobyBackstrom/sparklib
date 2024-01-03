@@ -52,9 +52,7 @@ export class LineChart<T = unknown> extends BaseChart {
     };
 
     this.#props = {
-      lineProps: props?.lineProps
-        ? { ...defaultLineProps, ...props.lineProps }
-        : defaultLineProps,
+      lineProps: { ...defaultLineProps, ...props?.lineProps },
 
       fillStyle: props?.fillStyle,
 
