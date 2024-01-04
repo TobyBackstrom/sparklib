@@ -11,13 +11,21 @@ export enum AxisPosition {
 export type AxisProperties = {
   position?: AxisPosition;
   lineWidth?: number;
-  fontSize?: string;
-  fontFamily?: string;
+  font?: string; // 'bold 12px Arial'
+  fontColor?: string;
+  tickLength?: number;
+  tickWidth?: number;
+  tickPadding?: number; // space between text label and tick mark
 };
 
 export type AxisChartProperties = {
   baseChartProps: BaseChartProperties;
   axisProps: AxisProperties;
+};
+
+export type AxisTick = {
+  position: number; // position in pixels along the axis line, 0 being top left.
+  label: string;
 };
 
 type Properties = {
@@ -33,8 +41,11 @@ export class Axis extends BaseChart {
     const defaultAxisProps: Required<AxisProperties> = {
       position: AxisPosition.Bottom,
       lineWidth: 1,
-      fontSize: '10px',
-      fontFamily: 'sans-serif',
+      font: '10px sans-serif',
+      fontColor: 'black',
+      tickLength: 6,
+      tickWidth: 1,
+      tickPadding: 5,
     };
 
     this.#props = {
@@ -44,45 +55,151 @@ export class Axis extends BaseChart {
     };
   }
 
-  render(ticks: number[], canvas?: HTMLCanvasElement): HTMLCanvasElement {
+  render(ticks: AxisTick[], canvas?: HTMLCanvasElement): HTMLCanvasElement {
     const context = super.renderChartBase(canvas);
-    context.font = `${this.#props.axisProps.fontSize} ${
-      this.#props.axisProps.fontFamily
-    }`;
+    context.font = this.#props.axisProps.font;
+
+    const textMetrics = context.measureText('M');
+    const textHeight =
+      textMetrics.actualBoundingBoxAscent +
+      textMetrics.actualBoundingBoxDescent;
 
     const width = this.chartProps.width;
     const height = this.chartProps.height;
-    const isBottom = this.#props.axisProps.position === AxisPosition.Bottom;
-    const isTop = this.#props.axisProps.position === AxisPosition.Top;
-    const isLeft = this.#props.axisProps.position === AxisPosition.Left;
-    const isRight = this.#props.axisProps.position === AxisPosition.Right;
     const lineWidth = this.#props.axisProps.lineWidth;
+    const tickWidth = this.#props.axisProps.tickWidth;
 
-    context.beginPath();
+    // Adjusted positions to account for line width
+    const yTop = lineWidth / 2;
+    const yBottom = height - lineWidth / 2;
+
     context.lineWidth = lineWidth;
+    context.fillStyle = this.#props.axisProps.fontColor;
 
-    if (isTop) {
-      const y = height - lineWidth / 2;
-      context.moveTo(0, y);
-      context.lineTo(width, y);
+    if (this.#props.axisProps.position === AxisPosition.Top) {
+      context.beginPath();
+      context.moveTo(0, yBottom);
+      context.lineTo(width, yBottom);
+
+      ticks.forEach((tick) => {
+        let tickPosition = tick.position;
+        // Adjust for edge cases
+        if (tickPosition === 0) {
+          tickPosition += tickWidth;
+        } else if (tick.position === width) {
+          tickPosition -= tickWidth;
+        }
+
+        context.moveTo(tickPosition, yBottom);
+        context.lineTo(
+          tickPosition,
+          yBottom - this.#props.axisProps.tickLength,
+        );
+
+        if (tick.label) {
+          const labelYPosition =
+            yBottom -
+            this.#props.axisProps.tickLength -
+            this.#props.axisProps.tickPadding; // Adjust the Y position for label
+          context.textAlign = 'center';
+          context.fillText(tick.label, tickPosition, labelYPosition);
+        }
+      });
     }
 
-    if (isBottom) {
-      const y = lineWidth / 2;
-      context.moveTo(0, y);
-      context.lineTo(width, y);
+    if (this.#props.axisProps.position === AxisPosition.Bottom) {
+      context.moveTo(0, yTop);
+      context.lineTo(width, yTop);
+
+      // Draw tick marks above the line
+      ticks.forEach((tick) => {
+        let tickPosition = tick.position;
+        // Adjust for edge cases
+        if (tickPosition === 0) {
+          tickPosition += tickWidth;
+        } else if (tick.position === width) {
+          tickPosition -= tickWidth;
+        }
+
+        context.moveTo(tickPosition, yTop);
+        context.lineTo(tickPosition, yTop + this.#props.axisProps.tickLength);
+
+        if (tick.label) {
+          const labelYPosition =
+            yTop +
+            this.#props.axisProps.tickLength +
+            textHeight +
+            this.#props.axisProps.tickPadding; // Adjust the Y position for label
+          context.textAlign = 'center';
+          context.fillText(tick.label, tickPosition, labelYPosition);
+        }
+      });
     }
 
-    if (isRight) {
-      const x = lineWidth / 2;
-      context.moveTo(x, 0);
-      context.lineTo(x, height);
-    }
-
-    if (isLeft) {
+    if (this.#props.axisProps.position === AxisPosition.Left) {
       const x = width - lineWidth / 2;
+
       context.moveTo(x, 0);
       context.lineTo(x, height);
+
+      ticks.forEach((tick) => {
+        let y = tick.position;
+
+        // Adjust for edge cases
+        if (y === 0) {
+          y += tickWidth;
+        } else if (tick.position === height) {
+          y -= tickWidth;
+        }
+
+        context.moveTo(x, y);
+        context.lineTo(x - lineWidth - this.#props.axisProps.tickLength, y);
+
+        if (tick.label) {
+          const metrics = context.measureText(tick.label);
+
+          const labelXPosition =
+            x -
+            lineWidth -
+            this.#props.axisProps.tickLength -
+            metrics.width -
+            this.#props.axisProps.tickPadding;
+          const labelYPosition = y + textHeight / 2;
+          context.textAlign = 'left';
+          context.fillText(tick.label, labelXPosition, labelYPosition);
+        }
+      });
+    }
+
+    if (this.#props.axisProps.position === AxisPosition.Right) {
+      const x = lineWidth / 2;
+
+      context.moveTo(x, 0);
+      context.lineTo(x, height);
+
+      ticks.forEach((tick) => {
+        let y = tick.position;
+
+        // Adjust for edge cases
+        if (y === 0) {
+          y += tickWidth;
+        } else if (tick.position === height) {
+          y -= tickWidth;
+        }
+
+        context.moveTo(x, y);
+        context.lineTo(x + this.#props.axisProps.tickLength, y);
+
+        if (tick.label) {
+          const labelXPosition =
+            x +
+            this.#props.axisProps.tickLength +
+            this.#props.axisProps.tickPadding;
+          const labelYPosition = y + textHeight / 2 - lineWidth / 2;
+          context.textAlign = 'left';
+          context.fillText(tick.label, labelXPosition, labelYPosition);
+        }
+      });
     }
 
     context.stroke();
@@ -91,18 +208,33 @@ export class Axis extends BaseChart {
     return context.canvas;
   }
 
-  fontSize(fontSize: string) {
-    this.#props.axisProps.fontSize = fontSize;
+  font(font: string) {
+    this.#props.axisProps.font = font;
     return this;
   }
 
-  fontFamily(fontFamily: string) {
-    this.#props.axisProps.fontFamily = fontFamily;
+  fontColor(fontColor: string) {
+    this.#props.axisProps.fontColor = fontColor;
     return this;
   }
 
   lineWidth(lineWidth: number) {
     this.#props.axisProps.lineWidth = lineWidth;
+    return this;
+  }
+
+  tickLength(tickLength: number) {
+    this.#props.axisProps.tickLength = tickLength;
+    return this;
+  }
+
+  tickWidth(tickWidth: number) {
+    this.#props.axisProps.tickWidth = tickWidth;
+    return this;
+  }
+
+  tickPadding(tickPadding: number) {
+    this.#props.axisProps.tickPadding = tickPadding;
     return this;
   }
 }
