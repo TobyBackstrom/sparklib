@@ -617,10 +617,11 @@ export class AppComponent implements AfterViewInit, OnInit {
       .lineWidth(2)
       .font('11px arial')
       .fontColor('blue')
+      .ticks(ticks0)
       .tickPadding(4)
       .tickLength(15)
       .tickWidth(1)
-      .render(ticks0);
+      .render();
     this.#append(a0, 'axisTop');
 
     const a1 = axisBottom()
@@ -629,7 +630,8 @@ export class AppComponent implements AfterViewInit, OnInit {
       // .background('pink')
       .lineWidth(3)
       .font('16px arial')
-      .render(ticks1);
+      .ticks(ticks1)
+      .render();
     this.#append(a1, 'axisBottom');
 
     const a2 = axisLeft()
@@ -639,15 +641,17 @@ export class AppComponent implements AfterViewInit, OnInit {
       .lineWidth(3)
       .font('bold 11px arial')
       .fontColor('blue')
-      .render(ticks0);
+      .ticks(ticks0)
+      .render();
     this.#append(a2, 'axisLeft');
 
     const a3 = axisRight()
       .width(40)
       .height(250)
       // .background('pink')
-      .lineWidth(2)
-      .render(ticks1);
+      .lineWidth(1)
+      .ticks(ticks1)
+      .render();
     this.#append(a3, 'axisRight');
   }
 

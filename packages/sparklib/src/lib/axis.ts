@@ -13,6 +13,7 @@ export type AxisProperties = {
   lineWidth?: number;
   font?: string; // 'bold 12px Arial'
   fontColor?: string;
+  ticks?: AxisTick[];
   tickLength?: number;
   tickWidth?: number;
   tickPadding?: number; // space between text label and tick mark
@@ -43,6 +44,7 @@ export class Axis extends BaseChart {
       lineWidth: 1,
       font: '10px sans-serif',
       fontColor: 'black',
+      ticks: [],
       tickLength: 6,
       tickWidth: 1,
       tickPadding: 5,
@@ -53,159 +55,6 @@ export class Axis extends BaseChart {
         ? { ...defaultAxisProps, ...props.axisProps }
         : defaultAxisProps,
     };
-  }
-
-  render(ticks: AxisTick[], canvas?: HTMLCanvasElement): HTMLCanvasElement {
-    const context = super.renderChartBase(canvas);
-    context.font = this.#props.axisProps.font;
-
-    const textMetrics = context.measureText('M');
-    const textHeight =
-      textMetrics.actualBoundingBoxAscent +
-      textMetrics.actualBoundingBoxDescent;
-
-    const width = this.chartProps.width;
-    const height = this.chartProps.height;
-    const lineWidth = this.#props.axisProps.lineWidth;
-    const tickWidth = this.#props.axisProps.tickWidth;
-
-    // Adjusted positions to account for line width
-    const yTop = lineWidth / 2;
-    const yBottom = height - lineWidth / 2;
-
-    context.lineWidth = lineWidth;
-    context.fillStyle = this.#props.axisProps.fontColor;
-
-    if (this.#props.axisProps.position === AxisPosition.Top) {
-      context.beginPath();
-      context.moveTo(0, yBottom);
-      context.lineTo(width, yBottom);
-
-      ticks.forEach((tick) => {
-        let tickPosition = tick.position;
-        // Adjust for edge cases
-        if (tickPosition === 0) {
-          tickPosition += tickWidth;
-        } else if (tick.position === width) {
-          tickPosition -= tickWidth;
-        }
-
-        context.moveTo(tickPosition, yBottom);
-        context.lineTo(
-          tickPosition,
-          yBottom - this.#props.axisProps.tickLength,
-        );
-
-        if (tick.label) {
-          const labelYPosition =
-            yBottom -
-            this.#props.axisProps.tickLength -
-            this.#props.axisProps.tickPadding; // Adjust the Y position for label
-          context.textAlign = 'center';
-          context.fillText(tick.label, tickPosition, labelYPosition);
-        }
-      });
-    }
-
-    if (this.#props.axisProps.position === AxisPosition.Bottom) {
-      context.moveTo(0, yTop);
-      context.lineTo(width, yTop);
-
-      // Draw tick marks above the line
-      ticks.forEach((tick) => {
-        let tickPosition = tick.position;
-        // Adjust for edge cases
-        if (tickPosition === 0) {
-          tickPosition += tickWidth;
-        } else if (tick.position === width) {
-          tickPosition -= tickWidth;
-        }
-
-        context.moveTo(tickPosition, yTop);
-        context.lineTo(tickPosition, yTop + this.#props.axisProps.tickLength);
-
-        if (tick.label) {
-          const labelYPosition =
-            yTop +
-            this.#props.axisProps.tickLength +
-            textHeight +
-            this.#props.axisProps.tickPadding; // Adjust the Y position for label
-          context.textAlign = 'center';
-          context.fillText(tick.label, tickPosition, labelYPosition);
-        }
-      });
-    }
-
-    if (this.#props.axisProps.position === AxisPosition.Left) {
-      const x = width - lineWidth / 2;
-
-      context.moveTo(x, 0);
-      context.lineTo(x, height);
-
-      ticks.forEach((tick) => {
-        let y = tick.position;
-
-        // Adjust for edge cases
-        if (y === 0) {
-          y += tickWidth;
-        } else if (tick.position === height) {
-          y -= tickWidth;
-        }
-
-        context.moveTo(x, y);
-        context.lineTo(x - lineWidth - this.#props.axisProps.tickLength, y);
-
-        if (tick.label) {
-          const metrics = context.measureText(tick.label);
-
-          const labelXPosition =
-            x -
-            lineWidth -
-            this.#props.axisProps.tickLength -
-            metrics.width -
-            this.#props.axisProps.tickPadding;
-          const labelYPosition = y + textHeight / 2;
-          context.textAlign = 'left';
-          context.fillText(tick.label, labelXPosition, labelYPosition);
-        }
-      });
-    }
-
-    if (this.#props.axisProps.position === AxisPosition.Right) {
-      const x = lineWidth / 2;
-
-      context.moveTo(x, 0);
-      context.lineTo(x, height);
-
-      ticks.forEach((tick) => {
-        let y = tick.position;
-
-        // Adjust for edge cases
-        if (y === 0) {
-          y += tickWidth;
-        } else if (tick.position === height) {
-          y -= tickWidth;
-        }
-
-        context.moveTo(x, y);
-        context.lineTo(x + this.#props.axisProps.tickLength, y);
-
-        if (tick.label) {
-          const labelXPosition =
-            x +
-            this.#props.axisProps.tickLength +
-            this.#props.axisProps.tickPadding;
-          const labelYPosition = y + textHeight / 2 - lineWidth / 2;
-          context.textAlign = 'left';
-          context.fillText(tick.label, labelXPosition, labelYPosition);
-        }
-      });
-    }
-
-    context.stroke();
-    context.closePath();
-
-    return context.canvas;
   }
 
   font(font: string) {
@@ -223,6 +72,11 @@ export class Axis extends BaseChart {
     return this;
   }
 
+  ticks(ticks: AxisTick[]) {
+    this.#props.axisProps.ticks = ticks;
+    return this;
+  }
+
   tickLength(tickLength: number) {
     this.#props.axisProps.tickLength = tickLength;
     return this;
@@ -236,6 +90,158 @@ export class Axis extends BaseChart {
   tickPadding(tickPadding: number) {
     this.#props.axisProps.tickPadding = tickPadding;
     return this;
+  }
+
+  render(canvas?: HTMLCanvasElement): HTMLCanvasElement {
+    const context = super.renderChartBase(canvas);
+
+    context.font = this.#props.axisProps.font;
+    context.lineWidth = this.#props.axisProps.lineWidth;
+    context.fillStyle = this.#props.axisProps.fontColor;
+
+    const textHeight = this.#getTextHeight(context);
+    const isHorizontal =
+      this.#props.axisProps.position === AxisPosition.Top ||
+      this.#props.axisProps.position === AxisPosition.Bottom;
+
+    if (isHorizontal) {
+      Axis.#renderHorizontalAxis(
+        this.#props.axisProps.position,
+        context,
+        this.chartProps.width,
+        this.chartProps.height,
+        this.#props.axisProps.lineWidth,
+        this.#props.axisProps.position === AxisPosition.Bottom ? textHeight : 0,
+        this.#props.axisProps.ticks ?? [],
+        this.#props.axisProps.tickWidth,
+        this.#props.axisProps.tickLength,
+        this.#props.axisProps.tickPadding,
+      );
+    } else {
+      Axis.#renderVerticalAxis(
+        this.#props.axisProps.position,
+        context,
+        this.chartProps.width,
+        this.chartProps.height,
+        this.#props.axisProps.lineWidth,
+        textHeight,
+        this.#props.axisProps.ticks ?? [],
+        this.#props.axisProps.tickWidth,
+        this.#props.axisProps.tickLength,
+        this.#props.axisProps.tickPadding,
+      );
+    }
+
+    return context.canvas;
+  }
+
+  #getTextHeight(context: CanvasRenderingContext2D): number {
+    const metrics = context.measureText('M');
+    return metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+  }
+
+  static #renderHorizontalAxis(
+    axisPosition: AxisPosition,
+    context: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    lineWidth: number,
+    textHeight: number,
+    ticks: AxisTick[],
+    tickWidth: number,
+    tickLength: number,
+    tickPadding: number,
+  ) {
+    const isTopAxis = axisPosition === AxisPosition.Top;
+    const axisLineY = isTopAxis ? height - lineWidth / 2 : lineWidth / 2;
+
+    context.beginPath();
+    context.moveTo(0, axisLineY);
+    context.lineTo(width, axisLineY);
+
+    ticks.forEach((tick) => {
+      let tickPosition = tick.position;
+
+      // Adjust for edge cases
+      if (tickPosition === 0) {
+        tickPosition += tickWidth;
+      } else if (tick.position === width) {
+        tickPosition -= tickWidth;
+      }
+
+      context.moveTo(tickPosition, axisLineY);
+      context.lineTo(
+        tickPosition,
+        axisLineY + (isTopAxis ? -1 : 1) * tickLength,
+      );
+
+      if (tick.label) {
+        const labelYPosition =
+          axisLineY +
+          (isTopAxis
+            ? -(tickLength + tickPadding)
+            : tickLength + (textHeight ?? 0) + tickPadding);
+        context.textAlign = 'center';
+        context.fillText(tick.label, tickPosition, labelYPosition);
+      }
+    });
+
+    context.stroke();
+    context.closePath();
+  }
+
+  static #renderVerticalAxis(
+    axisPosition: AxisPosition,
+    context: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    lineWidth: number,
+    textHeight: number,
+    ticks: AxisTick[],
+    tickWidth: number,
+    tickLength: number,
+    tickPadding: number,
+  ) {
+    const isLeftAxis = axisPosition === AxisPosition.Left;
+    const x = isLeftAxis ? width - lineWidth / 2 : lineWidth / 2;
+
+    context.beginPath();
+    context.moveTo(x, 0);
+    context.lineTo(x, height);
+
+    ticks.forEach((tick) => {
+      let y = tick.position;
+
+      // Adjust for edge cases
+      if (y === 0) {
+        y += tickWidth;
+      } else if (tick.position === height) {
+        y -= tickWidth;
+      }
+
+      context.moveTo(x, y);
+      context.lineTo(x + (isLeftAxis ? -1 : 1) * tickLength, y);
+
+      if (tick.label) {
+        const labelXPosition =
+          x +
+          (isLeftAxis
+            ? -(
+                lineWidth +
+                tickLength +
+                context.measureText(tick.label).width +
+                tickPadding
+              )
+            : tickLength + tickPadding);
+        const labelYPosition =
+          y + textHeight / 2 - (isLeftAxis ? lineWidth / 2 : 0);
+        context.textAlign = 'left';
+        context.fillText(tick.label, labelXPosition, labelYPosition);
+      }
+    });
+
+    context.stroke();
+    context.closePath();
   }
 }
 
