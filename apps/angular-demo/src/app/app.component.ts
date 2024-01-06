@@ -51,10 +51,7 @@ import {
   ChartMouseEvent,
   LineChart,
   MouseEventType,
-  axisBottom,
-  axisLeft,
-  axisRight,
-  axisTop,
+  axis,
 } from 'sparklib';
 
 @Component({
@@ -614,7 +611,8 @@ export class AppComponent implements AfterViewInit, OnInit {
   ];
 
   #addAxis() {
-    const a0 = axisTop()
+    const a0 = axis()
+      .position(AxisPosition.Top)
       .width(250)
       .height(30)
       // .background('pink')
@@ -628,7 +626,8 @@ export class AppComponent implements AfterViewInit, OnInit {
       .render();
     this.#append(a0, 'axisTop');
 
-    const a1 = axisBottom()
+    const a1 = axis()
+      .position(AxisPosition.Bottom)
       .width(250)
       .height(30)
       // .background('pink')
@@ -638,7 +637,8 @@ export class AppComponent implements AfterViewInit, OnInit {
       .render();
     this.#append(a1, 'axisBottom');
 
-    const a2 = axisLeft()
+    const a2 = axis()
+      .position(AxisPosition.Left)
       .width(40)
       .height(250)
       // .background('pink')
@@ -649,7 +649,8 @@ export class AppComponent implements AfterViewInit, OnInit {
       .render();
     this.#append(a2, 'axisLeft');
 
-    const a3 = axisRight()
+    const a3 = axis()
+      .position(AxisPosition.Right)
       .width(40)
       .height(250)
       // .background('pink')

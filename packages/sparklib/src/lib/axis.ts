@@ -252,39 +252,3 @@ export class Axis extends BaseChart {
 
 // factory functions for the fluid API
 export const axis = (props?: Partial<AxisChartProperties>) => new Axis(props);
-
-export const axisLeft = (props?: Partial<AxisChartProperties>) =>
-  new Axis({
-    ...props,
-    axisProps: {
-      ...props?.axisProps,
-      position: AxisPosition.Left,
-    },
-  });
-
-export const axisRight = (props?: Partial<AxisChartProperties>) =>
-  new Axis({
-    ...props,
-    axisProps: {
-      ...props?.axisProps,
-      position: AxisPosition.Right,
-    },
-  });
-
-export const axisTop = (props?: Partial<AxisChartProperties>) =>
-  new Axis({
-    ...props,
-    axisProps: {
-      ...props?.axisProps,
-      position: AxisPosition.Top,
-    },
-  });
-
-export const axisBottom = (props?: Partial<AxisChartProperties>) =>
-  new Axis({
-    ...props,
-    axisProps: {
-      ...props?.axisProps,
-      position: AxisPosition.Bottom,
-    },
-  });
