@@ -72,6 +72,11 @@ export class Axis extends BaseChart {
     return this;
   }
 
+  position(position: AxisPosition) {
+    this.#props.axisProps.position = position;
+    return this;
+  }
+
   ticks(ticks: AxisTick[]) {
     this.#props.axisProps.ticks = ticks;
     return this;

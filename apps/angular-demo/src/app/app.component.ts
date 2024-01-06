@@ -22,6 +22,7 @@ import {
   stripeChart,
   LineChartComponent,
   StripeChartComponent,
+  AxisComponent,
 } from 'ngx-sparklib';
 
 import {
@@ -45,6 +46,7 @@ import {
 } from './data';
 import { CommonModule } from '@angular/common';
 import {
+  AxisPosition,
   AxisTick,
   ChartMouseEvent,
   LineChart,
@@ -59,6 +61,7 @@ import {
   standalone: true,
   imports: [
     CommonModule,
+    AxisComponent,
     LineChartComponent,
     StripeChartComponent,
     RouterModule,
@@ -189,6 +192,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   yAccessor = (data: DataObject): number | null => data.yPos;
 
   MouseEventType = MouseEventType; // Expose the enum to the template
+  AxisPosition = AxisPosition; // Expose the enum to the template
 
   ngOnInit(): void {
     this.weatherService.getWeatherRecords().subscribe({
@@ -593,23 +597,23 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.#append(sc2, 'random250_2');
   }
 
+  ticks0: AxisTick[] = [
+    { label: '0', position: 0 },
+    { label: '', position: 62 },
+    { label: '125', position: 125 },
+    { label: '', position: 188 },
+    { label: '250', position: 250 },
+  ];
+
+  ticks1: AxisTick[] = [
+    { label: '25', position: 25 },
+    { label: '', position: 75 },
+    { label: '125', position: 125 },
+    { label: '', position: 175 },
+    { label: '225', position: 225 },
+  ];
+
   #addAxis() {
-    const ticks0: AxisTick[] = [
-      { label: '0', position: 0 },
-      { label: '', position: 62 },
-      { label: '125', position: 125 },
-      { label: '', position: 188 },
-      { label: '250', position: 250 },
-    ];
-
-    const ticks1: AxisTick[] = [
-      { label: '25', position: 25 },
-      { label: '', position: 75 },
-      { label: '125', position: 125 },
-      { label: '', position: 175 },
-      { label: '225', position: 225 },
-    ];
-
     const a0 = axisTop()
       .width(250)
       .height(30)
@@ -617,7 +621,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .lineWidth(2)
       .font('11px arial')
       .fontColor('blue')
-      .ticks(ticks0)
+      .ticks(this.ticks0)
       .tickPadding(4)
       .tickLength(15)
       .tickWidth(1)
@@ -630,7 +634,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       // .background('pink')
       .lineWidth(3)
       .font('16px arial')
-      .ticks(ticks1)
+      .ticks(this.ticks1)
       .render();
     this.#append(a1, 'axisBottom');
 
@@ -641,7 +645,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .lineWidth(3)
       .font('bold 11px arial')
       .fontColor('blue')
-      .ticks(ticks0)
+      .ticks(this.ticks0)
       .render();
     this.#append(a2, 'axisLeft');
 
@@ -650,7 +654,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(250)
       // .background('pink')
       .lineWidth(1)
-      .ticks(ticks1)
+      .ticks(this.ticks1)
       .render();
     this.#append(a3, 'axisRight');
   }

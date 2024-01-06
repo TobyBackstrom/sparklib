@@ -221,3 +221,62 @@ Object arrays
 
 <hr />
 <div #container class="container"></div>
+<hr />
+
+<div>AxisPosition.Top</div>
+<br />
+<sparklib-axis
+  [position]="AxisPosition.Top"
+  [width]="250"
+  [height]="30"
+  [lineWidth]="2"
+  [font]="'11px arial'"
+  [fontColor]="'blue'"
+  [ticks]="ticks0"
+  [tickPadding]="4"
+  [tickLength]="15"
+  [tickWidth]="1"
+></sparklib-axis>
+<br />
+<br />
+<br />
+<div>AxisPosition.Bottom</div>
+<br />
+<sparklib-axis
+  [position]="AxisPosition.Bottom"
+  [width]="250"
+  [height]="30"
+  [lineWidth]="3"
+  [font]="'16px arial'"
+  [ticks]="ticks1"
+></sparklib-axis>
+
+<br />
+<br />
+<br />
+<div>AxisPosition.Left</div>
+<br />
+<sparklib-axis
+  [position]="AxisPosition.Left"
+  [width]="40"
+  [height]="250"
+  [lineWidth]="3"
+  [font]="'bold 11px arial'"
+  [fontColor]="'blue'"
+  [ticks]="ticks0"
+></sparklib-axis>
+
+<br />
+<br />
+<br />
+<div>AxisPosition.Right</div>
+<br />
+<sparklib-axis
+  [position]="AxisPosition.Right"
+  [width]="40"
+  [height]="250"
+  [lineWidth]="1"
+  [ticks]="ticks1"
+></sparklib-axis>
+
+<hr />
