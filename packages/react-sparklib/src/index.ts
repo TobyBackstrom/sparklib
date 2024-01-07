@@ -2,6 +2,17 @@ export { Axis } from './lib/axis';
 export { LineChart } from './lib/line-chart';
 export { StripeChart } from './lib/stripe-chart';
 
+export type {
+  AxisChartProperties,
+  AxisProperties,
+  AxisTick,
+  DatumLine,
+  LinearGradient,
+  Margins,
+  Range,
+  ValueAccessor,
+} from 'sparklib';
+
 export {
   datumLine,
   getIndicesForPixelX,
@@ -10,17 +21,10 @@ export {
   linearGradient,
   margins,
   stripeChart,
-  AxisTick,
-  AxisChartProperties,
-  AxisProperties,
   AxisPosition,
   ChartMouseEvent,
-  DatumLine,
   DatumLineBuilder,
-  LinearGradient,
   LinearGradientBuilder,
-  Margins,
   MarginsBuilder,
   MouseEventType,
-  Range,
 } from 'sparklib';
