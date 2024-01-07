@@ -1,6 +1,7 @@
-export * from './lib/axis';
-export * from './lib/line-chart';
-export * from './lib/stripe-chart';
+export { Axis } from './lib/axis';
+export { LineChart } from './lib/line-chart';
+export { StripeChart } from './lib/stripe-chart';
+
 export {
   datumLine,
   getIndicesForPixelX,
@@ -9,6 +10,11 @@ export {
   linearGradient,
   margins,
   stripeChart,
+  AxisTick,
+  AxisChartProperties,
+  AxisProperties,
+  AxisPosition,
+  ChartMouseEvent,
   DatumLine,
   DatumLineBuilder,
   LinearGradient,

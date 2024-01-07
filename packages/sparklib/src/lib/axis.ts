@@ -8,6 +8,11 @@ export enum AxisPosition {
   Bottom = 'Bottom',
 }
 
+export type AxisTick = {
+  position: number; // position in pixels along the axis line, 0 being top left.
+  label: string;
+};
+
 export type AxisProperties = {
   position?: AxisPosition;
   lineWidth?: number;
@@ -22,11 +27,6 @@ export type AxisProperties = {
 export type AxisChartProperties = {
   baseChartProps: BaseChartProperties;
   axisProps: AxisProperties;
-};
-
-export type AxisTick = {
-  position: number; // position in pixels along the axis line, 0 being top left.
-  label: string;
 };
 
 type Properties = {

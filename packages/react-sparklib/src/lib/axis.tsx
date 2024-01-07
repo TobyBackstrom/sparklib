@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import * as sparklib from 'sparklib';
 
-export interface AxisProps {
+interface AxisProps {
   position?: sparklib.AxisPosition;
   width?: number;
   height?: number;
@@ -66,5 +66,3 @@ export const Axis = (props: AxisProps) => {
 
   return <canvas ref={canvasRef}></canvas>;
 };
-
-export default Axis;

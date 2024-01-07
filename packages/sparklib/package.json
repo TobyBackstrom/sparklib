@@ -12,5 +12,6 @@
   "bugs": {
     "url": "https://github.com/TobyBackstrom/sparklib/issues"
   },
-  "homepage": "https://github.com/TobyBackstrom/sparklib#readme"
+  "homepage": "https://github.com/TobyBackstrom/sparklib#readme",
+  "sideEffects": false
 }

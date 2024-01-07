@@ -1,6 +1,6 @@
 import { render, cleanup } from '@testing-library/react';
+import { StripeChart } from './stripe-chart';
 import '@testing-library/jest-dom';
-import StripeChart from './stripe-chart';
 
 afterEach(() => {
   cleanup();

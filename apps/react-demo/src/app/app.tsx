@@ -1,5 +1,4 @@
 import * as sparklib from 'react-sparklib';
-import { ChartMouseEvent } from 'sparklib';
 
 const data: [number, number][] = [
   [1, 2],
@@ -130,10 +129,26 @@ const hGradient = sparklib
 
 const randomObjectsDay2 = randomObjectsInRange(0, 5, 24 * 60, 0.8);
 
+const ticks0: sparklib.AxisTick[] = [
+  { label: '0', position: 0 },
+  { label: '', position: 62 },
+  { label: '125', position: 125 },
+  { label: '', position: 188 },
+  { label: '250', position: 250 },
+];
+
+const ticks1: sparklib.AxisTick[] = [
+  { label: '25', position: 25 },
+  { label: '', position: 75 },
+  { label: '125', position: 125 },
+  { label: '', position: 175 },
+  { label: '225', position: 225 },
+];
+
 export function App() {
   const xAccessor = (data: DataObject): number | null => data.xPos;
   const yAccessor = (data: DataObject): number | null => data.yPos;
-  const handleMouseEvent = (event: ChartMouseEvent) =>
+  const handleMouseEvent = (event: sparklib.ChartMouseEvent) =>
     console.log(
       `${event.eventType} [${event.startIndex}/${event.endIndex}]: (${event.x},${event.y})`,
       event,
@@ -187,6 +202,62 @@ export function App() {
         ]}
         onMouseEvent={handleMouseEvent}
       />
+      <br />
+      <hr />
+      <div>AxisPosition.Top</div>
+      <br />
+      <sparklib.Axis
+        position={sparklib.AxisPosition.Top}
+        width={250}
+        height={30}
+        lineWidth={2}
+        font="11px arial"
+        fontColor="blue"
+        ticks={ticks0}
+        tickPadding={4}
+        tickLength={15}
+        tickWidth={1}
+      ></sparklib.Axis>
+      <br />
+      <br />
+      <br />
+      <div>AxisPosition.Bottom</div>
+      <br />
+      <sparklib.Axis
+        position={sparklib.AxisPosition.Bottom}
+        width={250}
+        height={30}
+        lineWidth={3}
+        font="16px arial"
+        ticks={ticks1}
+      ></sparklib.Axis>
+      <br />
+      <br />
+      <br />
+      <div>AxisPosition.Left</div>
+      <br />
+      <sparklib.Axis
+        position={sparklib.AxisPosition.Left}
+        width={40}
+        height={250}
+        lineWidth={3}
+        font="bold 11px arial"
+        fontColor="blue"
+        ticks={ticks0}
+      ></sparklib.Axis>
+      <br />
+      <br />
+      <br />
+      <div>AxisPosition.Left</div>
+      <br />
+      <sparklib.Axis
+        position={sparklib.AxisPosition.Right}
+        width={40}
+        height={250}
+        ticks={ticks1}
+      ></sparklib.Axis>
+      <br />
+      <hr />
     </div>
   );
 }

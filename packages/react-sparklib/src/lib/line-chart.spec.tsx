@@ -1,11 +1,6 @@
 import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import LineChart from './line-chart';
-
-interface TestObject {
-  x: number;
-  y: number;
-}
+import { LineChart } from './line-chart';
 
 afterEach(() => {
   cleanup();

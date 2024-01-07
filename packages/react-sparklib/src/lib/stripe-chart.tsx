@@ -6,7 +6,7 @@ import * as sparklib from 'sparklib';
  *
  * @template T - The type of the data for the chart.
  */
-export interface StripeChartProps<T = unknown> {
+interface StripeChartProps<T = unknown> {
   /** Array of values to be rendered in the chart. */
   values: sparklib.StripeValueType<T>[];
 
@@ -125,5 +125,3 @@ export const StripeChart = <T = unknown>(props: StripeChartProps<T>) => {
 
   return <canvas ref={canvasRef}></canvas>;
 };
-
-export default StripeChart;

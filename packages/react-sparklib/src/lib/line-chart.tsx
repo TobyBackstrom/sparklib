@@ -116,5 +116,3 @@ export const LineChart = <T = unknown>(props: LineChartProps<T>) => {
 
   return <canvas ref={canvasRef}></canvas>;
 };
-
-export default LineChart;
