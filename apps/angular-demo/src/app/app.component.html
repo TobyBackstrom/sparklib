@@ -280,3 +280,26 @@ Object arrays
 ></sparklib-axis>
 
 <hr />
+<div class="simple-axis-chart-container" *ngIf="weatherRecords[0]">
+  <sparklib-axis
+    class="plain-axis-chart"
+    [position]="AxisPosition.Top"
+    [width]="weatherRecords[0].maxT.length"
+    [height]="20"
+    [background]="'lightyellow'"
+    [font]="'10px arial'"
+    [ticks]="axisChartTopTicks"
+    [tickPadding]="4"
+    [tickWidth]="1"
+  ></sparklib-axis>
+  <sparklib-line-chart
+    class="plain-axis-chart"
+    [width]="weatherRecords[0].maxT.length"
+    [height]="lineChartHeight"
+    [yDomain]="[0, 45]"
+    [background]="'lightyellow'"
+    [fillStyle]="'lightgreen'"
+    [values]="weatherRecords[0].maxT"
+  ></sparklib-line-chart>
+</div>
+<hr />

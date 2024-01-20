@@ -610,6 +610,14 @@ export class AppComponent implements AfterViewInit, OnInit {
     { label: '225', position: 225 },
   ];
 
+  axisChartTopTicks: AxisTick[] = [
+    { label: '', position: 0 },
+    { label: 'March', position: 60 },
+    { label: 'June', position: 125 },
+    { label: 'September', position: 186 },
+    { label: '', position: 243 },
+  ];
+
   #addAxis() {
     const a0 = axis()
       .position(AxisPosition.Top)
