@@ -21,7 +21,8 @@ import {
   selector: 'sparklib-axis',
   standalone: true,
   imports: [CommonModule],
-  template: '<canvas #canvasRef></canvas>',
+  template:
+    '<canvas #canvasRef [style.height.px]="height" style="display: block; margin: 0; padding: 0; border: none;"></canvas>',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AxisComponent implements AfterViewInit {

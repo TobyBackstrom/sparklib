@@ -27,7 +27,8 @@ import {
   selector: 'sparklib-stripe-chart',
   standalone: true,
   imports: [CommonModule],
-  template: '<canvas #canvasRef></canvas>',
+  template:
+    '<canvas #canvasRef [style.height.px]="height" style="display: block; margin: 0; padding: 0; border: none;"></canvas>',
   styles: [],
 })
 export class StripeChartComponent<T = unknown>
