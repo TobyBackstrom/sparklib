@@ -2,7 +2,7 @@
 
 A lightweight library featuring components for easy creation of sparkline charts.
 
-The library offers support for line charts, area charts, and stripe charts and basic axes.
+The library offers support for line charts, area charts, stripe charts and basic axes.
 
 More documentation is available in the **sparklib** [repository](https://github.com/TobyBackstrom/sparklib).
 
