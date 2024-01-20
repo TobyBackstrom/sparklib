@@ -2,7 +2,7 @@
 
 A lightweight library featuring a fluid API for easy creation of sparkline charts. Separate packages with components for [Angular](https://www.npmjs.com/package/ngx-sparklib) and [React](https://www.npmjs.com/package/react-sparklib) are available.
 
-The library currently offers support for line charts, area charts, and stripe charts.
+The library currently offers support for line charts, area charts, stripe charts and basic axes.
 
 > **Note**: Documentation is very much work in progress and currently lacking in detail.
 
@@ -141,6 +141,22 @@ const chart = stripeChart()
 </details>
 
 ![Barcode stripe chart](docs/images/sl-sc-code39-barcode.png)
+
+## Axes
+
+Sometimes you need to provide some context for the sparkline data in form of an axis, for example, in a table header. Sparklib allows you to create axes as individual canvas elements.
+
+So if you create a horizontal top x axis like this:
+
+![Horizontal top x axis](docs/images/sl-ax-horizontal-top-axis.png)
+
+And have a sparkline chart like this:
+
+![Horizontal top x axis](docs/images/sl-ax-horizontal-top-chart.png)
+
+You can then combine them with HTML and CSS markup like this:
+
+![Horizontal top x axis](docs/images/sl-ax-horizontal-top-axis-and-chart.png)
 
 ## Further Reading
 
