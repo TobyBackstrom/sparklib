@@ -1,6 +1,6 @@
 {
   "name": "react-sparklib",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Small Charts, Big Impact",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sparklib": "^1.0.42"
+    "sparklib": "^1.0.43"
   },
   "sideEffects": false
 }
