@@ -6,6 +6,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
+
+import html2canvas from 'html2canvas';
+
 import {
   WeatherRecord,
   WeatherRecordSet,
@@ -666,6 +669,14 @@ export class AppComponent implements AfterViewInit, OnInit {
       .ticks(this.ticks1)
       .render();
     this.#append(a3, 'axisRight');
+
+    const a4 = axis()
+      .position(AxisPosition.Bottom)
+      .lineWidth(3)
+      .font('italic 12px arial')
+      .ticks(this.ticks1)
+      .render();
+    this.#append(a4, 'styled axis bottom');
   }
 
   #append(chart: HTMLCanvasElement, label: string, border = true) {
@@ -704,6 +715,21 @@ export class AppComponent implements AfterViewInit, OnInit {
       .slice(0, -1);
 
     return Array.from(encodedString).map(Number);
+  }
+
+  capture(): void {
+    const element = document.getElementById('capture');
+
+    if (element) {
+      html2canvas(element).then((canvas) => {
+        console.log('capture');
+        const image = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = 'screenshot.png';
+        link.href = image;
+        link.click();
+      });
+    }
   }
 
   _barcodeData = [
