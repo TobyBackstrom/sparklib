@@ -158,6 +158,12 @@ You can then combine them with HTML and CSS markup like this:
 
 ![Horizontal top x axis](docs/images/sl-ax-horizontal-top-axis-and-chart.png)
 
+Axes are available for all sides of a chart (top, left, right and bottom). The example below uses a simple \<table> element to position the axes and line chart.
+
+![Chart with top, left, right and bottom axes](docs/images/sl-ax-axes-and-chart.png)
+
+Each axis can be individually styled (line width, color, font, labels and tick positions).
+
 ## Further Reading
 
 The concept of miniaturized data visualization has historical antecedents, but the term 'sparkline' and its modern interpretation were formalized by Edward Tufte in his 2006 book, [Beautiful Evidence](https://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0001OR).
