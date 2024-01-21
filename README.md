@@ -142,11 +142,13 @@ const chart = stripeChart()
 
 ![Barcode stripe chart](docs/images/sl-sc-code39-barcode.png)
 
-## Axes
+## Axes in Sparklib
 
-Sometimes you need to provide some context for the sparkline data in form of an axis, for example, in a table header. Sparklib allows you to create axes as individual canvas elements.
+To enhance the readability and context of sparkline data, Sparklib offers the functionality to create axes as individual canvas elements. These axes can be placed on any side of a chart - top, left, right, or bottom. Additionally, each axis is fully customizable, allowing adjustments in line width, color, font, labels, and tick positions.
 
-So if you create a horizontal top x axis like this:
+The axes support is very basic and if you need more advanced capabilities, please look to another charting library.
+
+If you create a horizontal top x axis like this:
 
 ![Horizontal top x axis](docs/images/sl-ax-horizontal-top-axis.png)
 
@@ -158,11 +160,9 @@ You can then combine them with HTML and CSS markup like this:
 
 ![Horizontal top x axis](docs/images/sl-ax-horizontal-top-axis-and-chart.png)
 
-Axes are available for all sides of a chart (top, left, right and bottom). The example below uses a simple \<table> element to position the axes and line chart.
+Axes are available for all sides of a chart (top, left, right and bottom). The example below uses a HTML \<table> to position the axes and line chart relative to each other.
 
 ![Chart with top, left, right and bottom axes](docs/images/sl-ax-axes-and-chart.png)
-
-Each axis can be individually styled (line width, color, font, labels and tick positions).
 
 ## Further Reading
 
