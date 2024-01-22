@@ -142,7 +142,7 @@ const chart = stripeChart()
 
 ![Barcode stripe chart](docs/images/sl-sc-code39-barcode.png)
 
-## Axes in Sparklib
+## Axes
 
 To enhance the readability and context of sparkline data, Sparklib offers the functionality to create axes as individual canvas elements. These axes can be placed on any side of a chart - top, left, right, or bottom. Additionally, each axis is fully customizable, allowing adjustments in line width, color, font, labels, and tick positions.
 
