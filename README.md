@@ -164,6 +164,10 @@ Axes are available for all sides of a chart (top, left, right and bottom). The e
 
 ![Chart with top, left, right and bottom axes](docs/images/sl-ax-axes-and-chart.png)
 
+There are several styling options available if you need fancy axes:
+
+![Horizontal bottom x axis with gradient](docs/images/sl-ax-horizontal-bottom-fancy-chart.png)
+
 ## Further Reading
 
 The concept of miniaturized data visualization has historical antecedents, but the term 'sparkline' and its modern interpretation were formalized by Edward Tufte in his 2006 book, [Beautiful Evidence](https://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0001OR).
