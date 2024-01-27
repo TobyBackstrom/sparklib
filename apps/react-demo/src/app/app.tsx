@@ -257,6 +257,21 @@ export function App() {
         ticks={ticks1}
       ></sparklib.Axis>
       <br />
+      <br />
+      <br />
+      <br />
+      <div>Fancy AxisPosition.Bottom</div>
+      <br />
+      <sparklib.Axis
+        position={sparklib.AxisPosition.Bottom}
+        width={250}
+        height={30}
+        strokeStyle={hGradient}
+        lineWidth={3}
+        font="16px arial"
+        fontColor="green"
+        ticks={ticks1}
+      ></sparklib.Axis>
       <hr />
     </div>
   );

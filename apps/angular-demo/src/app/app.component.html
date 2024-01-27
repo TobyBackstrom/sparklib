@@ -279,6 +279,37 @@ Object arrays
   [ticks]="ticks1"
 ></sparklib-axis>
 
+<br />
+<br />
+<br />
+<div>Fancy AxisPosition.Bottom</div>
+<br />
+<sparklib-axis
+  [position]="AxisPosition.Bottom"
+  [width]="250"
+  [height]="30"
+  [strokeStyle]="'blue'"
+  [lineWidth]="3"
+  [font]="'16px arial'"
+  [ticks]="ticks1"
+></sparklib-axis>
+
+<br />
+<br />
+<br />
+<div>Very Fancy AxisPosition.Bottom</div>
+<br />
+<sparklib-axis
+  [position]="AxisPosition.Bottom"
+  [width]="250"
+  [height]="30"
+  [strokeStyle]="hGradient"
+  [lineWidth]="3"
+  [font]="'16px arial'"
+  [fontColor]="'green'"
+  [ticks]="ticks1"
+></sparklib-axis>
+
 <hr />
 <div class="simple-axis-chart-container" *ngIf="weatherRecords[0]">
   <sparklib-axis

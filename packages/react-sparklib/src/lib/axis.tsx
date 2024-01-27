@@ -10,6 +10,12 @@ interface AxisProps {
     | string
     | sparklib.LinearGradient
     | sparklib.LinearGradientBuilder;
+  strokeStyle?:
+    | string
+    | sparklib.LinearGradient
+    | sparklib.LinearGradientBuilder;
+  fillStyle?: string | sparklib.LinearGradient | sparklib.LinearGradientBuilder;
+  lineDash?: number[];
   lineWidth?: number;
   font?: string; // 'bold 12px Arial'
   fontColor?: string;
@@ -50,6 +56,8 @@ export const Axis = (props: AxisProps) => {
         position: axis.position,
         font: axis.font,
         fontColor: axis.fontColor,
+        strokeStyle: axis.strokeStyle,
+        lineDash: axis.lineDash,
         lineWidth: axis.lineWidth,
         ticks: axis.ticks,
         tickLength: axis.tickLength,

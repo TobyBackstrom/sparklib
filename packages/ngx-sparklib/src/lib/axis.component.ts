@@ -33,6 +33,9 @@ export class AxisComponent implements AfterViewInit {
   @Input() position?: AxisPosition;
   @Input() font?: string;
   @Input() fontColor?: string;
+  @Input() strokeStyle?: string | LinearGradient | LinearGradientBuilder;
+  @Input() fillStyle?: string | LinearGradient | LinearGradientBuilder;
+  @Input() lineDash?: number[];
   @Input() lineWidth?: number;
   @Input() ticks?: AxisTick[];
   @Input() tickLength?: number;
@@ -74,6 +77,8 @@ export class AxisComponent implements AfterViewInit {
       position: chart.position,
       font: chart.font,
       fontColor: chart.fontColor,
+      strokeStyle: chart.strokeStyle,
+      lineDash: chart.lineDash,
       lineWidth: chart.lineWidth,
       ticks: chart.ticks,
       tickLength: chart.tickLength,

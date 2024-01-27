@@ -677,6 +677,36 @@ export class AppComponent implements AfterViewInit, OnInit {
       .ticks(this.ticks1)
       .render();
     this.#append(a4, 'styled axis bottom');
+
+    const a5 = axis()
+      .position(AxisPosition.Top)
+      .width(250)
+      .height(30)
+      .lineWidth(2)
+      .strokeStyle('blue')
+      .font('11px arial')
+      .fontColor('blue')
+      .ticks(this.ticks0)
+      .tickPadding(4)
+      .tickLength(10)
+      .tickWidth(1)
+      .render();
+    this.#append(a5, 'fancy axisTop');
+
+    const a6 = axis()
+      .position(AxisPosition.Top)
+      .width(250)
+      .height(30)
+      .lineWidth(2)
+      .strokeStyle(this.hGradient)
+      .font('11px arial')
+      .fontColor('green')
+      .ticks(this.ticks0)
+      .tickPadding(4)
+      .tickLength(10)
+      .tickWidth(1)
+      .render();
+    this.#append(a6, 'cute axisTop');
   }
 
   #append(chart: HTMLCanvasElement, label: string, border = true) {

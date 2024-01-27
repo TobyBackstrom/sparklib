@@ -1,5 +1,6 @@
 import { BaseChart } from './base-chart';
-import { BaseChartProperties } from './models';
+import { LinearGradientBuilder } from './builders';
+import { BaseChartProperties, LineProperties, LinearGradient } from './models';
 
 export enum AxisPosition {
   Left = 'Left',
@@ -15,7 +16,6 @@ export type AxisTick = {
 
 export type AxisProperties = {
   position?: AxisPosition;
-  lineWidth?: number;
   font?: string; // 'bold 12px Arial'
   fontColor?: string;
   ticks?: AxisTick[];
@@ -26,12 +26,14 @@ export type AxisProperties = {
 
 export type AxisChartProperties = {
   baseChartProps: BaseChartProperties;
+  lineProps: LineProperties;
   axisProps: AxisProperties;
 };
 
 type Properties = {
+  lineProps: Required<LineProperties>;
   axisProps: Required<AxisProperties>;
-} & Omit<AxisChartProperties, 'baseChartProps'>;
+};
 
 export class Axis extends BaseChart {
   #props: Properties;
@@ -39,9 +41,15 @@ export class Axis extends BaseChart {
   constructor(props?: Partial<AxisChartProperties>) {
     super(props?.baseChartProps);
 
+    const lineProps: Required<LineProperties> = {
+      strokeStyle: 'black',
+      lineDash: [],
+      lineWidth: 1,
+      ...props?.lineProps,
+    };
+
     const defaultAxisProps: Required<AxisProperties> = {
       position: AxisPosition.Bottom,
-      lineWidth: 1,
       font: '10px sans-serif',
       fontColor: 'black',
       ticks: [],
@@ -51,6 +59,7 @@ export class Axis extends BaseChart {
     };
 
     this.#props = {
+      lineProps,
       axisProps: props?.axisProps
         ? { ...defaultAxisProps, ...props.axisProps }
         : defaultAxisProps,
@@ -67,8 +76,18 @@ export class Axis extends BaseChart {
     return this;
   }
 
+  strokeStyle(strokeStyle: string | LinearGradient | LinearGradientBuilder) {
+    this.#props.lineProps.strokeStyle = strokeStyle;
+    return this;
+  }
+
+  lineDash(lineDash: number[]) {
+    this.#props.lineProps.lineDash = lineDash;
+    return this;
+  }
+
   lineWidth(lineWidth: number) {
-    this.#props.axisProps.lineWidth = lineWidth;
+    this.#props.lineProps.lineWidth = lineWidth;
     return this;
   }
 
@@ -101,7 +120,7 @@ export class Axis extends BaseChart {
     const context = super.renderChartBase(canvas);
 
     context.font = this.#props.axisProps.font;
-    context.lineWidth = this.#props.axisProps.lineWidth;
+    context.lineWidth = this.#props.lineProps.lineWidth;
     context.fillStyle = this.#props.axisProps.fontColor;
 
     const textHeight = this.#getTextHeight(context);
@@ -110,12 +129,12 @@ export class Axis extends BaseChart {
       this.#props.axisProps.position === AxisPosition.Bottom;
 
     if (isHorizontal) {
-      Axis.#renderHorizontalAxis(
+      this.#renderHorizontalAxis(
         this.#props.axisProps.position,
         context,
         this.chartProps.width,
         this.chartProps.height,
-        this.#props.axisProps.lineWidth,
+        this.#props.lineProps,
         this.#props.axisProps.position === AxisPosition.Bottom ? textHeight : 0,
         this.#props.axisProps.ticks ?? [],
         this.#props.axisProps.tickWidth,
@@ -123,12 +142,12 @@ export class Axis extends BaseChart {
         this.#props.axisProps.tickPadding,
       );
     } else {
-      Axis.#renderVerticalAxis(
+      this.#renderVerticalAxis(
         this.#props.axisProps.position,
         context,
         this.chartProps.width,
         this.chartProps.height,
-        this.#props.axisProps.lineWidth,
+        this.#props.lineProps,
         textHeight,
         this.#props.axisProps.ticks ?? [],
         this.#props.axisProps.tickWidth,
@@ -145,12 +164,12 @@ export class Axis extends BaseChart {
     return metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
   }
 
-  static #renderHorizontalAxis(
+  #renderHorizontalAxis(
     axisPosition: AxisPosition,
     context: CanvasRenderingContext2D,
     width: number,
     height: number,
-    lineWidth: number,
+    lineProperties: Required<LineProperties>,
     textHeight: number,
     ticks: AxisTick[],
     tickWidth: number,
@@ -158,9 +177,18 @@ export class Axis extends BaseChart {
     tickPadding: number,
   ) {
     const isTopAxis = axisPosition === AxisPosition.Top;
-    const axisLineY = isTopAxis ? height - lineWidth / 2 : lineWidth / 2;
+    const axisLineY = isTopAxis
+      ? height - lineProperties.lineWidth / 2
+      : lineProperties.lineWidth / 2;
 
     context.beginPath();
+
+    context.strokeStyle = this.getFillStyle(
+      lineProperties.strokeStyle,
+      context,
+    );
+    context.setLineDash(lineProperties.lineDash);
+
     context.moveTo(0, axisLineY);
     context.lineTo(width, axisLineY);
 
@@ -195,12 +223,12 @@ export class Axis extends BaseChart {
     context.closePath();
   }
 
-  static #renderVerticalAxis(
+  #renderVerticalAxis(
     axisPosition: AxisPosition,
     context: CanvasRenderingContext2D,
     width: number,
     height: number,
-    lineWidth: number,
+    lineProperties: Required<LineProperties>,
     textHeight: number,
     ticks: AxisTick[],
     tickWidth: number,
@@ -208,9 +236,18 @@ export class Axis extends BaseChart {
     tickPadding: number,
   ) {
     const isLeftAxis = axisPosition === AxisPosition.Left;
-    const x = isLeftAxis ? width - lineWidth / 2 : lineWidth / 2;
+    const x = isLeftAxis
+      ? width - lineProperties.lineWidth / 2
+      : lineProperties.lineWidth / 2;
 
     context.beginPath();
+
+    context.strokeStyle = this.getFillStyle(
+      lineProperties.strokeStyle,
+      context,
+    );
+    context.setLineDash(lineProperties.lineDash);
+
     context.moveTo(x, 0);
     context.lineTo(x, height);
 
@@ -232,14 +269,14 @@ export class Axis extends BaseChart {
           x +
           (isLeftAxis
             ? -(
-                lineWidth +
+                lineProperties.lineWidth +
                 tickLength +
                 context.measureText(tick.label).width +
                 tickPadding
               )
             : tickLength + tickPadding);
         const labelYPosition =
-          y + textHeight / 2 - (isLeftAxis ? lineWidth / 2 : 0);
+          y + textHeight / 2 - (isLeftAxis ? lineProperties.lineWidth / 2 : 0);
         context.textAlign = 'left';
         context.fillText(tick.label, labelXPosition, labelYPosition);
       }
