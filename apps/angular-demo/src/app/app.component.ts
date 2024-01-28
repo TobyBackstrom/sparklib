@@ -622,6 +622,24 @@ export class AppComponent implements AfterViewInit, OnInit {
   ];
 
   #addAxis() {
+    const ticks: AxisTick[] = [
+      { label: '', position: 0 },
+      { label: 'March', position: 62 },
+      { label: 'June', position: 127 },
+      { label: 'September', position: 187 },
+      { label: '', position: 250 },
+    ];
+
+    const a = axis()
+      .position(AxisPosition.Top)
+      .width(250)
+      .height(30)
+      .font('10px arial')
+      .ticks(ticks)
+      .render();
+
+    this.#append(a, 'first axisTop');
+
     const a0 = axis()
       .position(AxisPosition.Top)
       .width(250)

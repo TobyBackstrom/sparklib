@@ -148,7 +148,30 @@ To enhance the readability and context of sparkline data, Sparklib offers the fu
 
 The axes support is very basic and if you need more advanced capabilities, please look to another charting library.
 
-If you create a horizontal top x axis like this:
+<details>
+<summary>If you create a horizontal top x axis like this:</summary>
+
+```ts
+    const ticks: AxisTick[] = [
+      { label: '', position: 0 },
+      { label: 'March', position: 62 },
+      { label: 'June', position: 127 },
+      { label: 'September', position: 187 },
+      { label: '', position: 250 },
+    ];
+
+    const a = axis()
+      .position(AxisPosition.Top)
+      .width(250)
+      .height(30)
+      .font('10px arial')
+      .ticks(ticks)
+      .render();
+```
+
+</details>
+
+<br />
 
 ![Horizontal top x axis](docs/images/sl-ax-horizontal-top-axis.png)
 
@@ -173,3 +196,7 @@ There are several styling options available if you need fancy axes:
 The concept of miniaturized data visualization has historical antecedents, but the term 'sparkline' and its modern interpretation were formalized by Edward Tufte in his 2006 book, [Beautiful Evidence](https://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0001OR).
 
 Wikipedia also has an entry for [sparklines](https://en.wikipedia.org/wiki/Sparkline).
+
+```
+
+```
