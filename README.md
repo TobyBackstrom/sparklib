@@ -171,8 +171,6 @@ The axes support is very basic and if you need more advanced capabilities, pleas
 
 </details>
 
-<br />
-
 ![Horizontal top x axis](docs/images/sl-ax-horizontal-top-axis.png)
 
 And have a sparkline chart like this:
