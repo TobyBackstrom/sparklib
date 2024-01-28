@@ -160,7 +160,7 @@ The axes support is very basic and if you need more advanced capabilities, pleas
       { label: '', position: 250 },
     ];
 
-    const a = axis()
+    const xAxis = axis()
       .position(AxisPosition.Top)
       .width(250)
       .height(30)
