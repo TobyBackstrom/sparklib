@@ -129,12 +129,13 @@ export class Axis extends BaseChart {
       this.#props.axisProps.position === AxisPosition.Bottom;
 
     if (isHorizontal) {
-      this.#renderHorizontalAxis(
+      Axis.#renderHorizontalAxis(
         this.#props.axisProps.position,
         context,
         this.chartProps.width,
         this.chartProps.height,
         this.#props.lineProps,
+        this.getFillStyle(this.#props.lineProps.strokeStyle, context),
         this.#props.axisProps.position === AxisPosition.Bottom ? textHeight : 0,
         this.#props.axisProps.ticks ?? [],
         this.#props.axisProps.tickWidth,
@@ -142,12 +143,13 @@ export class Axis extends BaseChart {
         this.#props.axisProps.tickPadding,
       );
     } else {
-      this.#renderVerticalAxis(
+      Axis.#renderVerticalAxis(
         this.#props.axisProps.position,
         context,
         this.chartProps.width,
         this.chartProps.height,
         this.#props.lineProps,
+        this.getFillStyle(this.#props.lineProps.strokeStyle, context),
         textHeight,
         this.#props.axisProps.ticks ?? [],
         this.#props.axisProps.tickWidth,
@@ -164,12 +166,13 @@ export class Axis extends BaseChart {
     return metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
   }
 
-  #renderHorizontalAxis(
+  static #renderHorizontalAxis(
     axisPosition: AxisPosition,
     context: CanvasRenderingContext2D,
     width: number,
     height: number,
     lineProperties: Required<LineProperties>,
+    strokeStyle: string | CanvasGradient,
     textHeight: number,
     ticks: AxisTick[],
     tickWidth: number,
@@ -183,10 +186,7 @@ export class Axis extends BaseChart {
 
     context.beginPath();
 
-    context.strokeStyle = this.getFillStyle(
-      lineProperties.strokeStyle,
-      context,
-    );
+    context.strokeStyle = strokeStyle;
     context.setLineDash(lineProperties.lineDash);
 
     context.moveTo(0, axisLineY);
@@ -223,12 +223,13 @@ export class Axis extends BaseChart {
     context.closePath();
   }
 
-  #renderVerticalAxis(
+  static #renderVerticalAxis(
     axisPosition: AxisPosition,
     context: CanvasRenderingContext2D,
     width: number,
     height: number,
     lineProperties: Required<LineProperties>,
+    strokeStyle: string | CanvasGradient,
     textHeight: number,
     ticks: AxisTick[],
     tickWidth: number,
@@ -242,10 +243,7 @@ export class Axis extends BaseChart {
 
     context.beginPath();
 
-    context.strokeStyle = this.getFillStyle(
-      lineProperties.strokeStyle,
-      context,
-    );
+    context.strokeStyle = strokeStyle;
     context.setLineDash(lineProperties.lineDash);
 
     context.moveTo(x, 0);
