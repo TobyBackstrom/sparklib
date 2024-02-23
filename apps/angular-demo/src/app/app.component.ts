@@ -605,7 +605,15 @@ export class AppComponent implements AfterViewInit, OnInit {
     { label: '250', position: 250 },
   ];
 
-  ticks1: AxisTick[] = [
+  verticalTicks: AxisTick[] = [
+    { label: '25', position: 225 },
+    { label: '', position: 75 },
+    { label: '125', position: 125 },
+    { label: '', position: 175 },
+    { label: '225', position: 25 },
+  ];
+
+  horizontalTicks: AxisTick[] = [
     { label: '25', position: 25 },
     { label: '', position: 75 },
     { label: '125', position: 125 },
@@ -662,7 +670,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       // .background('pink')
       .lineWidth(3)
       .font('16px arial')
-      .ticks(this.ticks1)
+      .ticks(this.horizontalTicks)
       .render();
     this.#append(a1, 'axisBottom');
 
@@ -684,7 +692,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(250)
       // .background('pink')
       .lineWidth(1)
-      .ticks(this.ticks1)
+      .ticks(this.horizontalTicks)
       .render();
     this.#append(a3, 'axisRight');
 
@@ -692,7 +700,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .position(AxisPosition.Bottom)
       .lineWidth(3)
       .font('italic 12px arial')
-      .ticks(this.ticks1)
+      .ticks(this.horizontalTicks)
       .render();
     this.#append(a4, 'styled axis bottom');
 
