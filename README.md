@@ -185,7 +185,7 @@ Axes are available for all sides of a chart (top, left, right and bottom). The e
 
 ![Chart with top, left, right and bottom axes](docs/images/sl-ax-axes-and-chart.png)
 
-There are several styling options available if you need fancy axes:
+There are several styling options available if you need more fancy axes:
 
 ![Horizontal bottom x axis with gradient](docs/images/sl-ax-horizontal-bottom-fancy-chart.png)
 
