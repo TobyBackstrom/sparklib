@@ -1,6 +1,6 @@
 {
   "name": "ngx-sparklib",
-  "version": "17.0.0",
+  "version": "17.0.1",
   "description": "Small Charts, Big Impact",
   "repository": {
     "type": "git",
@@ -12,10 +12,15 @@
     "url": "https://github.com/TobyBackstrom/sparklib/issues"
   },
   "homepage": "https://github.com/TobyBackstrom/sparklib#readme",
-  "dependencies": {
+  "peerDependencies": {
+    "@angular/common": "^17.0.0",
+    "@angular/core": "^17.0.0"
+  },
+  "devDependencies": {
     "@angular/common": "^17.0.0",
     "@angular/core": "^17.0.0",
     "sparklib": "^1.0.44"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "typings": "index.d.ts"
 }
