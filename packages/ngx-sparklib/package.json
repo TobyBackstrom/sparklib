@@ -14,12 +14,12 @@
   "homepage": "https://github.com/TobyBackstrom/sparklib#readme",
   "peerDependencies": {
     "@angular/common": "^17.0.0",
-    "@angular/core": "^17.0.0"
+    "@angular/core": "^17.0.0",
+    "sparklib": "^1.0.44"
   },
   "devDependencies": {
     "@angular/common": "^17.0.0",
-    "@angular/core": "^17.0.0",
-    "sparklib": "^1.0.44"
+    "@angular/core": "^17.0.0"
   },
   "sideEffects": false,
   "typings": "index.d.ts"
