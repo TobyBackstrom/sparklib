@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AxisComponent } from './axis.component';
+import { StripeChartComponent } from '../lib/stripe-chart.component';
 
 describe('StripeChartComponent', () => {
-  let component: AxisComponent;
-  let fixture: ComponentFixture<AxisComponent>;
+  let component: StripeChartComponent;
+  let fixture: ComponentFixture<StripeChartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AxisComponent],
+      imports: [StripeChartComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AxisComponent);
+    fixture = TestBed.createComponent(StripeChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

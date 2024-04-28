@@ -1,6 +1,6 @@
 import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { LineChart } from './line-chart';
+import { LineChart } from '../lib/line-chart';
 
 afterEach(() => {
   cleanup();

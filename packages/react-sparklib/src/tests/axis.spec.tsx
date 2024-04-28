@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { Axis } from './axis';
+import { Axis } from '../lib/axis';
 
 describe('Axis', () => {
   it('should render successfully', () => {
