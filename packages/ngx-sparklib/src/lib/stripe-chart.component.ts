@@ -16,6 +16,7 @@ import {
   Margins,
   MarginsBuilder,
   MouseEventType,
+  Range,
   StripeChart,
   StripeChartProperties,
   StripeValueType,
@@ -44,8 +45,11 @@ export class StripeChartComponent<T = unknown>
   @Input() width?: number;
   @Input() height?: number;
   @Input() dpi?: number;
-  @Input() background?: string | LinearGradient | LinearGradientBuilder;
   @Input() margins?: Partial<Margins> | MarginsBuilder;
+  @Input() background?: string | LinearGradient | LinearGradientBuilder;
+  @Input() gradientColors?: string[];
+  @Input() nGradientColorLevels?: number;
+  @Input() domain?: Range | undefined;
   @Input() properties?: StripeChartProperties;
 
   @Input() mouseEventTypes?: MouseEventType[];
@@ -105,6 +109,9 @@ export class StripeChartComponent<T = unknown>
       dpi: chart.dpi,
       margins: chart.margins,
       background: chart.background,
+      gradientColors: chart.gradientColors,
+      nGradientColorLevels: chart.nGradientColorLevels,
+      domain: chart.domain,
       valueAccessor: chart.valueAccessor,
     };
   }
