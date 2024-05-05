@@ -1,6 +1,6 @@
 # sparklib - Small Charts, Big Impact
 
-A lightweight library featuring a fluid API for easy creation of sparkline charts. Separate packages with components for [Angular](https://www.npmjs.com/package/ngx-sparklib) and [React](https://www.npmjs.com/package/react-sparklib) are available.
+A lightweight library featuring a fluid, type-safe, API for easy creation of sparkline charts. Separate packages with components for [Angular](https://www.npmjs.com/package/ngx-sparklib) and [React](https://www.npmjs.com/package/react-sparklib) are available.
 
 The library currently offers support for line charts, area charts, stripe charts and basic axes.
 
