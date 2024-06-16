@@ -87,11 +87,7 @@ export class StripeChartComponent<T = unknown>
   }
 
   #setupMouseListener(chart: StripeChart<T>) {
-    if (
-      this.mouseEvent.observed &&
-      this.mouseEventTypes &&
-      this.mouseEventTypes.length > 0
-    ) {
+    if (this.mouseEvent.observed && this.mouseEventTypes?.length) {
       chart.mouseEventListener(
         this.mouseEventTypes,
         this.onMouseEvent.bind(this),
