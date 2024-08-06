@@ -25,16 +25,17 @@ export class StripeChart<T = unknown> extends BaseChart {
   #valueAccessor: ValueAccessor<T> = undefined;
   #mouseHandler?: CanvasMouseHandler;
 
+  // The default color scale is a gradient of grays.
   defaultColorScale: string[] = [
-    '#ffffff',
-    '#f0f0f0',
-    '#d9d9d9',
-    '#bdbdbd',
-    '#969696',
-    '#737373',
-    '#525252',
-    '#252525',
-    '#000000',
+    '#ffffff', // White
+    '#f0f0f0', // Very Light Gray
+    '#d9d9d9', // Light Gray
+    '#bdbdbd', // Medium Light Gray
+    '#969696', // Medium Gray
+    '#737373', // Medium Dark Gray
+    '#525252', // Dark Gray
+    '#252525', // Very Dark Gray
+    '#000000', // Black
   ];
 
   constructor(props?: Partial<StripeChartProperties>) {
