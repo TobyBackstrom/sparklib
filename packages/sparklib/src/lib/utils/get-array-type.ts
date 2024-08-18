@@ -7,13 +7,13 @@ export enum ArrayType {
   /** An unknown type. */
   Unknown = 'Unknown',
 
-  /** A single-dimensional array of numbers. */
+  /** A one-dimensional array of numbers. */
   SingleValue = 'SingleValue',
 
   /** A two-dimensional array of number pairs. */
   TupleValue = 'TupleValue',
 
-  /** A two-dimensional array of number pairs. */
+  /** A one-dimensional array of objects. */
   ObjectValue = 'ObjectValue',
 }
 
@@ -21,7 +21,7 @@ export enum ArrayType {
  * Identifies the type of array passed in the `values` parameter.
  *
  * The `values` parameter can contain either a single-dimensional array of numbers, a two-dimensional array of number pairs, or an array of objects.
- * If the array is single-dimensional, the function will return `ArrayType.SingleValue`.
+ * If the array is one-dimensional, the function will return `ArrayType.SingleValue`.
  * If the array is two-dimensional and all its elements are pairs of numbers, the function will return `ArrayType.TupleValue`.
  * If the array is one-dimensional and all its elements are objects, the function will return `ArrayType.ObjectValue`.
  * If the `values` array is empty, or if it contains any elements that are not numbers or pairs of numbers, the function will throw an error.
@@ -63,7 +63,7 @@ export function getArrayType<T>(values: LineValueType<T>[]): ArrayType {
       if (
         typeof firstNonNullValue[0] === 'number' &&
         (typeof firstNonNullValue[1] === 'number' ||
-          typeof firstNonNullValue[1] === null)
+          firstNonNullValue[1] === null)
       ) {
         // TODO maybe: there is no check for non-pair elements in pairs array, which would be a fairly expensive operation
         return ArrayType.TupleValue;
