@@ -6,3 +6,5 @@ export type LineValueType<T = unknown> =
   | T;
 
 export type StripeValueType<T = unknown> = number | T;
+
+export type BarValueType<T = unknown> = number | T;
