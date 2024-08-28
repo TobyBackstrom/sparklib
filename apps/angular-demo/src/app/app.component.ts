@@ -16,6 +16,7 @@ import {
 } from './weather.service';
 
 import {
+  barChart,
   datumLine,
   getIndicesForPixelX,
   lineChart,
@@ -208,6 +209,13 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
+    const barChart0 = barChart()
+      .width(250)
+      .height(100)
+      .background('green')
+      .render([]);
+    this.#append(barChart0, 'barChart0', true);
+
     this.lineChart0 = lineChart()
       .width(150)
       .height(250)
