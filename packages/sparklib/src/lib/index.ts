@@ -1,4 +1,5 @@
 export * from './axis';
+export * from './bar-chart';
 export * from './builders';
 export * from './line-chart';
 export * from './models';

@@ -2,6 +2,7 @@ export * from './lib/axis.component';
 export * from './lib/line-chart.component';
 export * from './lib/stripe-chart.component';
 export {
+  barChart,
   datumLine,
   getIndicesForPixelX,
   lineChart,
