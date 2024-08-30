@@ -42,3 +42,4 @@ Thumbs.db
 migrations.json
 
 .nx/cache
+.nx/workspace-data
