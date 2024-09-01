@@ -86,7 +86,7 @@ export class LineChart<T = unknown> extends BaseChart {
     }
 
     const values = this.#getValues(inputValues);
-    this.#setScales(values);
+    this.#scales = this.#getScales(values);
 
     const xDatumLinesWithZIndex: DatumLine[] = [];
     const yDatumLinesWithZIndex: DatumLine[] = [];
@@ -370,14 +370,14 @@ export class LineChart<T = unknown> extends BaseChart {
       ]);
   }
 
-  #setScales(values: BasicLineValueType[]) {
+  #getScales(values: BasicLineValueType[]): ChartScales {
     const xDomain = this.#getXDomain(values, this.#arrayType);
     const yDomain = this.#getYDomain(values, this.#arrayType);
 
     const xScale = this.#xScale(xDomain);
     const yScale = this.#yScale(yDomain);
 
-    this.#scales = {
+    return {
       xDomain,
       yDomain,
       xScale,
