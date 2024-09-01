@@ -25,8 +25,6 @@ type Properties = {
 } & Omit<LineChartProperties, 'baseChartProps'>;
 
 type ChartScales = {
-  arrayType: ArrayType;
-
   xDomain: Range;
   yDomain: Range;
 
@@ -123,7 +121,11 @@ export class LineChart<T = unknown> extends BaseChart {
       }
     });
 
-    const scaledCoordinates = this.#scaleCoordinates(values, this.scales);
+    const scaledCoordinates = this.#scaleCoordinates(
+      values,
+      this.#arrayType,
+      this.scales,
+    );
 
     if (this.#props.fillStyle) {
       this.#drawArea(
@@ -376,7 +378,6 @@ export class LineChart<T = unknown> extends BaseChart {
     const yScale = this.#yScale(yDomain);
 
     this.#scales = {
-      arrayType: this.#arrayType,
       xDomain,
       yDomain,
       xScale,
@@ -386,15 +387,16 @@ export class LineChart<T = unknown> extends BaseChart {
 
   #scaleCoordinates(
     values: BasicLineValueType[],
+    arrayType: ArrayType,
     scales: ChartScales,
   ): Coordinate[] {
     return values.map((value, index) => {
       const x =
-        scales.arrayType === ArrayType.SingleValue
+        arrayType === ArrayType.SingleValue
           ? index
           : (value as [number, number])[0];
       const y =
-        scales.arrayType === ArrayType.SingleValue
+        arrayType === ArrayType.SingleValue
           ? (value as number)
           : (value as [number, number])[1];
       return [scales.xScale(x as number), scales.yScale(y)];
