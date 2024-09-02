@@ -212,9 +212,18 @@ export class AppComponent implements AfterViewInit, OnInit {
     const barChart0 = barChart()
       .width(250)
       .height(100)
-      .background('green')
-      .render([]);
+      .background('lightyellow')
+      .render([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
     this.#append(barChart0, 'barChart0', true);
+
+    const barChart1 = barChart()
+      .width(250)
+      .height(100)
+      .background('lightyellow')
+      .render([
+        1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 9, -8, 7, -6, 5, -4, 3, -2, 1,
+      ]);
+    this.#append(barChart1, 'barChart1', true);
 
     this.lineChart0 = lineChart()
       .width(150)
