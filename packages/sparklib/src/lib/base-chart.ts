@@ -1,6 +1,13 @@
-import { LinearGradientBuilder, MarginsBuilder } from './builders';
+import * as d3Shape from 'd3-shape';
 import * as dom from './dom';
-import { BaseChartProperties, LinearGradient, Margins } from './models';
+import { LinearGradientBuilder, MarginsBuilder } from './builders';
+import {
+  BaseChartProperties,
+  Coordinate,
+  LinearGradient,
+  LineProperties,
+  Margins,
+} from './models';
 
 const DEFAULT_MARGINS: Margins = {
   bottom: 0,
@@ -120,5 +127,32 @@ export abstract class BaseChart {
     }
 
     return context;
+  }
+
+  protected drawLine(
+    coordinates: Coordinate[],
+    lineProperties: Required<LineProperties>,
+    context: CanvasRenderingContext2D,
+  ) {
+    const strokeStyle = this.getFillStyle(lineProperties.strokeStyle, context);
+    const lineWidthOffset = lineProperties.lineWidth === 1 ? 0.5 : 0; // offset to avoid anti-aliasing widening the line
+
+    context.beginPath();
+
+    d3Shape
+      .line<Coordinate>()
+      .defined((coordinate) => coordinate[1] != null)
+      .x((coordinate) => coordinate[0] + lineWidthOffset)
+      .y((coordinate) => coordinate[1] + lineWidthOffset)
+      .context(context)(coordinates);
+
+    context.strokeStyle = strokeStyle;
+    context.lineCap = 'round';
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    context.setLineDash(lineProperties.lineDash!);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    context.lineWidth = lineProperties.lineWidth!;
+    context.stroke();
+    context.closePath();
   }
 }

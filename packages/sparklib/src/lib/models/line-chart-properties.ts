@@ -1,11 +1,6 @@
-import {
-  BaseChartProperties,
-  DatumLine,
-  LinearGradient,
-  LineProperties,
-  Range,
-} from '.';
+import { LinearGradient, LineProperties, Range } from '.';
 import { LinearGradientBuilder } from '../builders';
+import { DatumBaseChartProperties } from './datum-base-chart-properties';
 
 /**
  * Represents the properties specific to a Line Chart.
@@ -26,32 +21,17 @@ import { LinearGradientBuilder } from '../builders';
  * };
  * ```
  */
-export type LineChartProperties = {
+export type LineChartProperties = DatumBaseChartProperties & {
   /**
    * The properties used for rendering the lines in the chart.
    */
   lineProps: LineProperties;
 
   /**
-   * The basic chart properties including dimensions, background, and margins.
-   */
-  baseChartProps: BaseChartProperties;
-
-  /**
    * The style used to fill the area beneath the line in the chart.
    * Can be a color, gradient, or a builder for a gradient.
    */
   fillStyle?: string | LinearGradient | LinearGradientBuilder;
-
-  /**
-   * Reference lines drawn along the X axis.
-   */
-  xDatumLines: DatumLine[];
-
-  /**
-   * Reference lines drawn along the Y axis.
-   */
-  yDatumLines: DatumLine[];
 
   /**
    * The domain of data along the X axis. Defines the range of data values

@@ -2,8 +2,8 @@ import * as d3Array from 'd3-array';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
-import { BaseChart, ValueAccessor } from './base-chart';
-import { DatumLineBuilder, LinearGradientBuilder } from './builders';
+import { ValueAccessor } from './base-chart';
+import { LinearGradientBuilder } from './builders';
 import {
   Coordinate,
   LineChartProperties,
@@ -14,15 +14,16 @@ import {
   ChartMouseEventListener,
   MouseEventType,
 } from './models';
-import { DatumLine } from './models/datum-line';
 import { LineProperties } from './models/line-properties';
 import { ArrayType, getArrayType } from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
+import { DatumBaseChart } from './datum-base-chart';
+import { DatumBaseChartProperties } from './models/datum-base-chart-properties';
 
 // LineChart props only (BaseChart excluded), with required lineProps.
 type Properties = {
   lineProps: Required<LineProperties>;
-} & Omit<LineChartProperties, 'baseChartProps'>;
+} & Omit<LineChartProperties, keyof DatumBaseChartProperties>;
 
 type ChartScales = {
   xDomain: Range;
@@ -32,7 +33,7 @@ type ChartScales = {
   yScale: d3Scale.ScaleLinear<number, number, never>;
 };
 
-export class LineChart<T = unknown> extends BaseChart {
+export class LineChart<T = unknown> extends DatumBaseChart {
   #props: Properties;
   #scales?: ChartScales;
   #arrayType: ArrayType = ArrayType.Unknown;
@@ -41,7 +42,7 @@ export class LineChart<T = unknown> extends BaseChart {
   #mouseHandler?: CanvasMouseHandler;
 
   constructor(props?: Partial<LineChartProperties>) {
-    super(props?.baseChartProps);
+    super(props);
 
     const defaultLineProps: Required<LineProperties> = {
       strokeStyle: 'black',
@@ -53,9 +54,6 @@ export class LineChart<T = unknown> extends BaseChart {
       lineProps: { ...defaultLineProps, ...props?.lineProps },
 
       fillStyle: props?.fillStyle,
-
-      xDatumLines: [...(props?.xDatumLines || [])],
-      yDatumLines: [...(props?.yDatumLines || [])],
 
       xDomain: props?.xDomain,
       yDomain: props?.yDomain,
@@ -88,38 +86,15 @@ export class LineChart<T = unknown> extends BaseChart {
     const values = this.#getValues(inputValues);
     this.#scales = this.#getScales(values);
 
-    const xDatumLinesWithZIndex: DatumLine[] = [];
-    const yDatumLinesWithZIndex: DatumLine[] = [];
-
-    // TODO: refactor datum lines to separate method
-    this.#props.xDatumLines.forEach((datumLine) => {
-      if (datumLine.zIndex === 0) {
-        this.#drawDatumLine(
-          'x',
-          datumLine,
-          this.scales,
-          this.scales.yDomain,
-          context,
-        );
-      } else {
-        xDatumLinesWithZIndex.push(datumLine);
-      }
-    });
-
-    // TODO: refactor datum lines to separate method
-    this.#props.yDatumLines.forEach((datumLine) => {
-      if (datumLine.zIndex === 0) {
-        this.#drawDatumLine(
-          'y',
-          datumLine,
-          this.scales,
-          this.scales.xDomain,
-          context,
-        );
-      } else {
-        yDatumLinesWithZIndex.push(datumLine);
-      }
-    });
+    // datum lines with zIndex 0 are drawn below the chart data
+    this.renderDatumLines(
+      context,
+      true,
+      this.scales.xDomain,
+      this.scales.yDomain,
+      this.scales.xScale,
+      this.scales.yScale,
+    );
 
     const scaledCoordinates = this.#scaleCoordinates(
       values,
@@ -137,29 +112,17 @@ export class LineChart<T = unknown> extends BaseChart {
     }
 
     if (this.#props.lineProps.lineWidth !== 0) {
-      this.#drawPath(scaledCoordinates, this.#props.lineProps, context);
+      this.drawLine(scaledCoordinates, this.#props.lineProps, context);
     }
 
-    // TODO: refactor datum lines to separate method
-    xDatumLinesWithZIndex.forEach((datumLine) =>
-      this.#drawDatumLine(
-        'x',
-        datumLine,
-        this.scales,
-        this.scales.yDomain,
-        context,
-      ),
-    );
-
-    // TODO: refactor datum lines to separate method
-    yDatumLinesWithZIndex.forEach((datumLine) =>
-      this.#drawDatumLine(
-        'y',
-        datumLine,
-        this.scales,
-        this.scales.xDomain,
-        context,
-      ),
+    // datum lines with zIndex > 0 are drawn above the chart data
+    this.renderDatumLines(
+      context,
+      false,
+      this.scales.xDomain,
+      this.scales.yDomain,
+      this.scales.xScale,
+      this.scales.yScale,
     );
 
     this.#mouseHandler?.setCanvas(context.canvas).setValueLength(values.length);
@@ -208,68 +171,6 @@ export class LineChart<T = unknown> extends BaseChart {
   // minY - maxY
   yDomain(yDomain: Range) {
     this.#props.yDomain = yDomain;
-    return this;
-  }
-
-  // add a vertical reference line in the x domain
-  xDatum(
-    xPositionOrDatumLineBuilder: number | DatumLineBuilder,
-    lineProps?: LineProperties,
-    zIndex?: number,
-  ): LineChart<T> {
-    if (typeof xPositionOrDatumLineBuilder === 'number') {
-      this.#datum(
-        this.#props.xDatumLines,
-        xPositionOrDatumLineBuilder,
-        lineProps,
-        zIndex,
-      );
-    } else {
-      const datumLine = xPositionOrDatumLineBuilder.build();
-      this.#datum(
-        this.#props.xDatumLines,
-        datumLine.position,
-        datumLine.lineProperties,
-        datumLine.zIndex,
-      );
-    }
-
-    return this;
-  }
-
-  xDatumLines(datumLines: DatumLine[]) {
-    this.#props.xDatumLines.push(...datumLines);
-    return this;
-  }
-
-  // add a horizontal reference line in the y domain
-  yDatum(
-    yPositionOrDatumLineBuilder: number | DatumLineBuilder,
-    lineProps?: LineProperties,
-    zIndex?: number,
-  ) {
-    if (typeof yPositionOrDatumLineBuilder === 'number') {
-      this.#datum(
-        this.#props.yDatumLines,
-        yPositionOrDatumLineBuilder,
-        lineProps,
-        zIndex,
-      );
-    } else {
-      const datumLine = yPositionOrDatumLineBuilder.build();
-      this.#datum(
-        this.#props.yDatumLines,
-        datumLine.position,
-        datumLine.lineProperties,
-        datumLine.zIndex,
-      );
-    }
-
-    return this;
-  }
-
-  yDatumLines(datumLines: DatumLine[]) {
-    this.#props.yDatumLines.push(...datumLines);
     return this;
   }
 
@@ -403,47 +304,6 @@ export class LineChart<T = unknown> extends BaseChart {
     });
   }
 
-  #datum(
-    datumLines: DatumLine[],
-    position: number,
-    datumLineProps?: LineProperties,
-    zIndex?: number,
-  ) {
-    const defaultDatumLineProps = {
-      strokeStyle: 'black',
-      lineDash: [1, 1],
-      lineWidth: 1,
-    };
-
-    const lineProperties = {
-      ...defaultDatumLineProps,
-      ...datumLineProps,
-    } as Required<LineProperties>;
-
-    datumLines.push({ position, lineProperties, zIndex });
-  }
-
-  #drawDatumLine(
-    axis: 'x' | 'y',
-    datumLine: DatumLine,
-    scales: ChartScales,
-    domain: Range,
-    context: CanvasRenderingContext2D,
-  ) {
-    const scaledCoordinates: Coordinate[] =
-      axis === 'x'
-        ? [
-            [scales.xScale(datumLine.position), scales.yScale(domain[0])],
-            [scales.xScale(datumLine.position), scales.yScale(domain[1])],
-          ]
-        : [
-            [scales.xScale(domain[0]), scales.yScale(datumLine.position)],
-            [scales.xScale(domain[1]), scales.yScale(datumLine.position)],
-          ];
-
-    this.#drawPath(scaledCoordinates, datumLine.lineProperties, context);
-  }
-
   #drawArea(
     coordinates: Coordinate[],
     y0: number,
@@ -464,33 +324,6 @@ export class LineChart<T = unknown> extends BaseChart {
 
     context.fillStyle = usedFillStyle;
     context.fill();
-    context.closePath();
-  }
-
-  #drawPath(
-    coordinates: Coordinate[],
-    lineProperties: Required<LineProperties>,
-    context: CanvasRenderingContext2D,
-  ) {
-    const strokeStyle = this.getFillStyle(lineProperties.strokeStyle, context);
-    const lineWidthOffset = lineProperties.lineWidth === 1 ? 0.5 : 0; // offset to avoid anti-aliasing widening the line
-
-    context.beginPath();
-
-    d3Shape
-      .line<Coordinate>()
-      .defined((coordinate) => coordinate[1] != null)
-      .x((coordinate) => coordinate[0] + lineWidthOffset)
-      .y((coordinate) => coordinate[1] + lineWidthOffset)
-      .context(context)(coordinates);
-
-    context.strokeStyle = strokeStyle;
-    context.lineCap = 'round';
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    context.setLineDash(lineProperties.lineDash!);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    context.lineWidth = lineProperties.lineWidth!;
-    context.stroke();
     context.closePath();
   }
 }
