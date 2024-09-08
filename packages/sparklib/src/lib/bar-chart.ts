@@ -1,9 +1,8 @@
 import * as d3Array from 'd3-array';
 import * as d3Scale from 'd3-scale';
 
-import { BaseChart, ValueAccessor } from './base-chart';
+import { ValueAccessor } from './base-chart';
 import {
-  BaseChartProperties,
   ChartMouseEventListener,
   MouseEventType,
   Range,
@@ -11,28 +10,24 @@ import {
 } from './models';
 import { ArrayType, createGradientColorScale, getArrayType } from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
+import { DatumBaseChart } from './datum-base-chart';
+import { DatumBaseChartProperties } from './models/datum-base-chart-properties';
+import { BarChartProperties } from './models/bar-chart-properties';
 
-export type BarChartProperties = {
-  baseChartProps: BaseChartProperties;
-  domain: Range | undefined;
-  barWidth?: number;
-  barPadding?: number;
-};
-
-type Properties = Omit<BarChartProperties, 'baseChartProps'>;
+type Properties = Omit<BarChartProperties, keyof DatumBaseChartProperties>;
 
 type ChartScaling = {
   yDomain: Range;
   yScale: d3Scale.ScaleLinear<number, number, never>;
 };
 
-export class BarChart<T = unknown> extends BaseChart {
+export class BarChart<T = unknown> extends DatumBaseChart {
   #props: Properties;
   #valueAccessor: ValueAccessor<T> = undefined;
   #mouseHandler?: CanvasMouseHandler;
 
   constructor(props?: Partial<BarChartProperties>) {
-    super(props?.baseChartProps);
+    super(props);
 
     const defaultProperties: Properties = {
       domain: undefined,
