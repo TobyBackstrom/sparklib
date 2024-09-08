@@ -21,7 +21,7 @@ export type BarChartProperties = {
 
 type Properties = Omit<BarChartProperties, 'baseChartProps'>;
 
-type ChartScales = {
+type ChartScaling = {
   yDomain: Range;
   yScale: d3Scale.ScaleLinear<number, number, never>;
 };
@@ -155,7 +155,7 @@ export class BarChart<T = unknown> extends BaseChart {
       ]);
   }
 
-  #getScales(values: number[]): ChartScales {
+  #getScales(values: number[]): ChartScaling {
     const yDomain = this.#getYDomain(values);
     const yScale = this.#yScale(yDomain);
 

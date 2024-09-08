@@ -25,7 +25,7 @@ type Properties = {
   lineProps: Required<LineProperties>;
 } & Omit<LineChartProperties, keyof DatumBaseChartProperties>;
 
-type ChartScales = {
+type ChartScaling = {
   xDomain: Range;
   yDomain: Range;
 
@@ -35,7 +35,7 @@ type ChartScales = {
 
 export class LineChart<T = unknown> extends DatumBaseChart {
   #props: Properties;
-  #scales?: ChartScales;
+  #scales?: ChartScaling;
   #arrayType: ArrayType = ArrayType.Unknown;
   #xAccessor: ValueAccessor<T> = undefined;
   #yAccessor: ValueAccessor<T> = undefined;
@@ -196,7 +196,7 @@ export class LineChart<T = unknown> extends DatumBaseChart {
     this.#mouseHandler = undefined;
   }
 
-  private get scales(): ChartScales {
+  private get scales(): ChartScaling {
     if (!this.#scales) {
       throw new Error('ChartScales are not initialized.');
     }
@@ -271,7 +271,7 @@ export class LineChart<T = unknown> extends DatumBaseChart {
       ]);
   }
 
-  #getScales(values: BasicLineValueType[]): ChartScales {
+  #getScales(values: BasicLineValueType[]): ChartScaling {
     const xDomain = this.#getXDomain(values, this.#arrayType);
     const yDomain = this.#getYDomain(values, this.#arrayType);
 
@@ -289,7 +289,7 @@ export class LineChart<T = unknown> extends DatumBaseChart {
   #scaleCoordinates(
     values: BasicLineValueType[],
     arrayType: ArrayType,
-    scales: ChartScales,
+    scales: ChartScaling,
   ): Coordinate[] {
     return values.map((value, index) => {
       const x =
