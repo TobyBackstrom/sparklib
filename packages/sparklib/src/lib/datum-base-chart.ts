@@ -77,12 +77,12 @@ abstract class DatumBaseChart extends BaseChart {
     datumLines.push({ position, lineProperties, zIndex });
   }
 
-  protected AddYDatumLines(datumLines: DatumLine[]) {
+  protected addYDatumLines(datumLines: DatumLine[]) {
     this.#props.yDatumLines.push(...datumLines);
     return this;
   }
 
-  protected AddXDatumLines(datumLines: DatumLine[]) {
+  protected addXDatumLines(datumLines: DatumLine[]) {
     this.#props.xDatumLines.push(...datumLines);
     return this;
   }
@@ -132,7 +132,7 @@ export abstract class YDatumBaseChart extends DatumBaseChart {
   }
 
   yDatumLines(datumLines: DatumLine[]) {
-    this.AddYDatumLines(datumLines);
+    this.addYDatumLines(datumLines);
     return this;
   }
 }
@@ -159,7 +159,7 @@ export abstract class XYDatumBaseChart extends YDatumBaseChart {
   }
 
   xDatumLines(datumLines: DatumLine[]) {
-    this.AddXDatumLines(datumLines);
+    this.addXDatumLines(datumLines);
     return this;
   }
 }
