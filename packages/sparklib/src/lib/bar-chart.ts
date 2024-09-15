@@ -10,18 +10,18 @@ import {
 } from './models';
 import { ArrayType, createGradientColorScale, getArrayType } from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
-import { DatumBaseChart } from './datum-base-chart';
-import { DatumBaseChartProperties } from './models/datum-base-chart-properties';
+import { YDatumBaseChart } from './datum-base-chart';
+import { YDatumBaseChartProperties } from './models/datum-base-chart-properties';
 import { BarChartProperties } from './models/bar-chart-properties';
 
-type Properties = Omit<BarChartProperties, keyof DatumBaseChartProperties>;
+type Properties = Omit<BarChartProperties, keyof YDatumBaseChartProperties>;
 
 type ChartScaling = {
   yDomain: Range;
   yScale: d3Scale.ScaleLinear<number, number, never>;
 };
 
-export class BarChart<T = unknown> extends DatumBaseChart {
+export class BarChart<T = unknown> extends YDatumBaseChart {
   #props: Properties;
   #valueAccessor: ValueAccessor<T> = undefined;
   #mouseHandler?: CanvasMouseHandler;

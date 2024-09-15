@@ -299,6 +299,7 @@ export class AppComponent implements AfterViewInit, OnInit {
             .setLineDash([1, 1])
             .setLineWidth(1)
             .setStrokeStyle('gray'),
+          0,
         ),
       )
       .yDatum(5)

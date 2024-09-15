@@ -1,6 +1,6 @@
 import { LinearGradient, LineProperties, Range } from '.';
 import { LinearGradientBuilder } from '../builders';
-import { DatumBaseChartProperties } from './datum-base-chart-properties';
+import { XYDatumBaseChartProperties } from './datum-base-chart-properties';
 
 /**
  * Represents the properties specific to a Line Chart.
@@ -21,7 +21,7 @@ import { DatumBaseChartProperties } from './datum-base-chart-properties';
  * };
  * ```
  */
-export type LineChartProperties = DatumBaseChartProperties & {
+export type LineChartProperties = XYDatumBaseChartProperties & {
   /**
    * The properties used for rendering the lines in the chart.
    */

@@ -133,7 +133,7 @@ export abstract class BaseChart {
     coordinates: Coordinate[],
     lineProperties: Required<LineProperties>,
     context: CanvasRenderingContext2D,
-  ) {
+  ): void {
     const strokeStyle = this.getFillStyle(lineProperties.strokeStyle, context);
     const lineWidthOffset = lineProperties.lineWidth === 1 ? 0.5 : 0; // offset to avoid anti-aliasing widening the line
 

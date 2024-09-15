@@ -17,13 +17,13 @@ import {
 import { LineProperties } from './models/line-properties';
 import { ArrayType, getArrayType } from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
-import { DatumBaseChart } from './datum-base-chart';
-import { DatumBaseChartProperties } from './models/datum-base-chart-properties';
+import { XYDatumBaseChart } from './datum-base-chart';
+import { XYDatumBaseChartProperties } from './models/datum-base-chart-properties';
 
 // LineChart props only (BaseChart excluded), with required lineProps.
 type Properties = {
   lineProps: Required<LineProperties>;
-} & Omit<LineChartProperties, keyof DatumBaseChartProperties>;
+} & Omit<LineChartProperties, keyof XYDatumBaseChartProperties>;
 
 type ChartScaling = {
   xDomain: Range;
@@ -33,7 +33,7 @@ type ChartScaling = {
   yScale: d3Scale.ScaleLinear<number, number, never>;
 };
 
-export class LineChart<T = unknown> extends DatumBaseChart {
+export class LineChart<T = unknown> extends XYDatumBaseChart {
   #props: Properties;
   #scales?: ChartScaling;
   #arrayType: ArrayType = ArrayType.Unknown;

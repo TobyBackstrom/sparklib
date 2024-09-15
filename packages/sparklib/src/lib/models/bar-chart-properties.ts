@@ -1,7 +1,7 @@
 import { Range } from '.';
-import { DatumBaseChartProperties } from './datum-base-chart-properties';
+import { YDatumBaseChartProperties } from './datum-base-chart-properties';
 
-export type BarChartProperties = DatumBaseChartProperties & {
+export type BarChartProperties = YDatumBaseChartProperties & {
   domain: Range | undefined;
   barWidth?: number;
   barPadding?: number;
