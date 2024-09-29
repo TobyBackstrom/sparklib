@@ -48,6 +48,14 @@ export class BarChart<T = unknown> extends YDatumBaseChart {
     const values = this.#getValues(inputValues);
     const scales = this.#getScales(values);
 
+    // datum lines with zIndex 0 are drawn below the chart data
+    super.renderHorizontalDatumLines(
+      context,
+      true,
+      scales.yDomain,
+      scales.yScale,
+    );
+
     const availableWidth =
       this.chartProps.width -
       this.chartProps.margins.left -
@@ -77,6 +85,14 @@ export class BarChart<T = unknown> extends YDatumBaseChart {
         context.closePath();
       }
     });
+
+    // datum lines with zIndex > 0 are drawn above the chart data
+    super.renderHorizontalDatumLines(
+      context,
+      false,
+      scales.yDomain,
+      scales.yScale,
+    );
 
     this.#mouseHandler?.setCanvas(context.canvas).setValueLength(values.length);
 

@@ -213,6 +213,8 @@ export class AppComponent implements AfterViewInit, OnInit {
       .width(250)
       .height(100)
       .background('lightyellow')
+      .yDatum(3.5, { lineWidth: 4, strokeStyle: 'red' }, 0)
+      .yDatum(7, { lineWidth: 4, strokeStyle: 'gold' })
       .render([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
     this.#append(barChart0, 'barChart0', true);
 

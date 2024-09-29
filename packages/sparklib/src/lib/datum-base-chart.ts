@@ -36,7 +36,7 @@ abstract class DatumBaseChart extends BaseChart {
     yDomain: Range,
     xScale: d3Scale.ScaleLinear<number, number, never>,
     yScale: d3Scale.ScaleLinear<number, number, never>,
-  ) {
+  ): void {
     this.#props.xDatumLines.forEach((datumLine) => {
       const draw = datumLine.zIndex === 0 ? zIndex0 : true;
 
@@ -94,7 +94,7 @@ abstract class DatumBaseChart extends BaseChart {
     yScale: d3Scale.ScaleLinear<number, number, never>,
     domain: Range,
     context: CanvasRenderingContext2D,
-  ) {
+  ): void {
     const scaledCoordinates: Coordinate[] =
       orientation === 'x'
         ? [
@@ -109,7 +109,33 @@ abstract class DatumBaseChart extends BaseChart {
     this.drawLine(scaledCoordinates, datumLine.lineProperties, context);
   }
 }
+
 export abstract class YDatumBaseChart extends DatumBaseChart {
+  #xDomain = [0, this.chartProps.width] as Range;
+  #xScale = d3Scale
+    .scaleLinear()
+    .domain(this.#xDomain)
+    .range([
+      this.chartProps.margins.left,
+      this.chartProps.width - this.chartProps.margins.right,
+    ]);
+
+  protected renderHorizontalDatumLines(
+    context: CanvasRenderingContext2D,
+    zIndex0: boolean, // only draw zIndex === 0 or not
+    yDomain: Range,
+    yScale: d3Scale.ScaleLinear<number, number, never>,
+  ): void {
+    super.renderDatumLines(
+      context,
+      zIndex0,
+      this.#xDomain,
+      yDomain,
+      this.#xScale,
+      yScale,
+    );
+  }
+
   // add a horizontal reference line in the y domain
   yDatum(
     yPositionOrDatumLineBuilder: number | DatumLineBuilder,
