@@ -209,24 +209,6 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    const barChart0 = barChart()
-      .width(250)
-      .height(100)
-      .background('lightyellow')
-      .yDatum(3.5, { lineWidth: 4, strokeStyle: 'red' }, 0)
-      .yDatum(7, { lineWidth: 4, strokeStyle: 'gold' })
-      .render([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
-    this.#append(barChart0, 'barChart0', true);
-
-    const barChart1 = barChart()
-      .width(250)
-      .height(100)
-      .background('lightyellow')
-      .render([
-        1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 9, -8, 7, -6, 5, -4, 3, -2, 1,
-      ]);
-    this.#append(barChart1, 'barChart1', true);
-
     this.lineChart0 = lineChart()
       .width(150)
       .height(250)
@@ -459,6 +441,8 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.#append(chart2b, 'chart2b');
     this.#append(chart2c, 'chart2c');
 
+    this.#addBarChartExamples();
+
     const barcodeData = this.#generateBarcode();
 
     const barcodeStripeChart = stripeChart()
@@ -615,6 +599,86 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.#append(scPride1_b, 'monotonic250 bin');
     this.#append(scPride2, 'random250_1');
     this.#append(sc2, 'random250_2');
+  }
+
+  #addBarChartExamples() {
+    const hGradient = linearGradient(0, 0, 250, 0)
+      .addColorStop(0, 'lightgreen')
+      .addColorStop(1, 'black')
+      .build();
+
+    const vGradient = linearGradient(0, 0, 0, 50)
+      .addColorStop(0, 'red')
+      .addColorStop(1, 'black');
+
+    const barChart00 = barChart()
+      .width(250)
+      .height(50)
+      .background('lightyellow')
+      .fillStyle('blue')
+      .barPadding(0)
+      .render([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
+    this.#append(barChart00, 'barChart00', true);
+
+    const barChart0 = barChart()
+      .width(250)
+      .height(50)
+      .background('lightyellow')
+      .fillStyle('blue')
+      .yDatum(3.5, { lineWidth: 4, strokeStyle: 'red' }, 0)
+      .yDatum(7, { lineWidth: 4, strokeStyle: 'gold' })
+      .render([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
+    this.#append(barChart0, 'barChart0', true);
+
+    const barChart1 = barChart()
+      .width(250)
+      .height(50)
+      .background('lightyellow')
+      .fillStyle(hGradient)
+      // .yDatum(3.5, { lineWidth: 4, strokeStyle: 'red' }, 0)
+      // .yDatum(7, { lineWidth: 4, strokeStyle: 'gold' })
+      .render([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
+    this.#append(barChart1, 'barChart1', true);
+
+    const barChart2 = barChart()
+      .width(250)
+      .height(50)
+      .background('lightyellow')
+      .fillStyle(vGradient)
+      // .yDatum(3.5, { lineWidth: 4, strokeStyle: 'red' }, 0)
+      // .yDatum(7, { lineWidth: 4, strokeStyle: 'gold' })
+      .render([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
+    this.#append(barChart2, 'barChart2', true);
+
+    const barChart3 = barChart()
+      .width(250)
+      .height(50)
+      .background('lightyellow')
+      .fillStyle('green')
+      .render([
+        1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 9, -8, 7, -6, 5, -4, 3, -2, 1,
+      ]);
+    this.#append(barChart3, 'barChart3', true);
+
+    const barChart4 = barChart()
+      .width(250)
+      .height(50)
+      .background('lightyellow')
+      .fillStyle(hGradient)
+      .render([
+        1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 9, -8, 7, -6, 5, -4, 3, -2, 1,
+      ]);
+    this.#append(barChart4, 'barChart4', true);
+
+    const barChart5 = barChart()
+      .width(250)
+      .height(50)
+      .background('lightyellow')
+      .fillStyle(vGradient)
+      .render([
+        1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 9, -8, 7, -6, 5, -4, 3, -2, 1,
+      ]);
+    this.#append(barChart5, 'barChart5', true);
   }
 
   ticks0: AxisTick[] = [

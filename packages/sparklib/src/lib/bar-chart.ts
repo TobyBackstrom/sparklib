@@ -7,14 +7,21 @@ import {
   MouseEventType,
   Range,
   BarValueType,
+  LinearGradient,
 } from './models';
-import { ArrayType, createGradientColorScale, getArrayType } from './utils';
+import { ArrayType, getArrayType } from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
 import { YDatumBaseChart } from './datum-base-chart';
 import { YDatumBaseChartProperties } from './models/datum-base-chart-properties';
 import { BarChartProperties } from './models/bar-chart-properties';
+import { LinearGradientBuilder } from './builders/linear-gradient-builder';
 
-type Properties = Omit<BarChartProperties, keyof YDatumBaseChartProperties>;
+type Properties = Omit<
+  Omit<BarChartProperties, keyof YDatumBaseChartProperties>,
+  'fillStyle'
+> & {
+  fillStyle: string | LinearGradient | LinearGradientBuilder;
+};
 
 type ChartScaling = {
   yDomain: Range;
@@ -30,10 +37,26 @@ export class BarChart<T = unknown> extends YDatumBaseChart {
     super(props);
 
     const defaultProperties: Properties = {
+      fillStyle: 'black',
       domain: undefined,
     };
 
     this.#props = { ...defaultProperties, ...props };
+  }
+
+  barWidth(barWidth: number) {
+    this.#props.barWidth = barWidth;
+    return this;
+  }
+
+  barPadding(barPadding: number) {
+    this.#props.barPadding = barPadding;
+    return this;
+  }
+
+  fillStyle(fillStyle: string | LinearGradient | LinearGradientBuilder) {
+    this.#props.fillStyle = fillStyle;
+    return this;
   }
 
   render(
@@ -56,6 +79,29 @@ export class BarChart<T = unknown> extends YDatumBaseChart {
       scales.yScale,
     );
 
+    this.#drawBars(values, scales, this.#props.fillStyle, context);
+
+    // datum lines with zIndex > 0 are drawn above the chart data
+    super.renderHorizontalDatumLines(
+      context,
+      false,
+      scales.yDomain,
+      scales.yScale,
+    );
+
+    this.#mouseHandler?.setCanvas(context.canvas).setValueLength(values.length);
+
+    return context.canvas;
+  }
+
+  #drawBars(
+    values: number[],
+    scales: ChartScaling,
+    fillStyle: string | LinearGradient | LinearGradientBuilder,
+    context: CanvasRenderingContext2D,
+  ) {
+    const usedFillStyle = this.getFillStyle(fillStyle, context);
+
     const availableWidth =
       this.chartProps.width -
       this.chartProps.margins.left -
@@ -69,34 +115,31 @@ export class BarChart<T = unknown> extends YDatumBaseChart {
           (values.length > 1 ? (0.2 * availableWidth) / values.length : 0));
 
     const barWidth =
+      this.#props.barWidth ??
       (availableWidth - barPadding * values.length) / values.length;
 
     values.forEach((value, i) => {
       if (value) {
         context.beginPath();
+
+        const xPos =
+          i * barWidth + i * barPadding + this.chartProps.margins.left;
+        const yPos = scales.yScale(this.chartProps.margins.top);
+        const barHeight =
+          scales.yScale(value) - scales.yScale(this.chartProps.margins.top);
+
+        context.rect(xPos, yPos, barWidth, barHeight);
         context.rect(
           i * barWidth + i * barPadding + this.chartProps.margins.left,
           scales.yScale(this.chartProps.margins.top),
           barWidth,
           scales.yScale(value) - scales.yScale(this.chartProps.margins.top),
         );
-        context.fillStyle = 'blue'; //gradientColorScale(value);
+        context.fillStyle = usedFillStyle;
         context.fill();
         context.closePath();
       }
     });
-
-    // datum lines with zIndex > 0 are drawn above the chart data
-    super.renderHorizontalDatumLines(
-      context,
-      false,
-      scales.yDomain,
-      scales.yScale,
-    );
-
-    this.#mouseHandler?.setCanvas(context.canvas).setValueLength(values.length);
-
-    return context.canvas;
   }
 
   mouseEventListener(
