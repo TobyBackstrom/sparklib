@@ -601,7 +601,58 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.#append(sc2, 'random250_2');
   }
 
+  generateSineWaveBars(n: number): number[] {
+    const values: number[] = [];
+    const step = (2 * Math.PI) / n;
+
+    for (let i = 0; i < n; i++) {
+      const x = i * step;
+      const y = Math.sin(x);
+      values.push(y);
+    }
+
+    // Scale the values to the range [-100, 100] and round to nearest integer
+    const scaledValues = values
+      .map((y) => Math.round(y * 100))
+      .filter((num) => num !== 0);
+
+    return scaledValues;
+  }
+
+  shuffleArray(array: number[]): number[] {
+    const result = [...array];
+
+    for (let i = result.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+
+    return result;
+  }
+
+  invertSecondHalf(array: number[]): number[] {
+    const n = array.length;
+    const half = Math.floor(n / 2);
+    const result = [...array];
+
+    // Invert the sign of the second half of the array
+    for (let i = half; i < n; i++) {
+      result[i] = result[i] * -1;
+    }
+
+    return result;
+  }
+
   #addBarChartExamples() {
+    const barChartValues1 = this.shuffleArray([
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 18, 17,
+      16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+    ]);
+
+    const barChartValuesMix = [
+      1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 9, -8, 7, -6, 5, -4, 3, -2, 1,
+    ];
+
     const hGradient = linearGradient(0, 0, 250, 0)
       .addColorStop(0, 'lightgreen')
       .addColorStop(1, 'black')
@@ -611,13 +662,18 @@ export class AppComponent implements AfterViewInit, OnInit {
       .addColorStop(0, 'red')
       .addColorStop(1, 'black');
 
+    const gradient = linearGradient(0, 0, 0, 50)
+      .addColorStop(0, 'lightgreen')
+      .addColorStop(0.5, 'black')
+      .addColorStop(1, 'red');
+
     const barChart00 = barChart()
       .width(250)
       .height(50)
       .background('lightyellow')
       .fillStyle('blue')
       .barPadding(0)
-      .render([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
+      .render(barChartValues1);
     this.#append(barChart00, 'barChart00', true);
 
     const barChart0 = barChart()
@@ -627,7 +683,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .fillStyle('blue')
       .yDatum(3.5, { lineWidth: 4, strokeStyle: 'red' }, 0)
       .yDatum(7, { lineWidth: 4, strokeStyle: 'gold' })
-      .render([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
+      .render(barChartValues1);
     this.#append(barChart0, 'barChart0', true);
 
     const barChart1 = barChart()
@@ -635,9 +691,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(50)
       .background('lightyellow')
       .fillStyle(hGradient)
-      // .yDatum(3.5, { lineWidth: 4, strokeStyle: 'red' }, 0)
-      // .yDatum(7, { lineWidth: 4, strokeStyle: 'gold' })
-      .render([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
+      .render(barChartValues1);
     this.#append(barChart1, 'barChart1', true);
 
     const barChart2 = barChart()
@@ -645,19 +699,31 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(50)
       .background('lightyellow')
       .fillStyle(vGradient)
-      // .yDatum(3.5, { lineWidth: 4, strokeStyle: 'red' }, 0)
-      // .yDatum(7, { lineWidth: 4, strokeStyle: 'gold' })
-      .render([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
+      .render(barChartValues1);
     this.#append(barChart2, 'barChart2', true);
+
+    const barChart1a = barChart()
+      .width(250)
+      .height(50)
+      .background('lightyellow')
+      .fillStyle(gradient)
+      .render(this.invertSecondHalf(barChartValues1));
+    this.#append(barChart1a, 'barChart1a', true);
+
+    const barChartSine = barChart()
+      .width(250)
+      .height(50)
+      .background('lightyellow')
+      .fillStyle(gradient)
+      .render(this.generateSineWaveBars(40));
+    this.#append(barChartSine, 'barChartSine', true);
 
     const barChart3 = barChart()
       .width(250)
       .height(50)
       .background('lightyellow')
       .fillStyle('green')
-      .render([
-        1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 9, -8, 7, -6, 5, -4, 3, -2, 1,
-      ]);
+      .render(barChartValuesMix);
     this.#append(barChart3, 'barChart3', true);
 
     const barChart4 = barChart()
@@ -665,9 +731,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(50)
       .background('lightyellow')
       .fillStyle(hGradient)
-      .render([
-        1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 9, -8, 7, -6, 5, -4, 3, -2, 1,
-      ]);
+      .render(barChartValuesMix);
     this.#append(barChart4, 'barChart4', true);
 
     const barChart5 = barChart()
@@ -675,9 +739,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(50)
       .background('lightyellow')
       .fillStyle(vGradient)
-      .render([
-        1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 9, -8, 7, -6, 5, -4, 3, -2, 1,
-      ]);
+      .render(barChartValuesMix);
     this.#append(barChart5, 'barChart5', true);
   }
 
