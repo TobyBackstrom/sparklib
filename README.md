@@ -22,7 +22,7 @@ Sparklines are not suited for detailed data analysis requiring full support for 
 
 <details>
 
-<summary>Basic chart</summary>
+<summary>Basic line chart</summary>
 
 ```ts
 const data: number[] = [16, 15.1, 10, 14.2 /* ... */];
@@ -40,7 +40,7 @@ const chart = lineChart()
 
 <details>
 
-<summary>Basic chart with a horizontal gradient</summary>
+<summary>Line chart with a horizontal gradient</summary>
 
 ```ts
 const data: number[] = [16, 15.1, 10, 14.2 /* ... */];
@@ -59,13 +59,13 @@ const chart = lineChart()
 
 </details>
 
-![Basic line chart with horizontal gradient](docs/images/sl-ac-g-weather-2.png)
+![Line chart with horizontal gradient](docs/images/sl-ac-g-weather-2.png)
 
-![Basic line chart with complex gradient](docs/images/sl-ac-g-weather-1.png)
+![Line chart with complex gradient](docs/images/sl-ac-g-weather-1.png)
 
 <details>
 
-<summary>Basic chart with a vertical gradient</summary>
+<summary>Line chart with a vertical gradient</summary>
 
 ```ts
 const data: number[] = [16, 15.1, 10, 14.2 /* ... */];
@@ -93,6 +93,84 @@ const chart = lineChart()
 Gaps in your data series are handled gracefully.
 
 ![Basic line chart with gaps in data](docs/images/sl-ac-g-weather-gaps-0.png)
+
+### Bar Charts
+
+<details>
+
+<summary>Basic bar chart</summary>
+
+```ts
+const data = [18, 12, 17 /* ... */];
+
+const chart = barChart()
+    .background('lightyellow')
+    .render(data);
+```
+
+</details>
+
+![Basic bar chart](docs/images/sl-bc-0.png)
+
+<details>
+
+<summary>Bar chart with a horizontal gradient</summary>
+
+```ts
+const data = [18, 12, 17 /* ... */];
+const width = 250;
+
+const chart = barChart()
+    .background('lightyellow')
+    .width(width)
+    .fillStyle(
+        linearGradient(0, 0, width, 0)
+          .addColorStop(0, 'lightgreen')
+          .addColorStop(1, 'black'),
+    )
+    .render(data);
+```
+
+</details>
+
+![Bar chart with a horizontal gradient](docs/images/sl-bc-3.png)
+
+<details>
+
+<summary>Bar chart with a vertical gradient</summary>
+
+```ts
+const data = [18, 12, 17 /* ... */];
+const height = 250;
+
+const chart = barChart()
+    .background('lightyellow')
+    .height(height)
+    .fillStyle(
+        linearGradient(0, 0, 0, height)
+          .addColorStop(0, 'red')
+          .addColorStop(1, 'black'),
+  )
+  .render(data);
+```
+
+</details>
+
+![Bar chart with a vertical gradient](docs/images/sl-bc-4.png)
+
+The bar charts can also handle a mix of positive and negative category values. You can control where the y axis will be relative to the height of the chart, or let it be set automatically.
+
+<p float="left">
+  <img alt="Bar chart with positive and negative values" src="docs/images/sl-bc-5.png" /> &nbsp;
+  <img alt="Bar chart with positive and negative values" src="docs/images/sl-bc-sine.png" /> 
+</p>
+
+Horizontal datum lines can be rendered above or below the bars.
+
+<p float="left">
+  <img alt="Bar chart with datum lines" src="docs/images/sl-bc-1.png" /> &nbsp;
+  <img alt="Bar chart with datum lines" src="docs/images/sl-bc-2.png" /> 
+</p>
 
 ### Stripe Charts
 

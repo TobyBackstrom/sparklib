@@ -644,41 +644,72 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   #addBarChartExamples() {
-    const barChartValues1 = this.shuffleArray([
-      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 18, 17,
-      16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
-    ]);
+    const barChartValuesInOrder = [
+      8, 12, 17, 13, 11, 3, 5, 10, 19, 13, 11, 4, 8, 14, 10, 1, 8, 6, 15, 17, 9,
+      14, 6, 16, 18, 16, 7, 3, 7, 5, 2, 15, 12, 9, 4, 2, 1,
+    ];
+
+    const barChartValues1 = barChartValuesInOrder;
+    // this.shuffleArray([
+    //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 18, 17,
+    //   16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+    // ]);
 
     const barChartValuesMix = [
       1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 9, -8, 7, -6, 5, -4, 3, -2, 1,
     ];
 
-    const hGradient = linearGradient(0, 0, 250, 0)
+    const bcWidth = 243; // 250;
+    const bcHeight = 40; // 50;
+
+    const hGradient = linearGradient(0, 0, bcWidth, 0)
       .addColorStop(0, 'lightgreen')
       .addColorStop(1, 'black')
       .build();
 
-    const vGradient = linearGradient(0, 0, 0, 50)
+    const vGradient = linearGradient(0, 0, 0, bcHeight)
       .addColorStop(0, 'red')
       .addColorStop(1, 'black');
 
-    const gradient = linearGradient(0, 0, 0, 50)
+    const gradient = linearGradient(0, 0, 0, bcHeight)
       .addColorStop(0, 'lightgreen')
       .addColorStop(0.5, 'black')
       .addColorStop(1, 'red');
 
+    //// DOC
+    const data = [18, 12, 17 /* ... */];
+
+    const chart = barChart()
+      .background('lightyellow')
+      .fillStyle(
+        linearGradient(0, 0, 0, bcHeight)
+          .addColorStop(0, 'red')
+          .addColorStop(1, 'black'),
+      )
+      .render(data);
+
+    this.#append(chart, 'doc chart', true);
+
+    const barChartDoc1 = barChart()
+      .background('lightyellow')
+      .width(bcWidth)
+      .height(bcHeight)
+      .render(barChartValues1);
+
+    this.#append(barChartDoc1, 'barChartDoc1', true);
+    //// DOC
+
     const barChart00 = barChart()
-      .width(250)
-      .height(50)
+      .width(bcWidth)
+      .height(bcHeight)
       .background('lightyellow')
       .fillStyle('blue')
-      .barPadding(0)
       .render(barChartValues1);
     this.#append(barChart00, 'barChart00', true);
 
     const barChart0 = barChart()
-      .width(250)
-      .height(50)
+      .width(bcWidth)
+      .height(bcHeight)
       .background('lightyellow')
       .fillStyle('blue')
       .yDatum(3.5, { lineWidth: 4, strokeStyle: 'red' }, 0)
@@ -687,56 +718,56 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.#append(barChart0, 'barChart0', true);
 
     const barChart1 = barChart()
-      .width(250)
-      .height(50)
+      .width(bcWidth)
+      .height(bcHeight)
       .background('lightyellow')
       .fillStyle(hGradient)
       .render(barChartValues1);
     this.#append(barChart1, 'barChart1', true);
 
     const barChart2 = barChart()
-      .width(250)
-      .height(50)
+      .width(bcWidth)
+      .height(bcHeight)
       .background('lightyellow')
       .fillStyle(vGradient)
       .render(barChartValues1);
     this.#append(barChart2, 'barChart2', true);
 
     const barChart1a = barChart()
-      .width(250)
-      .height(50)
+      .width(bcWidth)
+      .height(bcHeight)
       .background('lightyellow')
       .fillStyle(gradient)
       .render(this.invertSecondHalf(barChartValues1));
     this.#append(barChart1a, 'barChart1a', true);
 
     const barChartSine = barChart()
-      .width(250)
-      .height(50)
+      .width(bcWidth)
+      .height(bcHeight)
       .background('lightyellow')
       .fillStyle(gradient)
       .render(this.generateSineWaveBars(40));
     this.#append(barChartSine, 'barChartSine', true);
 
     const barChart3 = barChart()
-      .width(250)
-      .height(50)
+      .width(bcWidth)
+      .height(bcHeight)
       .background('lightyellow')
       .fillStyle('green')
       .render(barChartValuesMix);
     this.#append(barChart3, 'barChart3', true);
 
     const barChart4 = barChart()
-      .width(250)
-      .height(50)
+      .width(bcWidth)
+      .height(bcHeight)
       .background('lightyellow')
       .fillStyle(hGradient)
       .render(barChartValuesMix);
     this.#append(barChart4, 'barChart4', true);
 
     const barChart5 = barChart()
-      .width(250)
-      .height(50)
+      .width(bcWidth)
+      .height(bcHeight)
       .background('lightyellow')
       .fillStyle(vGradient)
       .render(barChartValuesMix);
