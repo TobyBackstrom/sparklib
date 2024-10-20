@@ -59,9 +59,10 @@ const chart = lineChart()
 
 </details>
 
-![Line chart with horizontal gradient](docs/images/sl-ac-g-weather-2.png)
-
-![Line chart with complex gradient](docs/images/sl-ac-g-weather-1.png)
+<p float="left">
+  <img alt="Line chart with horizontal gradient" src="docs/images/sl-ac-g-weather-2.png" /> &nbsp;
+  <img alt="Line chart with complex horizontal gradient" src="docs/images/sl-ac-g-weather-1.png" /> 
+</p>
 
 <details>
 
@@ -88,11 +89,11 @@ const chart = lineChart()
 
 </details>
 
-![Basic line chart with vertical gradient](docs/images/sl-ac-g-weather-3.png)
+![Line chart with vertical gradient](docs/images/sl-ac-g-weather-3.png)
 
 Gaps in your data series are handled gracefully.
 
-![Basic line chart with gaps in data](docs/images/sl-ac-g-weather-gaps-0.png)
+![Line chart with gaps in data](docs/images/sl-ac-g-weather-gaps-0.png)
 
 ### Bar Charts
 
@@ -164,7 +165,7 @@ The bar charts can also handle a mix of positive and negative category values. Y
 
 <p float="left">
   <img alt="Bar chart with positive and negative values" src="docs/images/sl-bc-5.png" /> &nbsp;
-  <img alt="Bar chart with positive and negative values" src="docs/images/sl-bc-sine.png" /> 
+  <img alt="Bar chart sine wave pattern" src="docs/images/sl-bc-sine.png" /> 
 </p>
 
 Horizontal datum lines can be rendered above or below the bars.
