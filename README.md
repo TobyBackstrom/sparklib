@@ -96,6 +96,8 @@ Gaps in your data series are handled gracefully.
 
 ### Bar Charts
 
+Bar charts provide a visual presentation of categorical data. They work well even as small charts in the sparkline format, and are easy to read and interpret.
+
 <details>
 
 <summary>Basic bar chart</summary>
@@ -158,7 +160,7 @@ const chart = barChart()
 
 ![Bar chart with a vertical gradient](docs/images/sl-bc-4.png)
 
-The bar charts can also handle a mix of positive and negative category values. You can control where the y axis will be relative to the height of the chart, or let it be set automatically.
+The bar charts can also handle a mix of positive and negative category values. You can control the position of the y-axis relative to the chart height, or let it be set automatically.
 
 <p float="left">
   <img alt="Bar chart with positive and negative values" src="docs/images/sl-bc-5.png" /> &nbsp;
