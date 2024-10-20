@@ -2,7 +2,7 @@
 
 A lightweight library featuring a fluid, type-safe, API for easy creation of sparkline charts. Separate packages with components for [Angular](https://www.npmjs.com/package/ngx-sparklib) and [React](https://www.npmjs.com/package/react-sparklib) are available.
 
-The library currently offers support for line charts, area charts, stripe charts and basic axes.
+The library currently offers support for line charts, area charts, bar charts, stripe charts and basic axes.
 
 > **Note**: Documentation is very much work in progress and currently lacking in detail.
 
@@ -14,7 +14,7 @@ A sparkline is a minimalist, word-sized graphic that shows data trends with typo
 
 ## What Isn't a Sparkline Chart?
 
-Sparklines are not suited for detailed data analysis requiring full support for axes, labels, legends, or gridlines. If you need these features or interactivity, consider using a full-fledged charting library like [Chart.js](https://www.chartjs.org/).
+Sparklines are not suited for detailed data analysis requiring full support for axes, labels, legends, or gridlines. If you need these features, or interactivity, consider using a full-fledged charting library like [Chart.js](https://www.chartjs.org/) instead.
 
 ## Examples
 
@@ -224,7 +224,7 @@ const chart = stripeChart()
 
 ## Axes
 
-To enhance the readability and context of sparkline data, Sparklib offers the functionality to create axes as individual canvas elements. These axes can be placed on any side of a chart - top, left, right, or bottom. Additionally, each axis is fully customizable, allowing adjustments in line width, color, font, labels, and tick positions.
+To enhance the readability and context of sparkline data, Sparklib offers basic functionality to create axes as individual canvas elements. These axes can be rendered to fit on any side of a chart - top, left, right, or bottom. HTML and CSS markup can then be used to position the axes in relation to the chart. Additionally, each axis is fully customizable, allowing adjustments in line width, color, font, labels, and tick positions.
 
 The axes support is very basic and if you need more advanced capabilities, please look to another charting library.
 
