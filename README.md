@@ -18,6 +18,8 @@ Sparklines are not suited for detailed data analysis requiring full support for 
 
 ## Line and Area Charts
 
+Simple line and area charts. The line can be centered around a zero line to display both positive and negative values. Optionally you can add horizontal and/or vertical datum lines. All lines, the area fill as well as the background can easily be styled.
+
 <details>
 
 <summary>Basic line chart</summary>
