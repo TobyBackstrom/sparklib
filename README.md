@@ -16,9 +16,7 @@ A sparkline is a minimalist, word-sized graphic that shows data trends with typo
 
 Sparklines are not suited for detailed data analysis requiring full support for axes, labels, legends, or gridlines. If you need these features, or interactivity, consider using a full-fledged charting library like [Chart.js](https://www.chartjs.org/) instead.
 
-## Examples
-
-### Line and Area Charts
+## Line and Area Charts
 
 <details>
 
@@ -94,7 +92,7 @@ Gaps in your data series are handled gracefully.
 
 ![Line chart with gaps in data](docs/images/sl-ac-g-weather-gaps-0.png)
 
-### Bar Charts
+## Bar Charts
 
 Bar charts provide a visual presentation of categorical data. They work well even as small charts in the sparkline format, and are easy to read and interpret.
 
@@ -174,7 +172,7 @@ Horizontal datum lines can be rendered above or below the bars.
   <img alt="Bar chart with datum lines" src="docs/images/sl-bc-2.png" /> 
 </p>
 
-### Stripe Charts
+## Stripe Charts
 
 Stripe charts visualize numerical data through vertical stripes, where the length or color intensity can represent values or frequencies. They are particularly effective for displaying dozens of time series in a single view. The examples below are somewhat contrieved but demonstrate what is possible.
 
