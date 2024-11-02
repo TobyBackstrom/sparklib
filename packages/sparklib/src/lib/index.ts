@@ -3,6 +3,7 @@ export * from './bar-chart';
 export * from './builders';
 export * from './line-chart';
 export * from './models';
+export * from './sparklib';
 export * from './stripe-chart';
 export * from './utils/get-indices-for-pixel-x';
 
