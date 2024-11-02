@@ -23,6 +23,7 @@ import {
   lineProperties,
   linearGradient,
   margins,
+  sparklib,
   stripeChart,
   LineChartComponent,
   StripeChartComponent,
@@ -209,7 +210,8 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.lineChart0 = lineChart()
+    this.lineChart0 = sparklib()
+      .lineChart()
       .width(150)
       .height(250)
       .margins({ bottom: 0, left: 0, right: 0, top: 0 })
@@ -220,7 +222,8 @@ export class AppComponent implements AfterViewInit, OnInit {
     const chart0 = this.lineChart0.render(singleValues);
     //this.#mouseOverChart(this.lineChart0, chart0);
 
-    const chart1 = lineChart()
+    const chart1 = sparklib()
+      .lineChart()
       .width(150)
       .height(250)
       .margins(margins().bottom(10).left(10).right(10).top(10))
@@ -230,7 +233,8 @@ export class AppComponent implements AfterViewInit, OnInit {
       .yDomain([-10, 10])
       .render(singleValues);
 
-    const chart2 = lineChart()
+    const chart2 = sparklib()
+      .lineChart()
       .width(150)
       .height(250)
       .margins(margins().bottom(10).left(10).right(10).top(10))

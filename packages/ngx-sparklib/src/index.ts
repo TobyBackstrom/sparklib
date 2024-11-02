@@ -9,6 +9,7 @@ export {
   lineProperties,
   linearGradient,
   margins,
+  sparklib,
   stripeChart,
   AxisTick,
   AxisChartProperties,
