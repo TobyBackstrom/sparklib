@@ -1,6 +1,6 @@
 import * as d3Array from 'd3-array';
 
-import { BaseChart, ValueAccessor } from './base-chart';
+import { BaseChart, ValueAccessor } from './base/base-chart';
 import {
   BaseChartProperties,
   ChartMouseEventListener,

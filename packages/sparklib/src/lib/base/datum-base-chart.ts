@@ -1,15 +1,15 @@
 import * as d3Scale from 'd3-scale';
 
 import { BaseChart } from './base-chart';
-import { DatumLineBuilder } from './builders';
+import { DatumLineBuilder } from '../builders';
 import {
   BaseChartProperties,
   Coordinate,
   DatumLine,
   LineProperties,
   Range,
-} from './models';
-import { XYDatumBaseChartProperties } from './models/datum-base-chart-properties';
+} from '../models';
+import { XYDatumBaseChartProperties } from '../models/datum-base-chart-properties';
 
 // Note to self: Mixins can't be used as they impose restrictions on hiding visibility.
 //               Methods and properties from base classes would become public/protected.
@@ -17,7 +17,7 @@ import { XYDatumBaseChartProperties } from './models/datum-base-chart-properties
 
 type Properties = Omit<XYDatumBaseChartProperties, keyof BaseChartProperties>;
 
-abstract class DatumBaseChart extends BaseChart {
+export abstract class DatumBaseChart extends BaseChart {
   #props: Properties;
 
   constructor(props?: Partial<XYDatumBaseChartProperties>) {
@@ -107,85 +107,5 @@ abstract class DatumBaseChart extends BaseChart {
           ];
 
     this.drawLine(scaledCoordinates, datumLine.lineProperties, context);
-  }
-}
-
-export abstract class YDatumBaseChart extends DatumBaseChart {
-  #xDomain = [0, this.chartProps.width] as Range;
-  #xScale = d3Scale
-    .scaleLinear()
-    .domain(this.#xDomain)
-    .range([
-      this.chartProps.margins.left,
-      this.chartProps.width - this.chartProps.margins.right,
-    ]);
-
-  protected renderHorizontalDatumLines(
-    context: CanvasRenderingContext2D,
-    zIndex0: boolean, // only draw zIndex === 0 or not
-    yDomain: Range,
-    yScale: d3Scale.ScaleLinear<number, number, never>,
-  ): void {
-    super.renderDatumLines(
-      context,
-      zIndex0,
-      this.#xDomain,
-      yDomain,
-      this.#xScale,
-      yScale,
-    );
-  }
-
-  // add a horizontal reference line in the y domain
-  yDatum(
-    yPositionOrDatumLineBuilder: number | DatumLineBuilder,
-    lineProps?: LineProperties,
-    zIndex?: number,
-  ) {
-    if (typeof yPositionOrDatumLineBuilder === 'number') {
-      this.addDatumLine('y', yPositionOrDatumLineBuilder, lineProps, zIndex);
-    } else {
-      const datumLine = yPositionOrDatumLineBuilder.build();
-      this.addDatumLine(
-        'y',
-        datumLine.position,
-        datumLine.lineProperties,
-        datumLine.zIndex,
-      );
-    }
-
-    return this;
-  }
-
-  yDatumLines(datumLines: DatumLine[]) {
-    this.addYDatumLines(datumLines);
-    return this;
-  }
-}
-
-export abstract class XYDatumBaseChart extends YDatumBaseChart {
-  xDatum(
-    xPositionOrDatumLineBuilder: number | DatumLineBuilder,
-    lineProps?: LineProperties,
-    zIndex?: number,
-  ): this {
-    if (typeof xPositionOrDatumLineBuilder === 'number') {
-      this.addDatumLine('x', xPositionOrDatumLineBuilder, lineProps, zIndex);
-    } else {
-      const datumLine = xPositionOrDatumLineBuilder.build();
-      this.addDatumLine(
-        'x',
-        datumLine.position,
-        datumLine.lineProperties,
-        datumLine.zIndex,
-      );
-    }
-
-    return this;
-  }
-
-  xDatumLines(datumLines: DatumLine[]) {
-    this.addXDatumLines(datumLines);
-    return this;
   }
 }

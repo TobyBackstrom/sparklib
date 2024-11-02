@@ -1,13 +1,13 @@
 import * as d3Shape from 'd3-shape';
-import * as dom from './dom';
-import { LinearGradientBuilder, MarginsBuilder } from './builders';
+import * as dom from '../dom';
+import { LinearGradientBuilder, MarginsBuilder } from '../builders';
 import {
   BaseChartProperties,
   Coordinate,
   LinearGradient,
   LineProperties,
   Margins,
-} from './models';
+} from '../models';
 
 const DEFAULT_MARGINS: Margins = {
   bottom: 0,

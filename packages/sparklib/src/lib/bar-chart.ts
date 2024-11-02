@@ -1,7 +1,7 @@
 import * as d3Array from 'd3-array';
 import * as d3Scale from 'd3-scale';
 
-import { ValueAccessor } from './base-chart';
+import { ValueAccessor } from './base/base-chart';
 import {
   ChartMouseEventListener,
   MouseEventType,
@@ -11,7 +11,7 @@ import {
 } from './models';
 import { ArrayType, getArrayType } from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
-import { YDatumBaseChart } from './datum-base-chart';
+import { YDatumBaseChart } from './base/y-datum-base-chart';
 import { YDatumBaseChartProperties } from './models/datum-base-chart-properties';
 import { BarChartProperties } from './models/bar-chart-properties';
 import { LinearGradientBuilder } from './builders/linear-gradient-builder';

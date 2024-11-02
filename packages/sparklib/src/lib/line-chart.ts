@@ -2,7 +2,7 @@ import * as d3Array from 'd3-array';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
-import { ValueAccessor } from './base-chart';
+import { ValueAccessor } from './base/base-chart';
 import { LinearGradientBuilder } from './builders';
 import {
   Coordinate,
@@ -17,7 +17,7 @@ import {
 import { LineProperties } from './models/line-properties';
 import { ArrayType, getArrayType } from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
-import { XYDatumBaseChart } from './datum-base-chart';
+import { XYDatumBaseChart } from './base/x-y-datum-base-chart';
 import { XYDatumBaseChartProperties } from './models/datum-base-chart-properties';
 
 // LineChart props only (BaseChart excluded), with required lineProps.

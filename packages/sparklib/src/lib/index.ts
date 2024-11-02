@@ -6,4 +6,4 @@ export * from './models';
 export * from './stripe-chart';
 export * from './utils/get-indices-for-pixel-x';
 
-export type { ValueAccessor } from './base-chart';
+export type { ValueAccessor } from './base/base-chart';

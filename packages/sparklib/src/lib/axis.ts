@@ -1,4 +1,4 @@
-import { BaseChart } from './base-chart';
+import { BaseChart } from './base/base-chart';
 import { LinearGradientBuilder } from './builders';
 import { BaseChartProperties, LineProperties, LinearGradient } from './models';
 
