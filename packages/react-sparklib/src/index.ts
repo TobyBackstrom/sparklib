@@ -20,6 +20,7 @@ export {
   lineProperties,
   linearGradient,
   margins,
+  sparklib,
   stripeChart,
   AxisPosition,
   ChartMouseEvent,
