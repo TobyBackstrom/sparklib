@@ -1,0 +1,72 @@
+{
+  "name": "web-demo",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/web-demo/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "web",
+        "outputPath": "dist/apps/web-demo",
+        "compiler": "babel",
+        "main": "apps/web-demo/src/main.ts",
+        "tsConfig": "apps/web-demo/tsconfig.app.json",
+        "webpackConfig": "apps/web-demo/webpack.config.js",
+        "assets": ["apps/web-demo/src/favicon.ico", "apps/web-demo/src/assets"],
+        "index": "apps/web-demo/src/index.html",
+        "baseHref": "/",
+        "styles": ["apps/web-demo/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/web-demo/src/environments/environment.ts",
+              "with": "apps/web-demo/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/webpack:dev-server",
+      "options": {
+        "buildTarget": "web-demo:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "web-demo:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "web-demo:build",
+        "spa": true
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/web-demo/jest.config.ts"
+      }
+    }
+  }
+}
