@@ -1,0 +1,1 @@
+import { sparklib } from 'sparklib';

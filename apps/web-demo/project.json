@@ -16,7 +16,11 @@
         "main": "apps/web-demo/src/index.ts",
         "tsConfig": "apps/web-demo/tsconfig.app.json",
         "webpackConfig": "apps/web-demo/webpack.config.js",
-        "assets": ["apps/web-demo/src/favicon.ico", "apps/web-demo/src/assets"],
+        "assets": [
+          "apps/web-demo/src/favicon.ico",
+          "apps/web-demo/src/assets",
+          "apps/web-demo/src/kitchen-sink.html"
+        ],
         "index": "apps/web-demo/src/index.html",
         "baseHref": "/",
         "styles": ["apps/web-demo/src/styles.scss"],
