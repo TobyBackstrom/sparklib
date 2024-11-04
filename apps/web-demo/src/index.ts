@@ -1,4 +1,4 @@
-import { sparklib, linearGradient } from 'sparklib';
+import { sparklib } from 'sparklib';
 
 const data = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 7, 5, 3, 2, 1, -1, -2, -5, -7, -2, 3, 4, 5, 6, 7,
@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     .height(40)
     .background('lightyellow')
     .fillStyle(
-      linearGradient(0, 0, 250, 0)
+      sparklib()
+        .linearGradient(0, 0, 250, 0)
         .addColorStop(0, 'lightgreen')
         .addColorStop(1, 'black'),
     )
@@ -33,7 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
     .height(40)
     .background('lightyellow')
     .fillStyle(
-      linearGradient(0, 0, 250, 0)
+      sparklib()
+        .linearGradient(0, 0, 250, 0)
         .addColorStop(0, 'lightgreen')
         .addColorStop(1, 'black'),
     )

@@ -13,7 +13,7 @@
         "target": "web",
         "outputPath": "dist/apps/web-demo",
         "compiler": "babel",
-        "main": "apps/web-demo/src/main.ts",
+        "main": "apps/web-demo/src/index.ts",
         "tsConfig": "apps/web-demo/tsconfig.app.json",
         "webpackConfig": "apps/web-demo/webpack.config.js",
         "assets": ["apps/web-demo/src/favicon.ico", "apps/web-demo/src/assets"],
