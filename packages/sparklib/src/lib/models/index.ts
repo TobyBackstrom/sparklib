@@ -1,3 +1,4 @@
+export * from './bar-chart-properties';
 export * from './base-chart-properties';
 export * from './chart-mouse-event';
 export * from './chart-mouse-event-listener';

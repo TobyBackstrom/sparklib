@@ -1,4 +1,5 @@
 export * from './lib/axis.component';
+export * from './lib/bar-chart.component';
 export * from './lib/line-chart.component';
 export * from './lib/stripe-chart.component';
 export {

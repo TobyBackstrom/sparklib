@@ -25,6 +25,7 @@ import {
   margins,
   sparklib,
   stripeChart,
+  BarChartComponent,
   LineChartComponent,
   StripeChartComponent,
   AxisComponent,
@@ -64,6 +65,7 @@ import {
   imports: [
     CommonModule,
     AxisComponent,
+    BarChartComponent,
     LineChartComponent,
     StripeChartComponent,
     RouterModule,
@@ -647,22 +649,25 @@ export class AppComponent implements AfterViewInit, OnInit {
     return result;
   }
 
+  barChartValuesInOrder = [
+    8, 12, 17, 13, 11, 3, 5, 10, 19, 13, 11, 4, 8, 14, 10, 1, 8, 6, 15, 17, 9,
+    14, 6, 16, 18, 16, 7, 3, 7, 5, 2, 15, 12, 9, 4, 2, 1,
+  ];
+
+  barChartValues1 = [
+    8, 12, 17, 13, 11, 3, 5, 10, 19, 13, 11, 4, 8, 14, 10, 1, 8, 6, 15, 17, 9,
+    14, 6, 16, 18, 16, 7, 3, 7, 5, 2, 15, 12, 9, 4, 2, 1,
+  ];
+  // this.shuffleArray([
+  //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 18, 17,
+  //   16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+  // ]);
+
+  barChartValuesMix = [
+    1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 9, -8, 7, -6, 5, -4, 3, -2, 1,
+  ];
+
   #addBarChartExamples() {
-    const barChartValuesInOrder = [
-      8, 12, 17, 13, 11, 3, 5, 10, 19, 13, 11, 4, 8, 14, 10, 1, 8, 6, 15, 17, 9,
-      14, 6, 16, 18, 16, 7, 3, 7, 5, 2, 15, 12, 9, 4, 2, 1,
-    ];
-
-    const barChartValues1 = barChartValuesInOrder;
-    // this.shuffleArray([
-    //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 18, 17,
-    //   16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
-    // ]);
-
-    const barChartValuesMix = [
-      1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 9, -8, 7, -6, 5, -4, 3, -2, 1,
-    ];
-
     const bcWidth = 243; // 250;
     const bcHeight = 40; // 50;
 
@@ -698,7 +703,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .background('lightyellow')
       .width(bcWidth)
       .height(bcHeight)
-      .render(barChartValues1);
+      .render(this.barChartValues1);
 
     this.#append(barChartDoc1, 'barChartDoc1', true);
     //// DOC
@@ -708,7 +713,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(bcHeight)
       .background('lightyellow')
       .fillStyle('blue')
-      .render(barChartValues1);
+      .render(this.barChartValues1);
     this.#append(barChart00, 'barChart00', true);
 
     const barChart0 = barChart()
@@ -718,7 +723,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .fillStyle('blue')
       .yDatum(3.5, { lineWidth: 4, strokeStyle: 'red' }, 0)
       .yDatum(7, { lineWidth: 4, strokeStyle: 'gold' })
-      .render(barChartValues1);
+      .render(this.barChartValues1);
     this.#append(barChart0, 'barChart0', true);
 
     const barChart1 = barChart()
@@ -726,7 +731,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(bcHeight)
       .background('lightyellow')
       .fillStyle(hGradient)
-      .render(barChartValues1);
+      .render(this.barChartValues1);
     this.#append(barChart1, 'barChart1', true);
 
     const barChart2 = barChart()
@@ -734,7 +739,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(bcHeight)
       .background('lightyellow')
       .fillStyle(vGradient)
-      .render(barChartValues1);
+      .render(this.barChartValues1);
     this.#append(barChart2, 'barChart2', true);
 
     const barChart1a = barChart()
@@ -742,7 +747,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(bcHeight)
       .background('lightyellow')
       .fillStyle(gradient)
-      .render(this.invertSecondHalf(barChartValues1));
+      .render(this.invertSecondHalf(this.barChartValues1));
     this.#append(barChart1a, 'barChart1a', true);
 
     const barChartSine = barChart()
@@ -758,7 +763,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(bcHeight)
       .background('lightyellow')
       .fillStyle('green')
-      .render(barChartValuesMix);
+      .render(this.barChartValuesMix);
     this.#append(barChart3, 'barChart3', true);
 
     const barChart4 = barChart()
@@ -766,7 +771,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(bcHeight)
       .background('lightyellow')
       .fillStyle(hGradient)
-      .render(barChartValuesMix);
+      .render(this.barChartValuesMix);
     this.#append(barChart4, 'barChart4', true);
 
     const barChart5 = barChart()
@@ -774,7 +779,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       .height(bcHeight)
       .background('lightyellow')
       .fillStyle(vGradient)
-      .render(barChartValuesMix);
+      .render(this.barChartValuesMix);
     this.#append(barChart5, 'barChart5', true);
   }
 
