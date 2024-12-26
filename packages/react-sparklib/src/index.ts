@@ -1,4 +1,5 @@
 export { Axis } from './lib/axis';
+export { BarChart } from './lib/bar-chart';
 export { LineChart } from './lib/line-chart';
 export { StripeChart } from './lib/stripe-chart';
 

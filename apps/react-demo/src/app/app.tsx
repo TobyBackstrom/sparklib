@@ -181,6 +181,13 @@ export function App() {
       />
       <br />
       <hr />
+      <sparklib.BarChart
+        values={data2}
+        background="lightyellow"
+        fillStyle={hGradient}
+      />
+      <br />
+      <hr />
       <sparklib.StripeChart
         values={data2}
         width={150}
