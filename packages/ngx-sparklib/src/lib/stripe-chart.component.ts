@@ -38,7 +38,7 @@ export class StripeChartComponent<T = unknown>
   // mandatory properties
   @Input({ required: true }) values!: StripeValueType<T>[];
 
-  // optional value accssor
+  // optional value accessor
   @Input() valueAccessor: ValueAccessor<T>;
 
   // optional properties

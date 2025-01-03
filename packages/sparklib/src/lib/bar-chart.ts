@@ -159,6 +159,11 @@ export class BarChart<T = unknown> extends YDatumBaseChart {
     return this;
   }
 
+  valueAccessor(accessor: ValueAccessor<T>) {
+    this.#valueAccessor = accessor;
+    return this;
+  }
+
   dispose() {
     this.#mouseHandler?.dispose();
     this.#mouseHandler = undefined;

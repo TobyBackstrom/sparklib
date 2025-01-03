@@ -10,9 +10,8 @@ interface BarChartProps<T = unknown> {
   // mandatory properties
   values: sparklib.BarValueType<T>[];
 
-  // TODO: optional value properties
-  xAccessor?: sparklib.ValueAccessor<T>;
-  yAccessor?: sparklib.ValueAccessor<T>;
+  /** Optional accessor function to extract values. */
+  valueAccessor?: sparklib.ValueAccessor<T>;
 
   // optional properties
   width?: number;
@@ -74,8 +73,7 @@ export const BarChart = <T = unknown>(props: BarChartProps<T>) => {
         fillStyle: chart.fillStyle,
         // TODO: yDomain: chart.yDomain,
         yDatumLines: chart.yDatumLines,
-        // TODO: xAccessor: chart.xAccessor,
-        // TODO: yAccessor: chart.yAccessor,
+        valueAccessor: chart.valueAccessor,
       };
     };
 

@@ -35,9 +35,8 @@ export class BarChartComponent<T = unknown>
   // mandatory properties
   @Input({ required: true }) values!: BarValueType<T>[];
 
-  // optional value properties
-  @Input() xAccessor: ValueAccessor<T>;
-  @Input() yAccessor: ValueAccessor<T>;
+  // optional value accessor
+  @Input() valueAccessor: ValueAccessor<T>;
 
   // optional properties
   @Input() width?: number;
@@ -92,6 +91,7 @@ export class BarChartComponent<T = unknown>
       fillStyle: chart.fillStyle,
       height: chart.height,
       margins: chart.margins,
+      valueAccessor: chart.valueAccessor,
       width: chart.width,
       yDatumLines: chart.yDatumLines,
     };
