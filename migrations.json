@@ -205,12 +205,52 @@
             "type": "UPDATE"
           }
         ],
-        "ref": "b5e9d660e22d30048e863571f25d8854f20042e2",
+        "ref": "e4f65396c5d918fdd8ab6da8f3c717627165a14e",
+        "nextSteps": []
+      },
+      "replace-getJestProjects-with-getJestProjectsAsync-v21": {
+        "type": "successful",
+        "name": "replace-getJestProjects-with-getJestProjectsAsync-v21",
+        "changedFiles": [],
+        "ref": "e4f65396c5d918fdd8ab6da8f3c717627165a14e",
+        "nextSteps": []
+      },
+      "remove-tsconfig-option-from-jest-executor": {
+        "type": "successful",
+        "name": "remove-tsconfig-option-from-jest-executor",
+        "changedFiles": [],
+        "ref": "e4f65396c5d918fdd8ab6da8f3c717627165a14e",
+        "nextSteps": []
+      },
+      "update-21-0-0-update-babel-loose": {
+        "type": "successful",
+        "name": "update-21-0-0-update-babel-loose",
+        "changedFiles": [],
+        "ref": "e4f65396c5d918fdd8ab6da8f3c717627165a14e",
+        "nextSteps": []
+      },
+      "update-21-0-0-remove-isolated-config": {
+        "type": "successful",
+        "name": "update-21-0-0-remove-isolated-config",
+        "changedFiles": [],
+        "ref": "e4f65396c5d918fdd8ab6da8f3c717627165a14e",
+        "nextSteps": []
+      },
+      "set-continuous-option": {
+        "type": "successful",
+        "name": "set-continuous-option",
+        "changedFiles": [
+          {
+            "path": "apps/angular-demo/project.json",
+            "type": "UPDATE"
+          }
+        ],
+        "ref": "abdd4c9f525477383bd112956e21346cb8370a71",
         "nextSteps": []
       }
     },
     "runningMigrations": [
-      "21-1-0-add-ignore-entries-for-nx-rule-files"
+      "set-continuous-option"
     ]
   }
 }
