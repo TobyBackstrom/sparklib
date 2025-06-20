@@ -103,6 +103,5 @@
     }
   },
   "useInferencePlugins": false,
-  "defaultBase": "master",
-  "useLegacyCache": true
+  "defaultBase": "master"
 }
