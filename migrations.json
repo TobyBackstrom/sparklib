@@ -257,12 +257,30 @@
             "type": "UPDATE"
           }
         ],
-        "ref": "8abb77f0f76ebe8c249d482aca65693f06d4dea1",
+        "ref": "7f0d233c7e61f6497e5d302130c1d876b3288606",
+        "nextSteps": []
+      },
+      "migrate-provide-server-rendering-import": {
+        "type": "skipped"
+      },
+      "replace-provide-server-routing": {
+        "type": "skipped"
+      },
+      "set-generator-defaults-for-previous-style-guide": {
+        "type": "successful",
+        "name": "set-generator-defaults-for-previous-style-guide",
+        "changedFiles": [
+          {
+            "path": "nx.json",
+            "type": "UPDATE"
+          }
+        ],
+        "ref": "06205e1be4f0bf1c5f5237e42a0098722129e9a2",
         "nextSteps": []
       }
     },
     "runningMigrations": [
-      "update-angular-cli-version-20-0-0"
+      "set-generator-defaults-for-previous-style-guide"
     ]
   }
 }
