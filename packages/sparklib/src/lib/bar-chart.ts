@@ -1,4 +1,3 @@
-import * as d3Array from 'd3-array';
 import * as d3Scale from 'd3-scale';
 
 import { ValueAccessor } from './base/base-chart';
@@ -9,7 +8,7 @@ import {
   BarValueType,
   LinearGradient,
 } from './models';
-import { ArrayType, getArrayType } from './utils';
+import { ArrayType, getArrayType, max, min } from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
 import { YDatumBaseChart } from './base/y-datum-base-chart';
 import { YDatumBaseChartProperties } from './models/datum-base-chart-properties';
@@ -193,12 +192,9 @@ export class BarChart<T = unknown> extends YDatumBaseChart {
   #getYDomain(values: number[]): Range {
     if (this.#props.domain === undefined) {
       if (values.length === 1) {
-        return [Math.min(0, d3Array.min(values) ?? 0), values[0]];
+        return [Math.min(0, min(values) ?? 0), values[0]];
       }
-      return [
-        Math.min(0, d3Array.min(values) ?? 0),
-        d3Array.max(values),
-      ] as Range;
+      return [Math.min(0, min(values) ?? 0), max(values)] as Range;
     } else {
       return this.#props.domain;
     }

@@ -18,7 +18,6 @@ export default {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/packages/react-sparklib',
   moduleNameMapper: {
-    '^d3-array$': 'node_modules/d3-array/dist/d3-array.min.js',
     '^d3-color$': 'node_modules/d3-color/dist/d3-color.min.js',
     '^d3-format$': 'node_modules/d3-format/dist/d3-format.min.js',
     '^d3-interpolate$':

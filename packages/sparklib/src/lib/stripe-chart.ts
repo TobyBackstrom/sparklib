@@ -1,5 +1,3 @@
-import * as d3Array from 'd3-array';
-
 import { BaseChart, ValueAccessor } from './base/base-chart';
 import {
   BaseChartProperties,
@@ -8,7 +6,12 @@ import {
   Range,
   StripeValueType,
 } from './models';
-import { ArrayType, createGradientColorScale, getArrayType } from './utils';
+import {
+  ArrayType,
+  createGradientColorScale,
+  extent,
+  getArrayType,
+} from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
 
 export type StripeChartProperties = {
@@ -167,7 +170,7 @@ export class StripeChart<T = unknown> extends BaseChart {
       if (values.length === 1) {
         return [values[0], values[0]];
       }
-      return d3Array.extent(values) as Range;
+      return extent(values) as Range;
     } else {
       return this.#props.domain;
     }

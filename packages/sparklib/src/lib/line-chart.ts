@@ -1,4 +1,3 @@
-import * as d3Array from 'd3-array';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
@@ -15,7 +14,7 @@ import {
   MouseEventType,
 } from './models';
 import { LineProperties } from './models/line-properties';
-import { ArrayType, getArrayType } from './utils';
+import { ArrayType, extent, getArrayType } from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
 import { XYDatumBaseChart } from './base/x-y-datum-base-chart';
 import { XYDatumBaseChartProperties } from './models/datum-base-chart-properties';
@@ -238,7 +237,7 @@ export class LineChart<T = unknown> extends XYDatumBaseChart {
       this.#props.xDomain ??
       ((arrayType === ArrayType.SingleValue
         ? [0, values.length - 1] // index in array defines the x domain
-        : d3Array.extent(values as [number, number][], (d) => d[0])) as Range)
+        : extent(values as [number, number][], (d) => d[0])) as Range)
     );
   }
 
@@ -246,8 +245,8 @@ export class LineChart<T = unknown> extends XYDatumBaseChart {
     return (
       this.#props.yDomain ??
       ((arrayType === ArrayType.SingleValue
-        ? d3Array.extent(values as number[])
-        : d3Array.extent(values as [number, number][], (d) => d[1])) as Range)
+        ? extent(values as number[])
+        : extent(values as [number, number][], (d) => d[1])) as Range)
     );
   }
 
