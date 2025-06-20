@@ -162,9 +162,6 @@
     },
     "targetVersion": "latest",
     "confirmedPackageUpdates": true,
-    "runningMigrations": [
-      "remove-legacy-cache"
-    ],
     "completedMigrations": {
       "remove-legacy-cache": {
         "type": "successful",
@@ -175,9 +172,45 @@
             "type": "UPDATE"
           }
         ],
-        "ref": "77dadb2557ec46c19e5bb9ea24038303c51e3527",
+        "ref": "3f0ef423f90db6749cb1cf5393e24c758d25430a",
+        "nextSteps": []
+      },
+      "remove-custom-tasks-runner": {
+        "type": "successful",
+        "name": "remove-custom-tasks-runner",
+        "changedFiles": [],
+        "ref": "3f0ef423f90db6749cb1cf5393e24c758d25430a",
+        "nextSteps": []
+      },
+      "release-version-config-changes": {
+        "type": "successful",
+        "name": "release-version-config-changes",
+        "changedFiles": [],
+        "ref": "3f0ef423f90db6749cb1cf5393e24c758d25430a",
+        "nextSteps": []
+      },
+      "release-changelog-config-changes": {
+        "type": "successful",
+        "name": "release-changelog-config-changes",
+        "changedFiles": [],
+        "ref": "3f0ef423f90db6749cb1cf5393e24c758d25430a",
+        "nextSteps": []
+      },
+      "21-1-0-add-ignore-entries-for-nx-rule-files": {
+        "type": "successful",
+        "name": "21-1-0-add-ignore-entries-for-nx-rule-files",
+        "changedFiles": [
+          {
+            "path": ".gitignore",
+            "type": "UPDATE"
+          }
+        ],
+        "ref": "b5e9d660e22d30048e863571f25d8854f20042e2",
         "nextSteps": []
       }
-    }
+    },
+    "runningMigrations": [
+      "21-1-0-add-ignore-entries-for-nx-rule-files"
+    ]
   }
 }
