@@ -46,7 +46,8 @@
     "serve": {
       "executor": "@nx/webpack:dev-server",
       "options": {
-        "buildTarget": "web-demo:build"
+        "buildTarget": "web-demo:build",
+        "port": 4300
       },
       "configurations": {
         "production": {

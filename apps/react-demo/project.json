@@ -54,7 +54,7 @@
       "options": {
         "buildTarget": "react-demo:build",
         "hmr": true,
-        "port": 4300
+        "port": 4400
       },
       "configurations": {
         "development": {
