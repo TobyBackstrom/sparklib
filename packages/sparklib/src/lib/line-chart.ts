@@ -1,4 +1,3 @@
-import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 
 import { ValueAccessor } from './base/base-chart';
@@ -14,7 +13,13 @@ import {
   MouseEventType,
 } from './models';
 import { LineProperties } from './models/line-properties';
-import { ArrayType, extent, getArrayType } from './utils';
+import {
+  ArrayType,
+  extent,
+  getArrayType,
+  scaleLinear,
+  ScaleLinear,
+} from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
 import { XYDatumBaseChart } from './base/x-y-datum-base-chart';
 import { XYDatumBaseChartProperties } from './models/datum-base-chart-properties';
@@ -27,9 +32,8 @@ type Properties = {
 type ChartScaling = {
   xDomain: Range;
   yDomain: Range;
-
-  xScale: d3Scale.ScaleLinear<number, number, never>;
-  yScale: d3Scale.ScaleLinear<number, number, never>;
+  xScale: ScaleLinear;
+  yScale: ScaleLinear;
 };
 
 export class LineChart<T = unknown> extends XYDatumBaseChart {
@@ -250,9 +254,8 @@ export class LineChart<T = unknown> extends XYDatumBaseChart {
     );
   }
 
-  #xScale(xDomain: Range): d3Scale.ScaleLinear<number, number, never> {
-    return d3Scale
-      .scaleLinear()
+  #xScale(xDomain: Range): ScaleLinear {
+    return scaleLinear()
       .domain(xDomain)
       .range([
         this.chartProps.margins.left,
@@ -260,9 +263,8 @@ export class LineChart<T = unknown> extends XYDatumBaseChart {
       ]);
   }
 
-  #yScale(yDomain: Range): d3Scale.ScaleLinear<number, number, never> {
-    return d3Scale
-      .scaleLinear()
+  #yScale(yDomain: Range): ScaleLinear {
+    return scaleLinear()
       .domain(yDomain)
       .range([
         this.chartProps.height - this.chartProps.margins.bottom,

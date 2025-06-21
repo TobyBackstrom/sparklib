@@ -1,13 +1,11 @@
-import * as d3Scale from 'd3-scale';
 import { DatumBaseChart } from './datum-base-chart';
 import { DatumLineBuilder } from '../builders';
 import { DatumLine, LineProperties, Range } from '../models';
-import { ScaleLinear } from '../utils';
+import { scaleLinear, ScaleLinear } from '../utils';
 
 export abstract class YDatumBaseChart extends DatumBaseChart {
   #xDomain = [0, this.chartProps.width] as Range;
-  #xScale = d3Scale
-    .scaleLinear()
+  #xScale = scaleLinear()
     .domain(this.#xDomain)
     .range([
       this.chartProps.margins.left,
@@ -18,7 +16,7 @@ export abstract class YDatumBaseChart extends DatumBaseChart {
     context: CanvasRenderingContext2D,
     zIndex0: boolean, // only draw zIndex === 0 or not
     yDomain: Range,
-    yScale: d3Scale.ScaleLinear<number, number, never> | ScaleLinear,
+    yScale: ScaleLinear,
   ): void {
     super.renderDatumLines(
       context,

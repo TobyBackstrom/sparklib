@@ -1,5 +1,3 @@
-import * as d3Scale from 'd3-scale';
-
 import { BaseChart } from './base-chart';
 import {
   BaseChartProperties,
@@ -34,8 +32,8 @@ export abstract class DatumBaseChart extends BaseChart {
     zIndex0: boolean, // only draw zIndex === 0 or not
     xDomain: Range,
     yDomain: Range,
-    xScale: d3Scale.ScaleLinear<number, number, never>,
-    yScale: d3Scale.ScaleLinear<number, number, never> | ScaleLinear,
+    xScale: ScaleLinear,
+    yScale: ScaleLinear,
   ): void {
     this.#props.xDatumLines.forEach((datumLine) => {
       const draw = datumLine.zIndex === 0 ? zIndex0 : true;
@@ -90,8 +88,8 @@ export abstract class DatumBaseChart extends BaseChart {
   protected drawDatumLine(
     orientation: 'x' | 'y',
     datumLine: DatumLine,
-    xScale: d3Scale.ScaleLinear<number, number, never>,
-    yScale: d3Scale.ScaleLinear<number, number, never> | ScaleLinear,
+    xScale: ScaleLinear,
+    yScale: ScaleLinear,
     domain: Range,
     context: CanvasRenderingContext2D,
   ): void {
