@@ -13,16 +13,11 @@ import {
   MouseEventType,
 } from './models';
 import { LineProperties } from './models/line-properties';
-import {
-  ArrayType,
-  extent,
-  getArrayType,
-  scaleLinear,
-  ScaleLinear,
-} from './utils';
+import { ArrayType, extent, getArrayType } from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
 import { XYDatumBaseChart } from './base/x-y-datum-base-chart';
 import { XYDatumBaseChartProperties } from './models/datum-base-chart-properties';
+import { scaleLinear, ScaleLinear } from './utils/scale';
 
 // LineChart props only (BaseChart excluded), with required lineProps.
 type Properties = {

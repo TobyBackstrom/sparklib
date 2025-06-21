@@ -1,8 +1,7 @@
 import { DatumBaseChart } from './datum-base-chart';
 import { DatumLineBuilder } from '../builders';
 import { DatumLine, LineProperties, Range } from '../models';
-import { scaleLinear, ScaleLinear } from '../utils';
-
+import { scaleLinear, ScaleLinear } from '../utils/scale';
 export abstract class YDatumBaseChart extends DatumBaseChart {
   #xDomain = [0, this.chartProps.width] as Range;
   #xScale = scaleLinear()

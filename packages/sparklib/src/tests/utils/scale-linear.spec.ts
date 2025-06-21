@@ -1,4 +1,4 @@
-import { scaleLinear } from '../../lib/utils';
+import { scaleLinear } from '../../lib/utils/scale';
 
 describe('scaleLinear', () => {
   describe('basic functionality', () => {

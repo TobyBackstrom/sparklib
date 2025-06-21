@@ -7,7 +7,7 @@ import {
   Range,
 } from '../models';
 import { XYDatumBaseChartProperties } from '../models/datum-base-chart-properties';
-import { ScaleLinear } from '../utils';
+import { ScaleLinear } from '../utils/scale';
 
 // Note to self: Mixins can't be used as they impose restrictions on hiding visibility.
 //               Methods and properties from base classes would become public/protected.

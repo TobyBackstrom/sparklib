@@ -6,19 +6,13 @@ import {
   BarValueType,
   LinearGradient,
 } from './models';
-import {
-  ArrayType,
-  getArrayType,
-  max,
-  min,
-  scaleLinear,
-  ScaleLinear,
-} from './utils';
+import { ArrayType, getArrayType, max, min } from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
 import { YDatumBaseChart } from './base/y-datum-base-chart';
 import { YDatumBaseChartProperties } from './models/datum-base-chart-properties';
 import { BarChartProperties } from './models/bar-chart-properties';
 import { LinearGradientBuilder } from './builders/linear-gradient-builder';
+import { scaleLinear, ScaleLinear } from './utils/scale';
 
 type Properties = Omit<
   Omit<BarChartProperties, keyof YDatumBaseChartProperties>,

@@ -4,4 +4,3 @@ export * from './max';
 export * from './min';
 export * from './get-array-type';
 export * from './get-indices-for-pixel-x';
-export * from './scale-linear';
