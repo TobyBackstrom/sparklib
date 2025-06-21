@@ -7,8 +7,8 @@ import {
   StripeValueType,
 } from './models';
 import {
-  ArrayType,
   createGradientColorScale,
+  ArrayType,
   extent,
   getArrayType,
 } from './utils';

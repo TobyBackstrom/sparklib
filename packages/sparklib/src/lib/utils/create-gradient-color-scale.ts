@@ -1,9 +1,9 @@
-import * as d3Scale from 'd3-scale';
 import * as d3Interpolate from 'd3-interpolate';
 import { Range } from '../models';
+import { scaleQuantize } from './scale';
 
 /**
- * Creates a D3 quantize color scale with a specified range (domain), color set, and number of color levels.
+ * Creates a quantize color scale with a specified range (domain), color set, and number of color levels.
  *
  * The color scale can be used to map a numeric input domain to discrete color levels.
  *
@@ -17,7 +17,7 @@ import { Range } from '../models';
  *                         The input domain is divided into this many equally sized sections,
  *                         each mapping to a color level.
  *
- * @returns A D3 scaleQuantize function, which maps the input domain to the generated color levels.
+ * @returns A scaleQuantize function, which maps the input domain to the generated color levels.
  */
 export function createGradientColorScale(
   domain: Range,
@@ -37,9 +37,7 @@ export function createGradientColorScale(
     numColorLevels,
   );
 
-  // finally a d3.scaleQuantize scale
-  const colorScale = d3Scale
-    .scaleQuantize<string>()
+  const colorScale = scaleQuantize<string>()
     .domain([domain[0], domain[1]])
     .range(gradientColors);
 

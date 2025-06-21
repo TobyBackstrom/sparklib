@@ -23,6 +23,7 @@ describe('createGradientColorScale', () => {
     ).toThrow();
   });
 
+  // TODO: activate this once d3Interpolate.quantize is implemented since that should return "null"
   it('should handle a zero numColorLevels', () => {
     const domain: [number, number] = [0, 10];
     const colors = ['red', 'blue', 'green'];
