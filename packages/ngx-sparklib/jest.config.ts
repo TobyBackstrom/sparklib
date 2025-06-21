@@ -1,4 +1,6 @@
 /* eslint-disable */
+import type { Config } from 'jest';
+
 export default {
   displayName: 'ngx-sparklib',
   preset: '../../jest.preset.js',
@@ -32,4 +34,4 @@ export default {
     '^d3-time-format$':
       'node_modules/d3-time-format/dist/d3-time-format.min.js',
   },
-};
+} satisfies Config;
