@@ -1,7 +1,6 @@
 import * as d3Scale from 'd3-scale';
 
 import { BaseChart } from './base-chart';
-import { DatumLineBuilder } from '../builders';
 import {
   BaseChartProperties,
   Coordinate,
@@ -10,6 +9,7 @@ import {
   Range,
 } from '../models';
 import { XYDatumBaseChartProperties } from '../models/datum-base-chart-properties';
+import { ScaleLinear } from '../utils';
 
 // Note to self: Mixins can't be used as they impose restrictions on hiding visibility.
 //               Methods and properties from base classes would become public/protected.
@@ -35,7 +35,7 @@ export abstract class DatumBaseChart extends BaseChart {
     xDomain: Range,
     yDomain: Range,
     xScale: d3Scale.ScaleLinear<number, number, never>,
-    yScale: d3Scale.ScaleLinear<number, number, never>,
+    yScale: d3Scale.ScaleLinear<number, number, never> | ScaleLinear,
   ): void {
     this.#props.xDatumLines.forEach((datumLine) => {
       const draw = datumLine.zIndex === 0 ? zIndex0 : true;
@@ -91,7 +91,7 @@ export abstract class DatumBaseChart extends BaseChart {
     orientation: 'x' | 'y',
     datumLine: DatumLine,
     xScale: d3Scale.ScaleLinear<number, number, never>,
-    yScale: d3Scale.ScaleLinear<number, number, never>,
+    yScale: d3Scale.ScaleLinear<number, number, never> | ScaleLinear,
     domain: Range,
     context: CanvasRenderingContext2D,
   ): void {

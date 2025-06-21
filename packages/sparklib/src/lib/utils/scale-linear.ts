@@ -2,7 +2,7 @@
  * Interface for a linear scale function with chainable configuration methods.
  * Drop-in replacement for d3.scaleLinear().
  */
-interface ScaleLinear {
+export interface ScaleLinear {
   /**
    * Maps a value from the input domain to the output range
    */

@@ -1,5 +1,3 @@
-import * as d3Scale from 'd3-scale';
-
 import { ValueAccessor } from './base/base-chart';
 import {
   ChartMouseEventListener,
@@ -8,7 +6,14 @@ import {
   BarValueType,
   LinearGradient,
 } from './models';
-import { ArrayType, getArrayType, max, min } from './utils';
+import {
+  ArrayType,
+  getArrayType,
+  max,
+  min,
+  scaleLinear,
+  ScaleLinear,
+} from './utils';
 import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
 import { YDatumBaseChart } from './base/y-datum-base-chart';
 import { YDatumBaseChartProperties } from './models/datum-base-chart-properties';
@@ -24,7 +29,7 @@ type Properties = Omit<
 
 type ChartScaling = {
   yDomain: Range;
-  yScale: d3Scale.ScaleLinear<number, number, never>;
+  yScale: ScaleLinear;
 };
 
 export class BarChart<T = unknown> extends YDatumBaseChart {
@@ -200,9 +205,8 @@ export class BarChart<T = unknown> extends YDatumBaseChart {
     }
   }
 
-  #yScale(yDomain: Range): d3Scale.ScaleLinear<number, number, never> {
-    return d3Scale
-      .scaleLinear()
+  #yScale(yDomain: Range): ScaleLinear {
+    return scaleLinear()
       .domain(yDomain)
       .range([
         this.chartProps.height - this.chartProps.margins.bottom,
