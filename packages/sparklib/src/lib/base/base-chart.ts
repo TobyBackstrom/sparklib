@@ -1,4 +1,3 @@
-import * as d3Shape from 'd3-shape';
 import * as dom from '../dom';
 import { LinearGradientBuilder, MarginsBuilder } from '../builders';
 import {
@@ -8,6 +7,7 @@ import {
   LineProperties,
   Margins,
 } from '../models';
+import { line } from '../utils/shape';
 
 const DEFAULT_MARGINS: Margins = {
   bottom: 0,
@@ -139,8 +139,7 @@ export abstract class BaseChart {
 
     context.beginPath();
 
-    d3Shape
-      .line<Coordinate>()
+    line<Coordinate>()
       .defined((coordinate) => coordinate[1] != null)
       .x((coordinate) => coordinate[0] + lineWidthOffset)
       .y((coordinate) => coordinate[1] + lineWidthOffset)

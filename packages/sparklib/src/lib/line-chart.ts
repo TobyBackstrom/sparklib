@@ -1,5 +1,3 @@
-import * as d3Shape from 'd3-shape';
-
 import { ValueAccessor } from './base/base-chart';
 import { LinearGradientBuilder } from './builders';
 import {
@@ -18,6 +16,7 @@ import { CanvasMouseHandler } from './utils/canvas-mouse-handler';
 import { XYDatumBaseChart } from './base/x-y-datum-base-chart';
 import { XYDatumBaseChartProperties } from './models/datum-base-chart-properties';
 import { scaleLinear, ScaleLinear } from './utils/scale';
+import { area } from './utils/shape';
 
 // LineChart props only (BaseChart excluded), with required lineProps.
 type Properties = {
@@ -310,8 +309,7 @@ export class LineChart<T = unknown> extends XYDatumBaseChart {
 
     context.beginPath();
 
-    d3Shape
-      .area<Coordinate>()
+    area<Coordinate>()
       .defined((coordinate) => coordinate[1] != null)
       .x((coordinate) => coordinate[0])
       .y0(y0)
